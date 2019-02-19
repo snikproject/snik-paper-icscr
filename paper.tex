@@ -1,0 +1,948 @@
+% please run ``latex paper'' and then ``makeglossaries paper'' from the command line to create the glossaries files
+% add. options: [seceqn,secthm,crcready,onecolumn]
+\documentclass[sw]{iosart2x}
+
+%\usepackage{dcolumn}
+%\usepackage{endnotes}
+
+\usepackage{booktabs}
+\usepackage{csquotes}
+\usepackage{graphicx}
+\usepackage{listings}
+\lstset{language=SPARQL,breaklines=true}
+
+\usepackage{cleveref}
+
+%%%%%%%%%%% End of definitions
+
+\pubyear{2019}
+\volume{0}
+\firstpage{1}
+\lastpage{1}
+
+\begin{document}
+
+\begin{frontmatter}
+
+%\pretitle{}
+\title{The SNIK Ontology of Hospital Information Management}
+\runningtitle{SNIK}
+%\subtitle{}
+
+
+% Two or more authors:
+\author[A]{\inits {K.}\fnms{Konrad} \snm{Höffner}\ead[label=e1]{konrad.hoeffner@imise.uni-leipzig.de}%
+\thanks{Corresponding author. \printead{e1}.}},
+\author[A]{\fnms{Franziska} \snm{Jahn}\ead[label=e2]{konrad.hoeffner@imise.uni-leipzig.de}}
+\author[A]{\fnms{Birgit} \snm{Schneider}\ead[label=e3]{birgit.schneider@imise.uni-leipzig.de}}
+\author[A]{\fnms{Anna} \snm{Lörke}\ead[label=e4]{anna.loerke@imise.uni-leipzig.de}}
+\author[A]{\fnms{Thomas} \snm{Pause}\ead[label=e5]{thomas.pause@imise.uni-leipzig.de}}
+\author[A]{\fnms{Alfred} \snm{Winter}\ead[label=e6]{alfred.winter@imise.uni-leipzig.de}}
+\runningauthor{}
+\address[A]{Institute for Medical Informatics, Statistics and Epidemiology (IMISE),
+\orgname{University of Leipzig}, \cny{Germany}\printead[presep={}}}]{e1,e2,e3,e4,e5,e6}}
+%Medical Informatics, Management of Health Information Systemsi
+%Härtelstraße 16--18, D-04107 Leipzig
+E-mail: \{khoeffner,fjahn,alfred\}@imise.informatik.uni-leipzig.de}
+\begin{abstract}
+Abstract text.
+\end{abstract}
+\begin{keyword}
+\kwd{Hospital Information Management}
+\end{keyword}
+\end{frontmatter}
+%%%%%%%%%%% The article body starts:
+\section{Introduction}\label{sec:introduction}
+A W3C design issue~\cite{puttinggovernmentdataonline} motivates making government data available online as Linked Data for three reasons:
+\enquote{1) Increasing citizen awareness of government functions to enable greater accountability; 2) Contributing valuable information about the world; and 3) Enabling the government, the country, and the world to function more efficiently.}
+Increasing the transparency of government spending specifically is in high demand from the public. For instance, in the survey publication~\cite{localtransparency}, \enquote{Public access to records is crucial to the functioning government} was rated with a mean of 4.14 (1 = disagree completely, 5 =  agree completely).
+Open spending data can reduce corruption by increasing accountability and strengthening democracy because voters can make better informed decisions.
+Furthermore, an informed and trusting public also strengthens the government itself because it is more likely to commit to large projects (see~\cite{fiscaltransparency} for details).
+
+%Both effects are proven in a study~\cite{fiscaltransparency}.
+Several States and Unions are bound to financial transparency by law, such as the European Union\footnote{\enquote{2. The Commission shall make available, in an appropriate
+and timely manner, information on recipients, as well as the nature and purpose of the measure financed from the budget[...]}~\cite{euregulations}} with its \emph{Financial Transparency System (FTS)}\footnote{\url{http://ec.europa.eu/budget/fts}}~\cite{martin-fts}.
+Public spending services satisfy basic information needs, but in their current form they do not allow queries which go further than simple keyword search or which cannot be answered with data from one system alone.
+Linked Data solves those problems by providing a unified format, a powerful query language and the possibility of integration with linked data sets from other services.
+
+Our contribution is an RDF transformation of the OpenSpending\footnote{\url{http://openspending.org}} project which provides government spending financial transactions from all over the world and is thus suitable as a core knowledge base that can be enriched and integrated with other, more focused data sets.
+Transforming OpenSpending to Linked Data and publishing it adds to and profits from the Semantic Web which offers benefits including a standardized interface, easier data integration and complex queries over multiple knowledge bases.
+
+%Some advantages of an RDF version over a relational database are (1) querying over multiple data sets at once using interlinks and (2) an additional custom vocabulary for each of the datasets, which are very heterogeneous (see \autoref{tab:sparqlqueries} for SPARQL queries for common use cases).
+
+ %linkage provides benefits blablabla ...
+%\todo{more motivation why RDF is good users are able to get this and that, what is linked, e.g. financial transparency system, cordis -> big benefit at least it is possible to link to this and that list other data sets, such as ... e.g. the paper about greece}
+
+%We present LinkedSpending, which provides approximately two million financial transactions from all over the world extracted from OpenSpending as \emph{Linked Open Data}.
+%information needs such as browsing of data sets, visualization and simple queries but they suffer from 
+
+The structure of the paper is as follows.
+\Cref{sec:motivation} motivates the work and presents use cases.
+\Cref{sec:openspending} describes OpenSpending, which is the source of the data, and its statistical data model.
+\Cref{sec:conversion} explains the target RDF Data Cube vocabulary and the transformation process to it.
+\Cref{sec:publishing} describes, how and where the data set is published and in which way users can access the data.
+%\Cref{sec:overview} gives an overview over the transformed linked dataset, describes the its schema and shows typical SPARQL queries.
+\Cref{sec:overview} gives an overall view of the data sets, gives details about the licence used and describes the data sets it is interlinked to.
+%This is followed by a description of usage scenarios in \Cref{sec:usagescenarios}.
+\Cref{sec:relatedwork} presents related spending data sets as Linked Open Data (LOD).
+%The data quality is analyzed in \cref{sec:dataquality} and
+The last section discusses known shortcomings of the data sets and future work. The prefixes used throughout this publication are defined in \Cref{tab:namespaces}.
+In order to save space, prefixes are used even when technically incorrect, such as in \resource{ls:berlin\_de/model}.
+
+\begin{table}[hbtp]
+\caption{Namespaces and prefixes used in the paper}
+\label{tab:namespaces}
+%\tiny
+\scriptsize
+%\footnotesize
+\renewcommand{\tabcolsep}{5pt}
+\begin{tabularx}{\columnwidth}{
+   >{\hsize=.25\hsize}L 
+   >{\hsize=1.75\hsize}L 
+}
+\toprule
+\textbf{prefix}	&\textbf{URL}\\
+\midrule
+os			&\os\\
+owl			&\url{http://www.w3.org/2002/07/owl\#}\\
+ls			&\ls\\
+lso			&\lso\\
+qb			&\url{http://purl.org/linked-data/cube\#}\\
+sdmxd			&\url{http://purl.org/linked-data/sdmx/2009/dimension\#}\\
+dbpedia			&\url{http://dbpedia.org/resource/}\\
+dbp			&\url{http://dbpedia.org/property/}\\
+\bottomrule
+\end{tabularx}
+\vspace{-20pt}
+\end{table}
+
+%while \cref{sec:transformation} explains the Data Cube model and the transformation.
+%-The purpose of LinkedSpending is explained in \cref{sec:purposeoflinkedspending}.
+
+
+
+%While the OpenSpending API is enough to satisfy basic information needs such as browsing of data sets, visualization and simple queries, Linked Data provides many more benefits such as complex queries and the possible integration of other datasets such as the FTS and
+%OpenSpending.org is a an open platform that provides public finance data from governments around the world.
+%At the time of this writing, 
+
+%We converted this data to RDF Data Cubes using a Java program which can be called again should data be added or existing data updated.
+
+\section{Motivation}\label{sec:motivation}
+%\section{Usage Scenarios}\label{sec:usagescenarios}
+In a time of globalization,
+%in the finance sector
+financial data becomes an international network.
+RDF data with its linked nature supports a representation that takes this network nature into account.
+As a machine interpretable format, it lowers the access barrier for application developers.
+For instance, generic Linked Data tools such as OntoWiki, CubeViz and Facete provide end users with the means to explore the data and discover new insights.
+
+%\textbf{Community Empowerment:}
+%network effect 
+%reduce corruptions
+% corruption by increasing accountability and strengthening democracy because voters can make better informed decisions.
+%Furthermore, an informed and trusting public also strengthens the government itself because it is more likely to commit to large projects.
+%hub
+
+%domain specific tool on dataset
+
+%generic tool 
+
+%\paragraph{Internationalization Support}
+
+%Apart from the information needs that can already be satisfied using the source data, there are usage scenarios that are easier or only possible with LinkedSpending.
+
+
+%\subsection{Economic Analysis}
+\paragraph{Economic Analysis}
+LinkedSpending is represented in Linked Open Data, which facilitates data integration.
+Currencies from DBpedia and countries from LinkedGeoData are already integrated.
+Financial data offers further integration candidates, such as political or other statistical, policy-influencing data such as health care.
+This allows queries such as query 7 in \autoref{tab:sparqlqueries}, which asks for data sets with currencies whose inflation rates are greater than \SI{10}{\percent}.
+%\todo{Ev. noch ein weiteres Beispiel um das noch zu untermauern und etwas mehr Substanz in die Subsection zu bringen - auch im Vergleich zu den folgenden beiden Subsections.}.
+
+LinkedSpending can also be used to compute economic indicators across several data sets.
+A possible indicator is a country's spending on education per person where the population size can be taken from the LinkedGeoData countries linked from one or more budget data sets.
+One such data set is \dataset{ugandabudget}, which contains the Uganda Budget and Aid to Uganda, 2003--2006.
+LinkedSpending serves as a hub for the integration of those data sets and their provenance information.
+More data sets can be integrated with similarity-based interlinking tools such as LIMES~\cite{NGON11}.
+%\footnotetext{and its web interface SAIM\cite{Lyko2013}}%, available at \url{http://saim.aksw.org}}
+
+%\subsection{Putting Spending Amounts into Perspective}
+%\subsection{Finding and Comparing Relevant Datasets}
+\paragraph{Finding and Comparing Relevant Data Sets} 
+
+Government spending amounts are often much higher than the sums ordinary people are used to dealing with but even for policy makers it is hard to understand whether a certain amount of money spent is too high or normal.
+Comparing data sets and finding those which are similar to another one helps separating common values from outliers which should be further investigated.
+For example, if another country has a similar budget structure but spends way less on health care with a similar health level,
+it should be investigated whether that discrepancy is caused by inherent differences such as different minimum wages or a different climate or if it is due to preventable factors such as inefficiencies or corruption.
+While OpenSpending provides several hundreds of data sets which can be searched and it allows browsing and visualization of any single one, it does not provide a comparison function between data sets.
+Because of the mechanism to identify equivalent properties (see \autoref{sec:conversion}), SPARQL queries can compare different data sets, e.g.~between similar structures in different countries.
+Query 9 in \autoref{tab:sparqlqueries} shows a simple query to detect data sets which are most similar to any particular data set.
+This is done by calculating the number of common measures, attributes and dimensions.
+\iffalse
+\subsection{Increased E-Government Transparency}
+While OpenSpending makes government spending data available, the data can be made more understandable by providing additional knowledge about the described entities and by facilitating access to the data by non-expert users.
+\paragraph{Additional Knowledge}
+Through integration with other knowledge bases, users can for example learn about the country and currency a data set refers to at the same time as they query the data. \todo{Scheint mir nicht ideal formuliert. Während des Queries etwas lernen, kann man höchstens wenn der Endpoint sehr langsam ist. Ev. "while they browse and explore the data", falls das gemeint ist? Es wäre auch gut, wenn 7.1 und 7.3 nicht beide identisch Integration von country und currency erwähnen, da es sonst so wirkt, als ob es nicht viele andere Möglichkeiten gibt und man versucht den gleichen Punkt mehrfach an die Reviewer zu verkaufen.}
+This helps interpreting the values and constructing helpful indicators. For example, the budget countries spend on health care varies wildly but less so when it is divided by the population number.
+
+\todo{ich habe das qa jetzt rausgenommen da mir kein besonders guter use case eingefallen ist und die aus den example sparql queries zu kompliziert wären für eine erfolgreiche beantwortung}
+\fi
+\iffalse
+\paragraph{Question Answering}
+The OpenSpending data is available through numerous interfaces such as a JSON API, a keyword search and graphical visualizations.
+Linked Open Data however allows the additional usage of Question Answering applications in order to to query the data in a way which is both more intuitive for non-experts than SQL and more expressive than keyword queries, which suffer from the inability to express relations and context, or faceted search, which only allows certain types of search restrictions.
+Question Answering approaches, such as TBSL~\cite{unger2012template}, can thus be adapted to the spending domain and then allow not only computer science experts, but journalists or just ordinary people to know more about it more intuitively using natural, full-text sentences.
+\todo{Der Paragraph sollte noch etwas angepasst werden um zu zeigen, warum Question Answering gerade hier günstig ist, z.B. eine konkrete Abfrage oder man probiert tatsächlich TBSL mit den Daten aus. Aktuell liest sich der Paragraph eher wie eine Begründung warum Question Answering über RDF allgemein sinnvoll ist (was zweifelslos der Fall ist, aber die Relevanz für das Paper noch nicht begründet).}
+\fi
+
+%\section{Source for the Data and Purpose of the Transformation}\label{sec:sourceforthedataandtopiccoverage}
+%\section{Purpose of LinkedSpending}\label{sec:purposeoflinkedspending}
+% viellecht besser passende beispiele nehmen, also anstelle von Kontinenten Gruppen und Hauptgruppen nehmen
+%For example the coded property \url{:continents} could have the range \url{:Afrika}, \url{:America}, \url{:Asia}, \url{:Australia} and the child property \url{:countries} ... (spezielle properties für jeden kontinent?)
+%This parent-child relationship is different from rdfs:subClassOf because the values are disjunctive but instead the childrens values are parts of the parents values.
+
+%grouped in slices data sets 
+%structure defined by datastructure definitions
+
+%At the time of this writing, OpenSpending contains 217 different data sets.
+%While they share the general \emph{budget} domain, they still have slightly different contexts and are described in different vocabularies.
+
+\iffalse
+2-3 beispiele
+
+statistik darüber bringen
+
+manuelles proof über die qualität
+
+am ende die datacubes nehmen
+
+data quality dashboard vom data cube nehmen
+\fi
+
+
+\section{OpenSpending Source Data}\label{sec:openspending}
+OpenSpending\footnote{\url{http://openspending.org/}} is a project which aims to track and analyze public spending worldwide and, at May 2014, contains more than 25 million financial entries in \numberofopenspendingdatasets{} data sets\footnote{As some of them contain errors, the number of LinkedSpending data sets is slightly smaller.}.
+Data Sets can be submitted and modified by anyone but they have to pass a sanity check from the OpenSpending Data Team which also cleans the data before publishing.\footnote{\url{http://community.openspending.org/contribute/data/}}
+OpenSpending hosts transactional as well as budgetary data with a focus on government finance.\footnote{\url{http://community.openspending.org/help/guide/en/financial-data-types/}}
+It contains this data in structured form stored in database tables and provides searching and filtering as well as visualizations and a JSON REST interface.
+The data sets differ in granularity and type of accompanying information, but they share the same meta model.
+%, e.g. from the FTS or CORDIS\footnotemark.
+\subsection{The Data Cube Model}%\label{sec:rdfdatacubemodel}
+The domain model of OpenSpending is a \emph{data cube} (also \emph{OLAP cube}, \emph{hypercube}), which represents multi-dimensional statistical observations.
+Each cell corresponds to an observation (an instance of spending or revenue) that contains measurements (e.g. the amount of money spent or received).
+The context of the measurement is provided by the \emph{dimensions} like the purpose, department and time of a spending item and optionally by \emph{attributes}, which further describe the measured value, e.g., the unit of the measurement.
+%Apart from the fixed data cube meta model, the structure of each dataset is completely up to the creator.
+%The budget data sets for example have the dimensions \emph{time} and \emph{department}, the measure \emph{amount spent} and the attribute \emph{currency} with the value \emph{euro}.
+\begin{figure}[h]
+\footnotesize
+\begin{lstlisting}[language=json]
+"sub-programme": {
+ "label": "Sub-programme",
+ "type": "compound",
+},
+"amount": {
+    "datatype": "float",
+    "label": "Total",
+    "type": "measure",
+}
+\end{lstlisting}
+\caption{simplified excerpt of an OpenSpending \emph{model}} 
+\label{fig:jsonmodel}
+\end{figure}
+
+\begin{figure}[h]
+{\footnotesize
+\begin{lstlisting}[language=json]
+"sub-programme": {
+ "label":"Security and safeguarding liberties",
+ "html_url":"http://openspending.org/eu-budget/sub-programme/security-and-safeguarding-liberties",
+ "name":"security-and-safeguarding-liberties"
+},
+"html_url": "http://openspending.org/eu-budget/entries/017dfcb58d05671ef9eb5a9f77fef39c8b14150c",
+"amount": 41.2
+\end{lstlisting}
+}
+\iffalse
+"main-programme": {
+
+    "description": null,
+    "label": "Main programme",
+    "facet": true,
+    "key": true,
+    "attributes": {
+        "name": {
+            "column": "StringCAT1",
+            "datatype": "id",
+            "default_value": ""
+        },
+        "label": {
+            "column": "StringCAT1",
+            "datatype": "string",
+            "default_value": ""
+        }
+    },
+    "type": "compound",
+    "dimension": "main-programme"
+},
+"main-programme": {
+ "label":"Citizenship, Freedom ,Security and Justice",
+ "html_url":"http://openspending.org/eu-budget/main-programme/citizenship-freedom-security-and-justice",
+ "name":"citizenship-freedom-security-and-justice"
+},
+
+\fi
+\caption{simplified excerpt from an OpenSpending \emph{entry}}
+\label{fig:jsonentry}
+\end{figure}
+
+\Cref{fig:jsonmodel} shows an excerpt from the model of the OpenSpending data set \emph{eu-budget} with the dimension \emph{sub-programme} and the measure \emph{amount}.
+\Cref{fig:jsonentry} shows the an entry that contains the actual values for the dimension and the measure of the observation.
+
+\subsection{Problems}
+While the data is well-structured and thus suitable for conversion without data cleaning or extensive preprocessing, it still poses problems that need to be taken into account:
+\begin{inparaenum}
+\item New data sets are frequently added (approximately 50 per month) and, less often, existing data sets are modified.
+\item Some data sets do not specify a value for all properties in all observations.
+\item There are properties with the same name in different data sets where it is unknown if they specify the same property.
+\item Data Cube is a meta model. The deep structure of the data sets is heterogeneous and
+ described only shallowly.
+\item The language of literals is varying between and even within data sets but the language used is not specified.
+\end{inparaenum}
+Points 1 to 3 are addressed in the next section while points 4 and 5 are discussed in \cref{sec:conclusions}.
+
+
+\section{Conversion of OpenSpending to RDF}\label{sec:conversion}
+
+%The conversion from OpenSpending to Linked Data consists of the extraction of the source data and its transformation to RDF.
+%Because the source data adheres to the data cube model, a conversion of the data to RDF needs an appropriate RDF vocabulary.
+%The RDF DataCube vocabulary~\cite{rdfdatacube} is an ideal fit for the transformed data.
+%Because the source data uses the data cube model, the RDF DataCube vocabulary~\cite{rdfdatacube} is an ideal fit for the transformed data.
+
+
+\begin{table*}[hbtp]
+\caption{Conversion of OpenSpending to LinkedSpending classes and instances}
+\label{tab:transformation}
+\scriptsize
+\renewcommand{\tabcolsep}{5pt}
+\begin{tabularx}{\textwidth}{
+% sum of hsizes needs to be 2
+   >{\hsize=.1\hsize}L 
+   >{\hsize=.4\hsize}L 
+   >{\hsize=.8\hsize}L 
+   >{\hsize=.6\hsize}L 
+   >{\hsize=.3\hsize}L          
+}
+\toprule % a bit unelegant: with the replacement of \url by \urlX to circumvent hyperref the line break inside urlX does not work so there are 2 spaces
+&\textbf{Source URL}  		&\textbf{JSON Path}				&\textbf{LinkedSpending class}		&\textbf{LS instance scheme}\\ 
+\midrule
+\rom{1}  		&\osdatasetjson 		&						&\class{qb:DataSet}			&\lsdataset\\
+\rom{2}			&\osmodel 			&						&\class{qb:DataStructureDefinition}	&\dsd\\
+\midrule
+\multirow{3}*{\rom{3}} 	&\osmodel			&\texttt{\$.mapping.*}				&\class{os:\{Country,Time\}Component} \class{Specification}
+													or \class{qb:ComponentSpecification}	&\urlX{lso:}\emph{propertyname} \urlX{-spec}\\
+\midrule
+\rom{4}			&\multirow{4}*{\osmodel}	&\texttt{\$.mapping.*[?(@.type="compound")]}	&\class{qb:DimensionProperty}		&\multirow{4}*{\urlX{lso:}\emph{propertyname}}\\
+\rom{5}			&				&\texttt{\$.mapping.*[?(@.type="date")]}		&\class{qb:DimensionProperty}	&\\
+\rom{6}			&				&\texttt{\$.mapping.*[?(@.type="measure")]}	&\class{qb:MeasureProperty}		&\\
+\rom{7}			&				&\texttt{\$.mapping.*[?(@.type="attribute")]}	&\class{qb:AttributeProperty}		&\\
+\midrule
+\rom{8} 		&\osdataset\urlX{/entries.json} 		&\texttt{\$.results[*].dataset}	&\class{qb:Observation}				&\urlX{ls:}\urlX{observation-} \emph{dataset name}-\emph{hashvalue}\\
+\bottomrule
+\end{tabularx}
+\end{table*}
+%\iffalse
+%\begin{sidewaystable}
+%{\setlength{\tabcolsep}{0.5em}
+%\scriptsize
+%\begin{tabulary}{0.84\textwidth}{lllLp{3cm}p{3cm}}
+%\toprule
+%			&\textbf{Source URL}  		&\textbf{JSON Path}				&\textbf{LinkedSpending class}		&\textbf{OpenSpending URL}				&\textbf{LinkedSpending URI}\\ 
+%\midrule
+%\rom{1}  		&\osdatasetjson 		&						&\class{qb:DataSet}			&\osdataset						&\lsdataset\\
+%\rom{2}			&\osmodel 			&						&\class{qb:DataStructureDefinition}	&\osmodel						&\dsd\\
+%\midrule
+%\multirow{3}*{\rom{3}} 	&\osmodel			&\texttt{\$.mapping.*}				&\class{os:{Country,Time}ComponentSpecification}
+%													or \class{qb:ComponentSpecification}	&none							&\lsdataset\url{/}\emph{propertyname} \url{/component} \url{Specification}		\\
+%\midrule
+%\rom{4}			&\multirow{4}*{\osmodel}	&\texttt{\$.mapping.*[?(@.type="compound")]}	&\class{qb:DimensionProperty}		&\multirow{4}*{\osdataset\url{/}\emph{propertyname}}	&\multirow{4}*{\lsdataset\url{/}\emph{propertyname}}\\
+%\rom{5}			&				&\texttt{\$.mapping.*[?(@.type="date")]}		&\class{qb:DimensionProperty}	&							&\\
+%\rom{6}			&				&\texttt{\$.mapping.*[?(@.type="measure")]}	&\class{qb:MeasureProperty}		&							&\\
+%\rom{7}			&				&\texttt{\$.mapping.*[?(@.type="attribute")]}	&\class{qb:AttributeProperty}		&							&\\
+%\midrule
+%\rom{8} 		&\osdataset\url{/entries.json} 		&\texttt{\$.results[*].dataset}	&\class{qb:Observation}			&\osmodel\url{/entries/} \emph{hashvalue}			&\lsdataset\url{/model/entries/}\emph{hashvalue}\\
+%\bottomrule
+%\end{tabulary}
+%\caption{Transformation of OpenSpending entities to LinkedSpending classes}}
+%\label{tab:transformation}
+%\end{sidewaystable}
+%\fi
+%\todo{\autoref{tab:transformation} source uris take the ones where i get them from or where the source uri is that only describes it? should be both acutally}
+
+%\paragraph{The RDF DataCube vocabulary}
+\paragraph{}
+The RDF DataCube vocabulary~\cite{rdfdatacube}, i.e.~an RDF variant of the previously explained data cube model, is an ideal fit for the transformed data. 
+\begin{figure}[h]
+\includegraphics[width=\columnwidth]{img/rdfdatacube_shrinked.pdf}
+\caption{Used RDF DataCube concepts and their relationships\protect\footnotemark}
+\label{fig:rdfdatacube}
+\end{figure}
+\footnotetext{Simplified version of the structure described in ~\cite{rdfdatacube}.}
+
+First and foremost, this vocabulary provides the backbone structure for every LinkedSpending data set, see \cref{fig:rdfdatacube}.
+Each data set is represented by an instance of \class{qb:DataSet} and an associated instance of \class{qb:DataStructureDefinition} which includes \emph{component specifications} (see \cref{fig:modellingexample} for an example).
+Each component specification is associated to a \emph{component property} which can be either a \emph{dimension}, an \emph{attribute} or a \emph{measure}.
+Commonly used concepts are specified in the model of the \emph{Statistical Data and Metadata eXchange (SDMX)} initiative\footnote{\url{http://sdmx.org}}.
+%\Cref{fig:modellingexample} shows, how
+%example, a reference area can make use of \resource{sdmxa:refArea}.
+The RDF Data Cube vocabulary  is supported by the LOD2 Statistical Office Workbench\footnote{\url{http://demo.lod2.eu/lod2statworkbench}} which is part of the Linked Data Stack (an advanced version of the the LOD2 Stack~\cite{Auer+ISWC-2012}).
+The workbench includes a DataCube validator, a split and merge component and a CKAN Publisher.
+The OntoWiki~\cite{ontowiki_www}, which manages several parts of the the Linked Data Lifecycle~\cite{Auer+ISWC-2012}, such as Storage/Querying and Search/Browsing/Exploration offers a CSV import plugin for the format as well as a faceted RDF Data Cube browser, CubeViz.
+Data cubes may contain slices, which are presets for certain dimension values, effectively selecting a subset of a cube. Users may create and visualize their own slices using the OntoWiki CubeViz plugin. Furthermore, the RDF DataCube vocabulary allows the persistence of slices which is used to represent preconfigured slices from OpenSpending.
+
+
+% the Linked Data Stack~\cite{Auer+ISWC-2012}
+% which others? ORE - Ontology Repair and Enrichment ?
+
+\begin{figure}
+\footnotesize
+\begin{lstlisting}[language=ttl]
+ls:berlin_de
+ rdf:type	qb:DataSet;
+ rdfs:label	"Berlin Budget";
+ dc:source	os:berlin_de;
+ qb:structure	ls:berlin_de/model;
+ qb:slice	ls:berlin_de/views/nach-einzelplan.
+ 
+ls:berlin_de/model
+ rdf:type qb:DataStructureDefinition;
+ qb:component
+   lso:CountryComponentSpecification,
+   lso:DateComponentSpecification,
+   lso:Einzelplan-spec,
+   lso:amount-spec.
+   
+lso:CountryComponentSpecification 
+ rdf:type qb:ComponentSpecification;
+ rdfs:label "country";
+ qb:attribute sdmxa:refArea; 
+ qb:componentRequired "false"^^xsd:boolean;
+ qb:componentAttachment
+   qb:DataSet,qb:Observation.
+\end{lstlisting}
+\caption{RDF DataCube vocabulary modelling excerpt of data set \resource{berlin\_de} (some properties and values omitted).}
+\label{fig:modellingexample}
+\end{figure}
+
+\paragraph{Transformation}
+All of the OpenSpending data sets describe observations referring to a specific point or period in time and thus undergo only minor changes.
+New data sets however, are frequently added. Because of this, the huge number of data sets and their size, an automatic, repeatable transformation is required.
+This is realized by a program\footnote{written in Java, available as open source at \url{https://github.com/AKSW/openspending2rdf}} which fetches a list of data sets on execution and only transforms the ones who are not transformed yet. Each data set is transformed separately.
+\autoref{tab:transformation} shows for each class used by LinkedSpending, at which URL (abbreviated using the prefixes from \cref{tab:namespaces}) the information used to create the instances of those classes is found. % cref somehow doesnt work with this table
+In case there are multiple instances described at one URL, a \emph{JSON path}\footnotemark{} expression is given, that locates the corresponding subnodes.
+\footnotetext{\emph{JSON path} (\url{http://code.google.com/p/json-path/}) is a a query language for selecting nodes from a JSON documents, similar to XPath for XML}
+Finally, the table contains the patterns that describe resulting LinkedSpending URLs.
+For example, the OpenSpending URL \resource{os:berlin\_de/model} contains the node \texttt{\$.mapping.amount} which has a type value of \enquote{attribute} and is, thus, transformed to the OpenSpending instance \resource{lso:amount} of the class \resource{qb:AttributeProperty}.
+
+Equivalent component properties (dimensions, attributes and measures) are identified as follows:
+A configuration file optionally specifies the mapping of data set and property name to an entity in the LinkedSpending ontology.
+By default, the property URI is derived from the property name.
+Properties with the same name in different data sets not having a mapping entry that states otherwise are assumed to represent the same concept and thus given the same URL.\footnotemark
+\footnotetext{Although that has the possibility of mismatches, such a mismatch has not been spotted yet. Still, evaluating and, if necessary, improving the automatic matching is part of future work.}
+
+%\subsection{Use of Established Vocabularies}
+\paragraph{Use of Established Vocabularies}
+%\textbf{Use of Established Vocabularies:} 
+In addition to the standard vocabularies, RDF, RDFS, OWL and XSD, the DCMI vocabulary is used for source and generation time metadata.
+The data sets are modelled, first and foremost, according to the RDF Data Cube vocabulary, % (see \cref{sec:openspending}),
+which specifies the structure of a data cube.
+LinkedSpending follows the RDF Data Cube recommendation to make heavy use of the SDMX model for measures, attributes and dimensions.%, among others, sponsored by the United Nations Statistics Division, the International Monetary Fund and the World Bank.
+The data sets are very heterogeneous but there are some properties which are commonly specified and thus modelled with established vocabularies.
+The year and date, a data set and an observation refers to, respectively, is expressed by \resource{sdmx-dimension:refPeriod} and XSD.
+%other than the usage of time and dates, which are expressed  currencies and countries.
+
+Currencies are taken from DBpedia~\cite{dbpedia-swj} and countries are represented using the vocabulary of LinkedGeoData~\cite{SLHA11}, a hub for spatial linked data.
+Some amount of data is imported from LinkedGeoData countries and DBpedia currencies. Because of the limited number of countries and currencies, and properties values imported per country and currency, the amount of data is too small to consider federated querying.
+As most countries and currencies are stable in the medium term, this data needs to be updated only infrequently.
+\paragraph{Interlinking}
+%\textbf{Interlinking:}
+There are two possibilities to align entities to another vocabulary: 1) to use the entities directly and 2) to create an own RDF resource with interlinks, like \resource{owl:sameAs}, to that vocabulary.
+We generally preferred the first approach because a higher amount of reuse provides easier integration, better understandability and tool support.
+%We generally preferred to use entities of a vocabularies directly, such as the currencies and countries, because this is a more elegant and less convoluted approach as long as the used vocabularies are stable and exactly correspond to the required meaning.
+%, as long as the entities are always in the object, or property position.
+% wir brauchen nicht extra begründen warum man subjects verlinken muss um dann zu sagen, dass es sowieso keine observations gibt, die man verknüpfen kann (da fragt sich der leser warum wir das schreiben)
+%Using an entity of another vocabulary in the subject position is problematic, however, because, amongst other things, those additional triples are not reachable by standard Linked Data URI dereferencing.
+%Because of this, the interlinks between observations of the data sets to observations in other data cubes need to be aligned by interlinking and not by replacement.
+% Observations are only equal to others however, when they describe exactly the same transaction and overlapping data sets from other sources have not been found.
+% While there are usually no interlinking targets for \emph{sameAs} links to other observations, there are many possibilities for interlinks between data sets or dimension values (which are always URIs, mostly with labels) and concepts they refer to.
+While we did not find \emph{sameAs} link targets on observation level, i.e.~exactly the same statistical observations described in other data sets, there are many possibilities for interlinks between data sets or dimension values and concepts they refer to.
+Using the labels of those data sets and dimension values, it is possible, for example, to link values of the dimension \enquote{region} of a federal budget, and thus indirectly also the observations which use those values, to the cities in DBpedia or LinkedGeoData whose labels are contained in the label of the region value URI.
+
+%\todo{Wenn zwei Datensätze sich z.B. auf Städte beziehen, könnte man vermutlich schon mehr Sachen verknüpfen. Das Problem bei dem Absatz ist, dass Du hier sagst, dass es quasi keine Linkmöglichkeiten gibt, aber unter 7.1 betonst, dass man mit mehr Links noch mehr Analysen durchführen kann.}
+
+%, such as \ls\url{/berlin\_de}, 
+%, can browse single URLs as HTML through the Pubby\footnote{\url{http://wifo5-03.informatik.uni-mannheim.de/pubby/}} interface by dereferencing the URIs, such as \ls\url{/berlin\_de}, in a browser.
+
+%The user can browse single URLs as HTML through the Pubby\footnote{\url{http://wifo5-03.informatik.uni-mannheim.de/pubby/}} interface by dereferencing the URIs, such as \ls\url{/berlin\_de}, in a browser.
+
+%Because mass processing such as interlinking requires computationally expensive queries against the SPARQL endpoint, an RDF dump\footnote{\ntriples} is also available. \todo{Satz würde ich eher weglassen bzw. verschieben. Es ist recht klar, dass es einen Dump gibt und es passt nicht in die Section.}
+%\Cref{tab:technicaldetails}
+
+\paragraph{Error Handling}
+The OpenSpending API lists \numberofopenspendingdatasets{} data sets with \numberofdatasets{} of them having a LinkedSpending equivalent.
+The discrepancy is caused by loss in several stages.
+To prevent timeouts and to reduce the impact of disrupted connections, the source data set is downloaded in several parts with a maximum number of entries.
+These parts are then merged so that each file corresponds to exactly one data set.
+Data sets without observations are removed and the remaining data sets are transformed, noting the missing values for all component properties.
+If the first 1000 values are all missing, the transformation is aborted, otherwise a \resource{lso:completeness} value $c = \frac{|\textnormal{existing values}|}{|\textnormal{observations}||\textnormal{component properties}|}$ is attached to the data set.
+Besides empty or non-existing data sets, there were no other types of error observed.
+%here are however several cases of component properties with the same name which raises the problem of determining equivalent component properties. The chosen approach is to regard as equal all properties with exactly the same name.
+%A%ll data sets, with the exception of ones where the first 1000 expected values are all missing, are now fully converted and each dataset now has a property “” which has an assigned float value measuring 1-%(missing number of values)/(expected number of values).
+
+%In order to detect faulty data sets and to guarantee high quality data, there is a threshold on the number of errors.
+%If the error count of the transformation of a dataset reaches both at least 30 and \SI{10}{\%} of all observation-property pairs yet processed, the transformation is aborted, which removes 5 additional data sets, leaving \numberofdatasets{}.
+
+\paragraph{Sustainability}
+The data conversion process is controlled by a web application\footnotemark{}, which constantly checks for added and modified data sets from OpenSpending, which are automatically queued for conversion but can also be manually managed.
+%\footnotetext{Available at \url{http://linkedspending.aksw.org/api}, developed at \github{}}
+\footnotetext{\url{http://linkedspending.aksw.org/api}}
+Updates don't interrupt the accessibility of the SPARQL endpoint and the services building on it.
+On average, about 50 new data sets became available on each month between September 2013 and March 2014.
+A service monitor constantly checks the state of the application and reports errors.
+
+%thus the OntoWiki and CubeViz instances. % würde ich weglassen, da OntoWiki+CubeViz erst im nächsten Kapitel richtig erklärt werden
+
+%(\todo{warten auf publikation von michas paper} \remark{JL: Ich kenne den Status nicht, aber auf andere Publikationen warten, ist selten eine gute Idee.})
+%This facilitates the consumation of the data sets.
+
+%Observations can also aggregate measurements and thus allow views of different detail level over the same base data.
+%The dimensions are either data type properties, like \enquote{xsd:dateTime} or coded properties which have \emph{code lists} detailing their possible values.
+%The values can be organized in hierarchical code lists, where each parent property (and code list) aggregates the values of its children.
+
+\paragraph{Performance}
+The transformation of a data set takes less than an hour on average on a 2 GHz virtual machine, using less then 2 GB of RAM.
+
+\section{Publishing}\label{sec:publishing}
+The data is published using OntoWiki~\cite{ontowiki_www}.
+The interface for human and machine consumption is available at \url{http://linkedspending.aksw.org}.
+Depending on the actor and needs, OntoWiki provides various abilities to gather the published RDF data.
+\begin{figure}[b!]
+\includegraphics[width=\columnwidth]{img/ontowiki2.png}
+\caption{View of the data set \dataset{berlin\_de} in the OntoWiki}
+\label{fig:ontowiki}
+\end{figure}
+%The data can be explored and (with the appropriate access rights) authored collaboratively \todo{Die Daten kann man zwar editieren, aber sie werden beim nächsten Durchlauf überschrieben, oder?} (see \autoref{fig:ontowiki}).
+It can be explored by viewing the properties of a resource, its values and by following links to other resources (see \autoref{fig:ontowiki}).
+Using the SPARQL endpoint\footnote{\sparql} provided by the underlying \emph{Virtuoso Triple Store}\footnote{\url{http://virtuoso.openlinksw.com}}, actors are able to satisfy complex information needs.
+%\footnote{According to benchmarks~\cite{Bizer2009, MOR+11, MOR+12} Virtuoso  }
+\begin{figure}[t!]
+\includegraphics[width=\columnwidth]{img/cubeviz_circles.pdf}
+\caption{Faceted browsing in CubeViz by restricting values of dimensions}
+\label{fig:cubeviz_circles}
+\end{figure}
+
+Faceted search offers a selection of values for certain properties and thus slice and dice of the data set according to the interests on the fly.
+For example, depicted in \autoref{fig:cubeviz_circles} is all Greek police spending in a certain region.
+Visualization supports discovery of underlying patterns and gain of new insights about the data, for example about the relative proportions of a budget (see \autoref{fig:cubeviz_piechart}).
+%As can be seen from both depictions, exploration of statistical data using a vocabulary-adopted tool is more efficient and comfortable. \todo{"more efficient" im Vergleich zu was? Außerdem glaube ich kaum, dass man so etwas anhand von einem Screenshot beurteilen kann.}
+We set up the RDF DataCube Browser CubeViz~\cite{salas-ijsc-2013} as part of the human consumption interface.
+%Both exploration paradigms are already available on OpenSpending, however CubeViz offers data discovery by generating new instead of predefined visualization and takes advantage of the openness of the data by publishing additional information from interlinked data sets.
+
+\begin{table}[hbtp]
+\caption{Technical details of the LinkedSpending data set}
+\label{tab:technicaldetails}
+\tiny
+\renewcommand{\tabcolsep}{5pt}
+\begin{tabularx}{\columnwidth}{
+   >{\hsize=.7\hsize}L 
+   >{\hsize=1.3\hsize}L 
+}
+\toprule
+URL				&\lswebsite\\
+Version date and number		&2013-8-14, 0.1\\
+                      		&2014-4-11, 2014-3\\
+License				&PDDL 1.0\footnotemark\\
+SPARQL endpoint			&\sparql\\
+%VoiD description		&\url{ls:void}\\
+%Schema				&\url{ls:ontology/}\\
+Compressed N-Triples Dump 	&\ntriples\\
+datahub entry			&\url{http://datahub.io/dataset/linkedspending}\\
+\bottomrule
+\end{tabularx}
+\vspace{-10pt}
+\end{table}
+\footnotetext{\url{http://opendatacommons.org/licenses/pddl/1.0/}}
+
+\paragraph{Licensing}
+All published data is openly licensed under the PDDL 1.0. in accordance with the open definition\footnote{\url{http://opendefinition.org/}}.
+%which is summarized by: \todo{Ist es wirklich notwendig die Summary hier zu bringen. Der Link reicht doch.} \blockquote{A piece of data or content is open if anyone is free to use, reuse, and redistribute it — subject only, at most, to the requirement to attribute and/or share-alike}.\footnote{\url{http://opendefinition.org/}}
+%The license details are described in a \emph{VoID}~\iffalse ~\footnote{\url{http://www.w3.org/TR/void/}}\fi description
+
+\section{Overview over the Data Sets}\label{sec:overview}
+LinkedSpending consists of \numberofdatasets{} data sets (continually growing) with \numberofobservationsapproximate{} observations total.
+The amount of observations of the individual data sets varies considerably between two (spendings in Prague of about \SI{5000}{CZK} for an unknown purpose) and \SI{242209} (\enquote{Spending from ministries under the Danish government}).
+\Cref{tab:amountofdata} details the average and total amount of data in bytes, triples, and observations as well as the number of links to external data sets, which, for the presented version of 2014-3, amounts to more than 9 million links to LinkedGeoData countries and 1.5 million links to DBpedia currencies.\footnotemark
+\footnotetext{The links are inflated as they originate in observations instead of data sets, which allows better querying and tool support.}
+\Cref{fig:histogram} shows the distribution of the numbers of measures, attributes and dimensions of the data sets.\footnote{This analysis relates to version 0.1, which contains less data sets.}
+Measures represent the quantity that an observation describes.
+All data sets have at least one measure which is the amount of money spent or received.
+For most of them (217) that is the only one but there are data sets with up to 7 measures.
+%\footnote{\dataset{dk-corporate-tax-list} contains measures for different kinds of profits as well as losses.}.
+Attributes give further context to the measurement.
+The number of attributes is more varied, ranging from 2 to 26, with all data sets having at least a currency and a country, and most of them additionally the time the observations refer to.
+While the number of dimensions ranges from none\footnote{There is only one data set with no dimensions which a test data set on OpenSpending, as a data cube with no dimensions is not useful.} to 32, almost all of the data sets have between 1 and 6 dimensions, 
+the most common ones being the year and the time the data set and the observations refers to, respectively.
+Technical details about the data sets are described in \cref{tab:technicaldetails}.
+
+\begin{figure}[h]
+\includegraphics[width=0.9\columnwidth]{img/histogram.pdf}
+\caption{Histogram of measures, attributes and dimensions (version 0.1). \num{217} data sets have exactly one measure (clipped bar).}
+\label{fig:histogram}
+\end{figure}
+
+\begin{table}[hbtp]
+\caption{Amount of data for version 2014-3. All values are rounded to the nearest integer.}
+\label{tab:amountofdata}
+\tiny
+\renewcommand{\tabcolsep}{5pt}
+\begin{tabularx}{\columnwidth}{
+   >{\hsize=\hsize}L 
+   >{\hsize=\hsize}L 
+   >{\hsize=\hsize}L 
+}
+\toprule	
+	&\textbf{Total}    		&\textbf{Average}\\ 
+\midrule
+\textbf{number of data sets}    		&\numberofdatasets{}\\
+\textbf{file size (RDF/N-Triples)}	&\SI{24585}{MB}		&\SI{39}{MB}\\
+\textbf{triples}     		    &\num{113640534}&	\num{181245}\\
+\textbf{observations} 			& \num{5026393}		&\num{8017}\\
+\textbf{links to external data sets} 			&\num{10696614}		&\num{17060}\\
+% OLD VERSION
+%\textbf{filesize (RDF/N-Triples)}	&\SI{10012}{MB}		&\SI{41}{MB}\\
+%\textbf{triples}     			&\num{49619572}&	\num{200889}\\
+%\textbf{observations} 			&\num{2404313}		&\num{9734}\\
+%\textbf{links to external data sets} 			&\num{}		&\num{}\\
+\bottomrule
+\end{tabularx}
+\end{table}
+%\subsection{Example Queries}
+\paragraph{Example Queries} 
+%\textbf{Example Queries:} 
+\Cref{tab:sparqlqueries} contains queries for common use cases:
+Queries 1--6 are basic queries.
+Query 7 uses the interlinking to DBpedia currencies by querying over two different graphs.\footnotemark{}
+\footnotetext{Parts of DBpedia and LinkedGeoData describing countries and currencies have been integrated in the SPARQL endpoint. With federated querying however, nearly the whole LOD cloud can be queried.}
+Query 8 uses the custom vocabulary\footnotemark{} which is available for each data set.
+\footnotetext{In this case, the \enquote{Hauptfunktion} and \enquote{Oberfunktion} are unique to the \dataset{berlin\_de} dataset.}
+
+\begin{table*}[t]
+\lstset{aboveskip=-8pt,belowskip=-\baselineskip}
+
+\scriptsize
+\caption{Examplary SPARQL queries for typical use cases.}
+\label{tab:sparqlqueries}
+\begin{tabular}{@{\makebox[1em][r]{\rownumber\space}}p{0.2\textwidth}p{0.8\textwidth}}
+\toprule
+\textbf{information need}	&\textbf{SPARQL Query}\\
+\midrule
+list of all data sets&\begin{lstlisting}
+select * {?d a qb:DataSet}
+\end{lstlisting}\\
+all measures of the dataset \dataset{berlin\_de}
+&\begin{lstlisting}
+select ?m { ls:berlin_de qb:structure ?s. ?s qb:component ?c. ?c qb:measure ?m.}
+\end{lstlisting}\\
+all years which have observations in the de-bund dataset from \num{2020} onwards&
+\begin{lstlisting}
+select distinct ?year {?o a qb:Observation. ?o qb:dataSet ls:de-bund. ?o lso:refYear ?year.FILTER (xsd:date(?year) >= "2020-1-1"^^xsd:date) }
+\end{lstlisting}\\
+spendings of more than \num{100} billion \euro&
+\begin{lstlisting}
+select * {?o lso:amount ?a. ?o dbo:currency dbpedia:Euro. FILTER(xsd:integer(?a)>"1E11"^^xsd:integer) }
+\end{lstlisting}\\
+data sets with multiple years&
+\begin{lstlisting}
+select ?d count(?y) as ?count { ?d a qb:DataSet. ?d lso:refYear ?y. } group by ?d having (count(?y)>1)
+\end{lstlisting}\\
+sums of amounts for each reference year of \dataset{berlin\_de}&
+\begin{lstlisting}
+select ?y (sum(xsd:integer(?amount)) as ?sum) 
+{?o qb:dataSet ls:berlin_de. ?o lso:refYear ?y. ?o lso:amount ?amount.} group by ?y
+\end{lstlisting}\\
+data sets with currencies whose inflation rate is greater than \SI{10}{\%}&
+\begin{lstlisting}
+select distinct ?d ?c ?r {?o qb:dataSet ?d. ?o  dbo:currency ?c. ?c dbp:inflationRate ?r. filter(?r > 10)} 
+\end{lstlisting}\\
+Berlin city subsectors of research and education that have had their budget reduced from 2012 to 2013 (data set version 0.1)&
+\begin{lstlisting}
+select ?l (sum(xsd:integer(?amount12)) as ?sum12) (sum(xsd:integer(?amount13)) as ?sum13)
+ {?o qb:dataSet ls:berlin_de.
+  ?o lso:Hauptfunktion <http://openspending.org/berlin_de/Hauptfunktion/1>.
+  ?o lso:Oberfunktion ?of. ?of rdfs:label ?l.
+  {?o lso:refYear "2012"^^xsd:gYear. ?o lso:amount ?amount12.} UNION
+  {?o lso:refYear "2013"^^xsd:gYear. ?o lso:amount ?amount13.}}
+group by ?l
+having (sum(xsd:integer(?amount12)) > sum(xsd:integer(?amount13)))
+\end{lstlisting}\\
+data sets ordered by their number of properties in common with \dataset{2012\_tax} (having at least one such common property)&
+\begin{lstlisting}
+select ?d (count(?c) as ?count)
+{ls:2012_tax qb:structure ?s. ?s qb:component  ?c.
+ ?d qb:structure ?s2.         ?s2 qb:component ?c.
+ FILTER(?d!=ls:2012_tax)}
+group by ?d
+order by desc(?count)
+\end{lstlisting}\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+%mashups mehrwertgenerierung durch transformation
+
+%bei openspending ist alles da und super aaaber:
+\iffalse
+\section{OpenSpending}
+\begin{table}
+\begin{tabulary}{\columnwidth}{lS}
+\toprule
+\textbf{category}    	&\textbf{number of data sets}\\ 
+\midrule
+$\sum$			&\\
+\bottomrule
+\end{tabulary}
+\caption{Categories of data sets from OpenSpending}
+\end{table}
+\fi
+
+\iffalse
+The data sets are divided into the categories \emph{budget}, \emph{spending} and \emph{other} and are further organized by country and language.
+Each data set has a model that contains its core data set metadata (e.g. name, label, description, currency) and the dimensions, measures and views.
+Each of the models can be transformed to an RDF Data Cube \verb|qb:DataStructureDefinition| and each data set to a \verb|qb:DataSet|.
+Because of the large number of data sets, the models are not transformed manually but with \todo{insert the method here}.
+Model dimensions are mapped to Data Cube dimension, where each of the json object names is manually mapped to an RDF property.
+
+
+data cube: dimensions, attributes, measures
+\fi
+
+%\end{thebibliography}
+
+\iffalse
+\subsection{Intrinsic dimensions}
+
+\paragraph{Accuracy}
+Because the data sets were created by transformation and the values itself were not changed, their accuracy is equal to that of the source data of each data set.
+A request for information about existing studies into the accuracy on the OpenSpending mailing list was not answered.
+To measure the accuracy, more elaborate research is needed that checks the correctness of a random sample of the values by comparing them with a reference.
+
+\paragraph{Objectivity}
+\todo{das klingt alles viel zu schwammig, aber es ist ja auch nicht klar messbar. wie kann man das trotzdem wissenschaftlich schreiben?}
+As for the accuracy, the objectivity depends on the individual source data provided originally by government agencies and then converted and transfered to OpenSpending by some third party.
+So, assuming that the values were not changed on the way from the agencies to OpenSpending, the amount of thrust that the information is unbiased depends on the thrustworthyness of the governements and agencies themselves.
+Finally, objectivity is a subjective dimension and depends on the use case.
+Using the data to get an overview of the financial situation of a country is surely unproblematic but to allocate funding based on the exact number of the reports is thought to be questionable by the author of the paper.
+%- es gibt auf jeden fall anreize, finanzdaten zu fälschen ()
+\paragraph{Validity-of-documents}
+The validity of the RDF syntax has been successfully verified by the Raptor RDF parsing and serializing utility.
+Valid use of vocabularies is verified by \todo{...}
+
+\paragraph{Consistency}
+The way the program is written guarantees that for each observation there is only value for each measure.\todo{doesnt sound good, how to improve?}
+
+\paragraph{Conciseness}
+In RDF Data Cubes, attributes can be attached to a data set, a slice, a measure property or to an observation.
+
+While attributes which take different values for each observations necessarily have to be attached at the observation level, there are conflicting arguments for attributes which have the same value throughout.
+Attaching them at the observations ensures that all relevant information concerning an observation is in one place.
+Thus users can satisfy their information needs with less complex SPARQL queries or by resolving a single URL.
+Attaching them at the data set however removes redundancy and thus improves the conciseness.
+Furthermore, queries which select certain data sets, are actually easier to formulate with the latter approach.
+However, it is easier to create mash-ups and to use RDF DataCube visualization tools such as CubeViz~\cite{cubeviz}, when all attributes are attached at the observation level, so that we attach all attributes directly to the observations.
+RDF however is flexible and permits attaching the countries additionally at the data sets. Thus datasets of a certain country are simpler and the overhead in data size is negligible.
+
+%The countries are however also at the data sets because queries for data sets of a certain country are anticipated to be more frequent and cross-country spendings are less comparable as intra-country ones.
+%Because of this, our modelling approach is varied:
+%All attributes from the source data which are represented at the observation level, which are different for each data set, are kept so in the target data.
+%It is possible to check if all values of a certain attribute are the same and to move those attributes to the data set level but this is confusing for the users and inconsistent.
+%OpenSpending data sets on the other hand, have two fixed attributes: the countries whose governments do the financial transactions and the currency of the transactions.
+
+%The currency of a transaction is however directly tied to the amount spent and search queries which separate data sets by currency are less anticipated.
+%Thus the overhead of specifying the currency at each observation is deemed to weigh less than the .
+
+\subsection{Trust Dimensions}
+
+- depends on the source data, for each dataset
+most governements - high believability and reputation
+
+\subsection{Dataset Dynamicity Dimensions}
+Because spending data is historical, currency, volatility and timeliness are not applicable.
+\fi
+\subsection{Contextual Dimensions}
+\paragraph{Completeness}
+Because all of the attributes, measures, dimensions and observations of the original data sets are carried over to their Linked Data versions, the all transformed data sets are fully complete both on the schema and the data (instance) level. \todo{Nur so ``complete'' wie die Ausgangsdaten, oder? Ist auch nicht so interessant die Aussage, da offensichtlich.}
+However of the 321 data sets listed by OpenSpending, only \num{252} were retrievable and \numberofdatasets{} of those convertible.
+
+%\paragraph{Amount-of-data}
+%The amount of observations of the data sets varies between two (spendings in Prague of about \SI{5000}{CZK} for an unknown purpose) and 242209 (\enquote{Spending from ministries under the Danish government}).
+%See \autoref{fig:histogram} for the numbers of measures, attributes and dimensions.
+%See \autoref{fig:amountofdata} for the distribution of the numbers of triples and observations and \autoref{fig:histogram} for the numbers of measures, attributes and dimensions.
+\iffalse
+\begin{figure}[h]
+\includegraphics[width=\columnwidth]{img/pointcloud.pdf}
+\caption{Numbers of triples and observations of the data sets (logarithmic scales)}
+\label{fig:amountofdata}
+\end{figure}
+\fi
+\iffalse
+old data:
+\fi
+
+%\paragraph{Relevancy} This dimension is dependent on the task at hand.
+
+\subsection{Representational Dimensions}
+
+%\todo{- average length of names of measures, attributes,dimensions necessary?}
+
+%The URIs are kept short and human readable by reusing the existing OpenSpending URLs which are constructed based on the names of the resources and their parent resources.
+%For example, the dimension \emph{recipient} of the dataset \emph{nigerianbudg13} has the URL \url{os:nigerianbudg13/recipient}.
+%They were also reused to facilitate future integration with the source dataset using content negotiation to determine whether the user or application needs an RDF representation.
+%For resources which do not have a single source URL the spirit of the OpenSpending naming scheme was still followed. For example, the view \emph{} of the dataset \emph{berlin_de} \todo{example}.
+
+%\paragraph{Representational Consistency}
+\iffalse moved to extraction workflow
+First and foremost, the RDF Data Cube vocabulary provides the backbone structure for all of the data sets.
+This vocabulary uses the model of the Statistical Data and Metadata eXchange (SDMX) initiative\footnote{\url{http://sdmx.org}} which is widely used and, among others, sponsored by the United Nations Statistics Division, the International Monetary Fund and the World Bank.
+RDF Data Cube is supported by tools such as the CubeViz~\cite{Auer+ISWC-2012} plugin, that enables the management of RDF Data Cubes in the OntoWiki (\todo{warten auf publikation von michas paper} \remark{JL: Ich kenne den Status nicht, aber auf andere Publikationen warten, ist selten eine gute Idee.}), which manages several parts of the the Linked Data Lifecycle, such as publication, authoring and visualization.
+This facilitates the consumation of the data sets.
+\fi
+%\todo{Micha: sind die Zitierungen richtig?}
+%The SDMX vocabularies\footnote{\url{http://purl.org/linked-data/sdmx/2009{/dimension\#,measure\#,attribute\#,concept\#}}} are used for observation values, currencies and time periods.
+%\todo{move lifecycle part to a more fitting place?}
+%\paragraph{Representational Conciseness}
+\paragraph{Representational Conciseness and Understandability}
+Because the source data contains labels for all data sets, attributes, dimensions and measures, those labels are also provided for the transformed data sets.
+The resource URLs\footnote{except the observations whose last part is a hash value} are concise and  easily understandable, because they are generated from the names of the entities they describe.% (see \emph{Representational conciseness}).
+This facilitates writing SPARQL queries (see \autoref{tab:sparqlqueries}) and interpreting the results.
+
+%\begin{tabular}{ll}
+%x&\begin{Verbatim}dfdf\end{Verbatim}
+%\end{tabular}
+
+
+\paragraph{Interpretability}
+All objects are represented by globally unique URIs, many of them with labels (see the paragraph above). \todo{Leider ebenfalls keine so interessante Aussage.}
+
+\paragraph{Versatility}
+The data sets are available as resolved URIs, on a SPARQL endpoint\footnote{\sparql} and as \iffalse Turtle\footnote{\turtle} and \fi N-Triples\footnote{\ntriples} dumps. \todo{Wurde ebenfalls schon vorher gesagt.}
+
+%\section{Examples and Critical Discussion of Typical Knowledge Modeling Patterns Used}
+\iffalse
+\section{Use Cases}
+
+- CubeViz visualisierung
+- 2 länder mit ähnlichen data sets -> zusammen analysieren
+4 use cases sind am besten mit sparql queries
+\fi
+\end{comment}
+
+
+\section{Related Work}\label{sec:relatedwork}
+The TWC Data-Gov Corpus~\cite{datagov1,datagov2} consists of linked government data from the Data-gov project. However, it only contains transactions made in the US and does not overlap with OpenSpending.
+The publicspending.gr project generates and publishes~\cite{spendinggreece} public spending data from Greece based on the UK payment ontology and without using statistical data cubes.
+The UK government expenditure dataset COINS\footnote{\url{http://data.gov.uk/dataset/coins}} is available as Linked Data\footnote{\url{http://openuplabs.tso.co.uk/sparql/gov-coins}, in a beta version}.
+\emph{LOD Around-The-Clock (LATC)}\footnoteurl{http://latc-project.eu} is a project, which was funded by the European Union (EU) and converted European open government data into RDF.
+One of its outcomes is the FTS\footnoteurl{http://ec.europa.eu/budget/fts}~\cite{martin-fts} project, which transforms and publishes financial transparency data on EU spending.
+In comparison with LinkedSpending, those projects also contribute linked government data but with a different or more limited scope.
+
+Furthermore, there is the Digital Agenda Scoreboard~\cite{martin-scoreboard} is an EU project which keeps track of the transformation of statistical data to RDF. 
+
+\section{Conclusions, Shortcomings, Future Work}\label{sec:conclusions}
+As shown in \Cref{sec:conversion}, we converted several hundreds of financial data sets to RDF and, as shown in \Cref{sec:publishing}, we published them as Linked Open Data in several ways.
+%Thus, our contribution is that we have made available as Linked Open Data a large number of data sets.
+However, we recognise a few shortcomings and our goal is to enrich the meta data with the help of domain experts and to refine the structure of the individual data sets.
+Furthermore, we plan to improve the automatic configuration of CubeViz.
+%improve the user interface \todo{``improve the user interface'' wirkt aus dem Zusammenhang gerissen} 
+
+\paragraph{Multilinguality}
+RDF itself provides support for multilingualism, which is one of its key advantages to other representation formats.
+The source data does not contain language tags, however, and the the languages used do not always match the country, the data refers to.
+Automatic language detection on single labels did not yield a satisfying precision and it is not possible to increase the precision of the language detection by combining the estimates about several labels of an observation as their language is not always identical.
+We plan statistical examinations of the relations between labels of different entities and more complex schemes based on those examinations, which can achieve language detection with a higher precision.
+Additionally, we plan to automatically translate all literals to several languages.
+
+% \section{Known Shortcomings and Future Work}
+\paragraph{Individual Modelling}
+Because the source data is already structured, the transformation of all the data sets without the need of text extraction and in an automatic way was feasible.
+On a deep level however, there is much unmodelled structure that is unique to each data set or at most shared between several of them, for instance the categorization of spending into several specific \enquote{plans} in German budgets.
+Because of the amount of data sets, modelling all details, and thus also improving the internal and external connectivity, requires either a large-scale cooperation or a crowd-driven approach, which we did not perform yet.
+%\todo{Ich denke idealerweise sollte ein SPARQL-Query genau so einen Fall aufzeigen, bei dem wir das modelliert haben und damit über mehrere data sets Abfragen bauen konnten.}
+
+
+\paragraph{Drilldowns}
+Because of the hierarchical organization of the different coded properties \enquote{groups} and \enquote{functions}, the visualizations on \url{openspending.org} permit \enquote{zooming} (drilldown) in and out of the different levels of the data.
+The RDF Data Cube vocabulary specifies the use of \url{skos:ConceptScheme} or \url{qb:HierarchicalCodeList} but neither variant is fully implemented and it is not clear, which of those modelling possibilities will become standard.
+%\todo{Ist hier ``not implemented in CubeViz'' gemeint?}  -> das kann auch sein aber es ist auch noch nicht in den Daten selbst drin
+%As soon as hierarchical code lists are better specified, the linear hierarchy of the budget groups and function should be modelled.
+
+\subsection{Future Work}
+
+% interlinking
+\paragraph{Interlinking}
+Extensive interlinking of referenced entities to the all-purpose knowledge base of DBpedia provides additional context.
+Coded property values, such as the budget areas healthcare and public transportation, can be interlinked with their respective DBpedia concepts.
+This enables the usage of type hierarchies and thus new ways of structuring the data and provides more meaningful aggregations and new insights.
+
+\paragraph{Question Answering}
+We plan to develop a question answering system that allows accessing statistical Linked Data in the form of RDF Data Cubes using natural language questions~\cite{statisticalqashort}.
+LinkedSpending is used both as the first knowledge base and for performance evaluation.
+
+%\paragraph{more elaborate updating with different modules with a diff component a scheduler ...}
+
+\iffalse
+\paragraph{Reuse}
+Because of the large amount of data sets, the conversion process is necessarily automatic.
+While for some of the often used component properties, like date and time, resources from existing vocabularies such as SDMX are used, in the general case, new resources are created for all values.
+A thorough manual inspection might yield in an increased usage of existing vocabulary.
+Also some of the dimensions may be stable over different data sets and thus might be shared, which decreases the amount of redundancy and increases the benefit of those resources, should they be referenced from other resources.
+
+\paragraph{Hosting integration with OpenSpending}
+According to the Linked Data principles, the RDF resources we created should be resolvable.
+As openspending.org already uses URLs with different extensions to deliver different content types like JSON and HTML, adding content negotiation and hosting the resources at there would be easy to implement.
+To speed up the integration of new data, a web service that watches for changes in the input data and runs the transformation to keep the RDF data up to date would be useful. 
+%\paragraph{Webservice}
+\fi
+
+\iffalse
+\begin{table}
+\begin{tabulary}{\columnwidth}{LSS}
+\textbf{Country}	&\textbf{Number of data sets}	&\textbf{Number of observations}\\
+\end{tabulary}
+\caption{spending data per country}
+\label{tab:countries}
+\end{table}
+\fi
+%\todo{write somewhere: county codes modelled with SDMX Codelist CL_AREA following ISO 3166 alpha-2(for example \enquote{DE} stands for Germany) -> better: link with linkedgeodata}
+\iffalse
+\begin{table}
+\begin{tabulary}{\columnwidth}{LS}:
+\textbf{}	&	&\\
+\end{tabulary}
+\caption{spending data per country}
+\label{tab:countries}
+\end{table}
+\paragraph{URL renaming}
+The URLs of most of the transformed resources are equal (except for the prefixes) to those of OpenSpending in order to facilitate a common hosting of both RDF and the original resources with content negotiation.
+However the original naming schemes lead less understandable to URLs like the dimension \url{ls:nigeriabudg13/recipient} which cannot be prefixed at the core schema level because RDF local names cannot contain the slash character \enquote{/}.
+If this kind of hosting is not wanted by OpenSpending, other naming schemes are better, for example \ls\url{/dimensions/recipient}.
+\fi
+% \section*{Acknowledgements}
+\medskip\textbf{Acknowledgements:}
+Special thanks goes to the people behind the OpenSpending project, including Friedrich Lindenberg for suggesting the conversion. 
+
+% \cite{hoeffner-2013-kesw}
+\bibliographystyle{abbrv}
+\bibliography{paper,../../bib/aksw.swj}
+%\bibliography{paper,../../bib/aksw.twocolumn.abbrv,../../bib/aksw.pending}
+
+\end{document}
