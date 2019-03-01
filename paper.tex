@@ -43,7 +43,7 @@
 %Härtelstraße 16--18, D-04107 Leipzig
 
 \begin{abstract}
-Abstract text.
+This paper describes the ontology of the \textbf{Semantic Network of Information Management in Hospitals} (SNIK).  
 \end{abstract}
 
 \begin{keyword}
@@ -63,15 +63,28 @@ Abstract text.
 \end{tabular}
 \end{table}
 
-\section{Background}
+\section{Background}\label{sec:background}
 \todo{not Konrad: write background of meta model}
+\citet{domaene} contains an initial structure of the meta model.
 
-\section{Architecture}
-The \textbf{Semantic Network of Information Management in Hospitals} (\enquote{Krankenhaus} in German) is an OWL 2 DL ontology that consists of a central meta model and modular subontologies based on the meta model.  
+\section{Architecture}\label{sec:architecture}
+\todo{Describe the meta model here}
+The \textbf{Semantic Network of Information Management in Hospitals} (\enquote{Krankenhaus} in German) is an OWL 2 DL ontology that consists of a central meta model and modular subontologies based on the meta model. 
 
-\section{Data Set Description}
+\section{Data Set Description}\label{sec:dsd}
+The SNIK ontologies are available at \url{http://www.snik.eu/ontology/} under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license.
+The SNIK ontologies contain knowledge about information management in hospitals from three textbooks, an interview and a standard.
+- Blue Book~\citep{bb}
+- Orange Book~\citep{ob}
+- CIOX
+- Heinrich~\citep{he}
+- IT4IT
 
-\section{Application}
+\section{Application}\label{sec:application}
+The SNIK ontologies were initially intended as the basis for a decision support system for hospital CIOs~\citep{domaene}.
+While such a system was designed and a prototype was implemented, it was ultimately not integrated into the informational infrastructure of the Unilklinikum Leipzig.
+
+- verweis auf existierende papers
 
 \section{Acknowledgments}
 We thank the publishers ... and ... for granting us permission to publish the subontologies based on the textbooks [][][] under an open license.
