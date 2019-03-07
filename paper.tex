@@ -7,11 +7,13 @@
 \usepackage{csquotes}
 %\usepackage{graphicx}
 \usepackage{todonotes}
+%\usepackage{natbib} % does not seem to work with ios 1
+\renewcommand{\citet}{\cite}% citet is not defined without natbib
+\renewcommand{\citep}{\cite}% citep is not defined without natbib
 \setlength{\marginparwidth}{2.1cm}% enough space for todonotes
 %\usepackage{listings}
 %\lstset{language=SPARQL,breaklines=true}
-\usepackage{cleveref}
-
+%\usepackage{cleveref}
 %%%%%%%%%%% End of definitions
 
 \pubyear{2019}
@@ -46,6 +48,7 @@
 This paper describes the ontology of the \textbf{Semantic Network of Information Management in Hospitals} (SNIK).  
 \end{abstract}
 
+
 \begin{keyword}
 \kwd{information management, information systems, hospital information management}
 \end{keyword}
@@ -63,34 +66,50 @@ This paper describes the ontology of the \textbf{Semantic Network of Information
 \end{tabular}
 \end{table}
 
+\section{Call Excerpt}
+Source: \url{http://www.semantic-web-journal.net/authors}\\
+Short papers describing ontology modeling and creation efforts.
+The descriptions should be brief and pointed, indicating the design principles, methodologies applied at creation, comparison with other ontologies on the same topic, and pointers to existing applications or use-case experiments.
+It is strongly encouraged, that the described ontologies are free, open, and accessible on the Web.
+These submissions will be reviewed along the following dimensions:
+\begin{enumerate}
+\item Quality and relevance of the described ontology (convincing evidence must be provided).
+\item Illustration, clarity and readability of the describing paper, which shall convey to the reader the key aspects of the described ontology.
+\end{enumerate}
+
 \section{Background}\label{sec:background}
 \todo{not Konrad: write background of meta model}
 \citet{domaene} contains an initial structure of the meta model.
 
 \section{Architecture}\label{sec:architecture}
 \todo{Describe the meta model here}
-The \textbf{Semantic Network of Information Management in Hospitals} (\enquote{Krankenhaus} in German) is an OWL 2 DL ontology that consists of a central meta model and modular subontologies. 
-The SNIK ontologies contain knowledge about information management in hospitals from different sources:% three textbooks, an interview and a standard.
-The textbooks \citet{bb} \citet{ob} and \citet{he} form the ontologies BB, OB and HE, respectively. 
+The \textbf{Semantic Network of Information Management in Hospitals} (SNIK\footnote{Hospital means \enquote{Krankenhaus} in German.}) is a modular OWL 2 DL ontology.
+The \enquote{Meta Model} defines three basic disjunctive classes and their possible relations: Roles (who), Function (does what) and Entity Types (and which information is therefore needed).
+A set of modular subontologies define subclasses of those three classes and their relations as described by a certain knowledge source about information management in hospitals:
+%from different sources:% three textbooks, an interview and a standard.
+The textbooks \citet{bb}, \citet{ob} and \citet{he} form the ontologies BB, OB and HE, respectively. 
 CIOX is based on an interview with the CIO of the Universitätsklinikum Leipzig.
-IT4IT is based on the IT4IT-Standard.\todo{Sebastian: Was über Standards und IT4IT schreiben}
+IT4IT is based on the IT4IT standard.\todo{Sebastian: Was über Standards und IT4IT schreiben}
 
 \section{Data Set Description}\label{sec:dsd}
 The SNIK ontologies are available at \url{http://www.snik.eu/ontology/} under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license.
 
 \section{Application}\label{sec:application}
-The SNIK ontologies were initially intended as the basis for a decision support system for hospital CIOs~\citep{domaene}.
-While such a system was designed and a prototype was implemented\todo{welches paper ist das?}, it was ultimately not integrated into the informational infrastructure of the Unilklinikum Leipzig.
+The SNIK ontologies were initially intended~\citep{domaene} as the data source for \textbf{software to support hospital CIOs}:
+(1) The requirements engineering decision support system TOREOnto~\citep{toreonto} and (2) the knowledge exploration and navigation visualization CIONo~\citep{ciono}.
+While those applications were designed and prototypes were implemented, they were ultimately not integrated into the informational infrastructure of the Unilklinikum Leipzig.
 
+Recent efforts focus on ontology assisted \textbf{teaching}. 
+SNIK Graph~\citep{snikgraph}
 \todo{verweis auf existierende papers}
 \todo{benutzung durch braunschweig}
 \todo{benutzung durch amsterdam}
 
 
 \section{Acknowledgments}
-We thank the publishers ... and ... for granting us permission to publish the subontologies based on the textbooks [][][] under an open license.
+We thank the publishers ... and ... for granting us permission to publish the subontologies based on the textbooks \citet{bb,ob,he} under an open license.
 The SNIK project is supported by the DFG (German Research Foundation) under the grant numbers 1605/7-1 and 1387/8-1.
-\nocite{*} 
+%\nocite{*} 
 \bibliographystyle{ios1}
 \bibliography{paper}
 
