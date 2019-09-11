@@ -14,6 +14,7 @@
 \renewcommand{\citep}{\cite}% citep is not defined without natbib
 \setlength{\marginparwidth}{2.1cm}% enough space for todonotes
 \usepackage{listings}
+\usepackage{aurl}
 \lstset{language=SPARQL,breaklines=true}
 %\usepackage{cleveref}
 %%%%%%%%%%% End of definitions
@@ -28,8 +29,8 @@
 \begin{frontmatter}
 
 %\pretitle{}
-\title{The SNIK Ontology of Hospital Information Management}
-\runningtitle{The SNIK Ontology of Hospital Information Management}
+\title{Textbook Knowledge on Hospital Information Management as Linked Data}
+%\runningtitle{The SNIK Ontology of Hospital Information Management}
 %\subtitle{}
 
 % Two or more authors:
@@ -37,19 +38,22 @@
 \thanks{Corresponding author. \printead{e1}.}},
 \author[A]{\fnms{Franziska} \snm{Jahn}\ead[label=e2]{franziska.jahn@imise.uni-leipzig.de}},
 \author[A]{\fnms{Birgit} \snm{Schneider}\ead[label=e3]{birgit.schneider@imise.uni-leipzig.de}},
-\author[A]{\fnms{Anna} \snm{Lörke}\ead[label=e4]{anna.loerke@imise.uni-leipzig.de}},
+%\author[A]{\fnms{Anna} \snm{Lörke}\ead[label=e4]{anna.loerke@imise.uni-leipzig.de}},
 \author[A]{\fnms{Thomas} \snm{Pause}\ead[label=e5]{thomas.pause@imise.uni-leipzig.de}},
 \author[A]{\fnms{Alfred} \snm{Winter}\ead[label=e6]{alfred.winter@imise.uni-leipzig.de}}
 \runningauthor{K. Höffner et al.}
 \address[A]{Institute for Medical Informatics, Statistics and Epidemiology (IMISE),
-\orgname{University of Leipzig}, \cny{Germany}\printead[presep={\\}]{e1,e2,e3,e4,e5,e6}}
+\orgname{University of Leipzig}, \cny{Germany}\printead[presep={\\}]{e1,e2,e3,e5,e6}}
 %Medical Informatics, Management of Health Information Systemsi
 %Härtelstraße 16--18, D-04107 Leipzig
 
 \begin{abstract}
-This paper describes the ontology of the \textbf{Semantic Network of Information Management in Hospitals} (SNIK).  
+Textbooks contain abstract knowledge about a domain.
+In the case of Hospital Information Management, much of this knowledge consists of systems, their parts and their relations, making it a natural fit for RDF, RDFS and OWL.
+As the domain is large and highly relevant to students of Medical Informatics, modelling the knowledge is not only possible but also very useful.
+We present a common data model for the domain and the result of applying the data model to three textbooks.
+We publish the result over several interfaces that are useful for researchers, practitioners and students, depending on their objectives and their Semantic Web skills.
 \end{abstract}
-
 
 \begin{keyword}
 \kwd{information management, information systems, hospital information management}
@@ -68,8 +72,27 @@ This paper describes the ontology of the \textbf{Semantic Network of Information
 \end{tabular}
 \end{table}
 
-
 \section{Introduction}
+Given a care delivery organization, its health information system (HIS) can be defined as the part of the organization that processes and stores data, information, and knowledge.
+It usually consists of a large number of different application systems, computers, and network components~\citep{bb}.
+Managing an HIS comprises planning, monitoring and directing activities.
+Due to the complexity and the unique conditions in health care, HIS management is an exceptionally challenging task.
+There is an enormous amount of frameworks, textbooks and articles describing the scope of HIS management from the perspective of medical informatics.
+%However, the disciplines of business informatics and information systems (IS) provide an even broader view on information systems and their management.
+A structured representation of the different perspectives leads to a holistic view on HIS management and helps help researchers and students connect their existing knowledge with further knowledge from other sources during research and learning.
+In order to integrate different knowledge sources and to provide the knowledge in a structured, machine-readable data format, we extracted knowledge about HIS management from three textbooks~\citep{bb,ob,he} and other sources.
+The combination of this knowledge~\citep{einsemantischesnetz,domaene,approachtosupport} results in SNIK, the Semantic Network of Information Management in Hospitals (“Krankenhaus” in German).
+
+In order to encourage and enable other researchers, students and health informatics professionals to use available knowledge of HIS management, we answer the following questions in this paper:
+
+We discuss advantages and disadvantages of the interfaces and give recommendations on which ones present the best compromise for different use cases and target audiences.
+We conclude with plans for future work on interlinking and visualization.
+
+As the domain is large and highly relevant to students of Medical Informatics, modelling the knowledge is not only possible but also very useful.
+
+We present a common data model for the domain and the result of applying the data model to three textbooks.
+We publish the result over several interfaces that are useful for researchers, practitioners and students, depending on their objectives and their Semantic Web skills.
+
 Publishing textbook knowledge as Linked Data enables different ways of teaching.
 The data is the result of 
 The extraction effort includes 
@@ -80,28 +103,73 @@ This paper describes the current state of digitalized Hospital Information Manag
 Using a data model of Information Management 
 Depending on the learning style and information need of the student, several tools are available to cosnume that knowledge.
 
+\section{Data Model}
+In order to specify, which information should be extracted from the books and to facilitate comparisons, we use a common data model.
+Because processed textbooks contain abstract knowledge instead of information about any specific hospital, all concepts are modelled as classes.
+We thus call our data model the \enquote{meta model}, as it is an ontology.
+
+The Meta Model (see Figure 1) provides a common vocabulary for the domain of HIS management and thus defines, which superclasses and relations can be used.
+SNIK version 0.4.1 comprises five subontologies that are built upon the Meta Model, see Table 1.
+At the head of the class hierarchy is the “Top” class, which has exactly three disjunctive subclasses.
+Following the Meta Model, each class has to be a subclass of exactly one of them.
+The correct superclass of a new concept can be found by answering the question: Who (“Role”) does what (“Function”) and which information (“EntityType”) is needed? If a concept is neither of them, it cannot be modeled using the Meta Model.
+As the subclass relation is transitive, a new class can be placed further down the hierarchy and it can still be inferred, whether it is a Function, Role or EntityType (see Figure 3).
+Besides the subclass relationship, two classes can be connected with relations provided by the Meta Model.
+The generic “is associated with” relationship is possible between all classes but carries little information.
+Which more specific relations between two classes are available depends on their superclasses.
+For example, a role and a function can be connected as “is involved in” “is responsible for” and “approves”.
+Relations that are neither of them can either be modeled by using the generic “is associated with” relation or by creating and using a new sub relation of “is associated with”
+
+\section{Concessions to Practicality}
+Our main focus is that SNIK provides a net benefit to its users, many of which do not have Semantic Web expertise.
+This led to several concessions to usability and actual usage by sacrificing full conformance to the W3C OWL recommendation in the following cases:
+
+\paragraph{OWL Restrictions}
+The meta model offers several properties between the different subtopclasses.
+The definitions of \aurl{rdfs}{domain} and \aurl{rdfs}{range} state that the subjects, respectively objects of all triples with that property are instances of that class.
+Because SNIK contains classes, which are subclasses, not instances of the subtopclasses, using those properties directly in SNIK is technically wrong and OWL property restrictions should be used.
+This presented the following problems:
+\begin{itemize}
+\item Tools such as LodLive don't understand those OWL constructs and only show the RDF form with blank nodes and helper constructs, which is confusing to the users
+\item Communicating OWL restrictions to extractors and non-Semantic Web expert project members is difficult.
+\item Extractors only enter the name of the property, not whether it is a "someValuesFrom" or "allValuesFrom" restriction.
+For example, it is unclear whether each CEO is involved in at least one project review, or whether each CEO is only involved in project reviews.
+It may even be the case that both of those statements are not what the author intended.
+\item Deleting or adding a connection between classes in the OntoWiki is no longer an atomic operation and may result in unreferenced blank nodes or partially restored undo results.
+\end{itemize}
+
+To avoid those problems, we use direct triples between the classes of SNIK as if they were instances, not classes.
+
+\paragraph{}
+
+\section{Data Quality}
+- extractors not always same people who wrote book/part of book
+- mistake when extracting
+- reasoning does not work (test)
+\begin{itemize}
+\item Multiple Subtops
+\item Inconsistent Subtop with Subclass
+\item SKOS Link to Different Subtop
+\item Subclass Cycles
+\item Missing superclass
+\item Undefined Objects
+\item Domain Violation
+\item Range Violation
+\item Class URL Naming Convention Violations
+\item Property URL Naming Convention Violations
+\item Missing Definition
+\item Literals with Semicolons
+\item Classes with too many subclasses
+\item No Restriction
+\item Non-HTTP URI
+\item OWL 2 DL: Undefined Properties
+\item OWL 2 DL: Multiply Defined Properties
+\item OWL 2 DL: Class Typing Constraints
+\end{itemize}
+-> use SHAPE/SHACL ?
 
 \section{Unsorted}
 
-\begin{tabular*}{\columnwidth}{l}
-Which components of a healthcare network are not healthcare institutions?\\
-\begin{lstlisting}
-SELECT ?x {bb:HealthCareNetwork meta:entityTypeComponent ?x.
-  MINUS {?x rdfs:subClassOf* bb:HealthCareInstitution.}}
-\end{lstlisting}\\
-%bb:GovernmentalAuthority\\
-
-How many functions is the CIO responsible for?\\
-\begin{lstlisting}
-SELECT COUNT(?f) {bb:ChiefInformationOfficer meta:isResponsibleForFunction ?f.}
-\end{lstlisting}\\
-%15\\
-
-Do transinstitutional health information systems support telemicroscopy?\\
-\begin{lstlisting}
-ASK {bb:TransinstitutionalHealthInformationSystem meta:supports bb:Telemicroscopy.}
-\end{lstlisting}
-\end{tabular*}
 
 \begin{tabulary}{\columnwidth}{lL}
 \toprule
@@ -169,10 +237,31 @@ While those applications were designed and prototypes were implemented, they wer
 Recent efforts focus on ontology assisted \textbf{teaching}. 
 SNIK Graph~\citep{snikgraph}
 
+%The technical environment of SNIK is characterized in previous work [11].
+\section{Discussion}
+SNIK is based on the Meta Model from Figure \todo{reference}.
+Thus, SNIK can be considered as an archetype for ontologies describing for a given domain (here “HIS management”), what functions a certain role has to carry out and what information a person of this role needs and what information she/he provides while carrying out the functions.
+This may be used for domains like the medical department of a hospital as well.
+This would be valuable knowledge, for instance as basis for systems analysis projects [1].
+Different user groups can use the interfaces of SNIK that are most suitable to them.
+For example, the IT management of a hospital can use SNIK as a vocabulary to integrate data from different formats that result from application components from different vendors.
+Using the SPARQL1 query language, experts can also integrate applications with the SNIK ontology.
+ Experts can also use the SPARQL query editor to answer specific questions, see Table 2.
+Students and teachers, on the other hand, benefit more from SNIK Graph, which intuitively presents knowledge without the need for technical skills.
+
+Figure 4– A “Spider Worm” between the classes “Change Management” and “HIS Quality” in the SNIK Graph visualization web application.
+The content of SNIK is taken from textbooks which are protected by property rights of publishing houses or taken from an interview with a CIO holding property rights as well. Making the SNIK ontology openly available may therefore conflict with these property rights. In case of SNIK, we appreciate the approvals of the publishing houses Springer, de Gruyter and Schattauer and of the CIO. In general, missing approvals may prevent the creation of such open ontologies and thus the provision of textbook content as open knowledge.
+The approvals for SNIK were possible because for each class and relation being part of SNIK there is a clear indication of its source (see code “bb” and chapter information in Table 1). In future work we will use these indications for establishing hyperlinks into the sources such that users of SNIK may use SNIK as a smart index for retrieving more detailed knowledge and supporting illustrations from the original textbooks – if digitally available. We are convinced that this way an ontology like SNIK is not a competitor of textbooks but a smart guide for using a textbook. Thus, it might be attractive for publishing houses.
+
 \todo{verweis auf existierende papers}
 \todo{benutzung durch braunschweig}
 \todo{benutzung durch amsterdam}
 
+\section{Conclusions}
+We showed that knowledge on the management of information systems in medicine and health care is made publicly available using open standards over several interfaces with different compromises between expressivity and accessibility. It can be combined with other knowledge in biomedical and health informatics and in other disciplines.
+
+\section{Future Work}
+We plan to extend the text-based interlinks with semantic-similarity-based ontology matching [5] to find more correspondencies between the textbooks. This will enable users to switch to another textbook when a certain concept is explained there in more detail. The SNIK toolset, SNIK Graph in particular, is under permanent improvement. For instance, we are considering alternatives to the shortest path that are the most preferred by different audiences and whether those paths can be (semi-)automatically generated using suitable node or edge weight functions. We are also investigating candidates for additional subontologies and as interlink targets.
 
 \section{Acknowledgments}
 We thank the publishers ... and ... for granting us permission to publish the subontologies based on the textbooks \citet{bb,ob,he} under an open license.
