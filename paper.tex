@@ -236,10 +236,10 @@ A set of modular subontologies define subclasses of those three classes and thei
 The SNIK ontologies are available at \url{http://www.snik.eu/ontology/} under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license.
 
 \section{Application}\label{sec:application}
-SNIK was initially intended~\citep{domaene} as the data source for software to support hospital CIOs.
-Two applications were designed and implemented as prototypes: (1) the requirements engineering decision support system TOREOnto~\citep{toreonto} and (2) the knowledge exploration and navigation visualization CIONo~\citep{ciono}.\todo{add ciono to bib}
-Due to data protection regulations, efforts to integrated them into the informational infrastructure of the Uniklinikum Leipzig were stopped.
-Subsequent efforts shifted to ontology assisted teaching.
+SNIK was initially intended~\citep{domaene} both as the data source for software to support hospital CIOs and to support teaching.
+For the former goal, two applications were designed and implemented as prototypes~\citep{toreonto}: (1) the requirements engineering decision support system TOREOnto and (2) the knowledge exploration and navigation visualization CIONx.
+Due to internal regulations, efforts to integrate them into the informational infrastructure of the Uniklinikum Leipzig were stopped.
+Consequently, latter efforts concentrate on the teaching support:
 
 \subsection{SNIK Graph}
 \todo{reference franziskas poster in both figures}
@@ -267,8 +267,8 @@ Besides integrity of data, there are also 13 other criteria for quality of data.
 \includegraphics[width=\columnwidth]{img/snik-graph-spiderworm.png}
 \end{figure}
 
-SNIK Graph~\citep{snikgraph} is a web application\footnote{\url{http://www.snik.eu/graph}} that transforms the classes and triples of SNIK to nodes and edges of a graph.
-The graph is visualized using the Cytoscape.js~\citep{cytoscape} library with the spring-based Euler layout\todo{cite?}.
+SNIK Graph is a web application\footnote{\url{http://www.snik.eu/graph}} that transforms the classes and triples of SNIK to nodes and edges of a graph.
+The graph is visualized using the Cytoscape.js~\citep{cytoscape} library with the force-directed Euler layout.
 The u~\cref{fig:snik-graph-overview}
 
 Exploration options like the \enquote{spider worm} (see Figure 4), which consists of the shortest path between a start node and an end node together with the end node’s neighbourhood, illustrate the context of a concept.
