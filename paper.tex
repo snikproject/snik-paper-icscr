@@ -233,9 +233,32 @@ A set of modular subontologies define subclasses of those three classes and thei
 %from different sources:% three textbooks, an interview and a standard.
 
 \section{Data Set Description}\label{sec:dsd}
+\begin{table*}
+\caption{use of established vocabularies}
+\label{tab:templates}
+\begin{tabulary}{\textwidth}{lL}
+\toprule
+\textbf{Vocabulary}	&\textbf{Description}\\
+\midrule
+&\\
+&\\
+&\\
+\bottomrule
+\end{tabulary}
+\end{table*}
+
 The SNIK ontologies are available at \url{http://www.snik.eu/ontology/} under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license.
 
-\section{Application}\label{sec:application}
+\section{Lifecycle}\label{sec:application}
+After the transformation~\citep{sniktec} of the spreadsheets using Tarql, the resulting RDF was refined in Protege and then uploaded to a Virtuoso SPARQL endpoint. 
+Besides issues of collaborative editing, this required a regular export and reupload, which delayed the effect of changes in SNIK to the user facing applications.
+- git repository (link): collaborative editing but protege can cause large diffs -> people who understand rdf enough to use text editor ttl/rdfxml 
+- use ontowiki: slow but user friendly, undo function,
+- SPARUL queries
+
+
+
+\section{Application}
 SNIK was initially intended~\citep{domaene} both as the data source for software to support hospital CIOs and to support teaching.
 For the former goal, two applications were designed and implemented as prototypes~\citep{toreonto}: (1) the requirements engineering decision support system TOREOnto and (2) the knowledge exploration and navigation visualization CIONx.
 Due to internal regulations, efforts to integrate them into the informational infrastructure of the Uniklinikum Leipzig were stopped.
