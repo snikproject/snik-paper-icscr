@@ -239,7 +239,7 @@ The SNIK ontologies are available at \url{http://www.snik.eu/ontology/} under th
 SNIK was initially intended~\citep{domaene} both as the data source for software to support hospital CIOs and to support teaching.
 For the former goal, two applications were designed and implemented as prototypes~\citep{toreonto}: (1) the requirements engineering decision support system TOREOnto and (2) the knowledge exploration and navigation visualization CIONx.
 Due to internal regulations, efforts to integrate them into the informational infrastructure of the Uniklinikum Leipzig were stopped.
-Consequently, latter efforts concentrate on the teaching support:
+Consequently, the other approaches are in the area of teaching support:
 
 \subsection{SNIK Graph}
 \todo{reference franziskas poster in both figures}
@@ -253,7 +253,7 @@ Consequently, latter efforts concentrate on the teaching support:
 
 \begin{figure}
 \caption{A teacher prepares a lecture on strategic HIS directing using the \enquote{Circle Star} function of SNIK Graph.}
-\label{fig:snik-graph-circlestar}
+\label{fig:snik-graph-circle-star}
 \includegraphics[width=\columnwidth]{img/snik-graph-circle-star.png}
 \end{figure}
 
@@ -268,11 +268,13 @@ Besides integrity of data, there are also 13 other criteria for quality of data.
 \end{figure}
 
 SNIK Graph is a web application\footnote{\url{http://www.snik.eu/graph}} that transforms the classes and triples of SNIK to nodes and edges of a graph.
-The graph is visualized using the Cytoscape.js~\citep{cytoscape} library with the force-directed Euler layout.
-The u~\cref{fig:snik-graph-overview}
-
-Exploration options like the \enquote{spider worm} (see Figure 4), which consists of the shortest path between a start node and an end node together with the end node’s neighbourhood, illustrate the context of a concept.
-%Existing Linked Data visualizations, such as Relfinder, LodView and LodLive (see Table 1) are also adapted to SNIK using the SPARQL endpoint as a data source.
+The graph is visualized using the Cytoscape.js~\citep{cytoscape} library with the force-directed Euler layout, see~\cref{fig:snik-graph-overview}.
+With several thousand classes, specific parts of SNIK can be hard to discern.
+Thus, there are several options to view subgraphs of SNIK, for example to show only a specific chapter of a book to prepare a lecture about a specific topic.
+Users can also search for and restrict the view to a single class and then show the neighbourhood of that class (see \cref{fig:snik-graph-circle-star}) and subsequently the neighbourhood of selected neighbours of the previous step.
+SNIK Graph can also calculate the shortest path to between classes.
+We also tried to automatically find the most interesting path but this was not successfull as it is subjective and the depends on the goal of the user.
+Path and neighourhood operations are joined in the \enquote{spider worm} (see \cref{fig:snik-graph-spiderworm}), which consists of the shortest path between a start node and an end node together with the end node’s neighbourhood, illustrate the context of a concept.
 
 \subsection{Quiz}
 The DBpedia-powered Clover Quiz~\citep{cloverquiz} shows that ontologies can be used to automatically generate multiple-choice questions.
