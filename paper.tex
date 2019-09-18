@@ -250,21 +250,44 @@ A set of modular subontologies define subclasses of those three classes and thei
 The SNIK ontologies are available at \url{http://www.snik.eu/ontology/} under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license.
 
 \section{Lifecycle}\label{sec:application}
-After the transformation~\citep{sniktec} of the spreadsheets using Tarql, the resulting RDF was refined in Protege and then uploaded to a Virtuoso SPARQL endpoint. 
-Besides issues of collaborative editing, this required a regular export and reupload, which delayed the effect of changes in SNIK to the user facing applications.
-- git repository (link): collaborative editing but protege can cause large diffs -> people who understand rdf enough to use text editor ttl/rdfxml 
-- use ontowiki: slow but user friendly, undo function,
-- SPARUL queries
 
+\begin{figure}[ht]
+\caption{The SNIK lifecycle}
+\label{fig:lifecycle}
+\includegraphics[width=\columnwidth]{cycle.pdf}
+\end{figure}
 
+When we add a new textbook to SNIK, we identify all concepts that fit the meta model and their relations to other concepts.
+Some project members are not proficient in RDF serializations, so we first fill out a meta model conforming spreadsheet template.
+We then use Tarql\footnote{\url{https://github.com/cygri/tarql}} with a mapping configuration file\footnote{\url{https://github.com/IMISE/snik-csv2rdf}} to converts that spreadsheet to RDF.
+Next, we refine the data in Protégé and upload it to a Virtuso SPARQL endpoint.
 
-\section{Application}
+After the initial publish phase, we describe the repeating steps of the reuse phrase with the SNIK lifecycle in \Cref{fig:lifecycle}:
+\begin{itemize}
+\item the Virtuoso SPARQL endpoint is used for querying and as data source for all our applications  
+\item an instance of the OntoWiki is used for punctual changes and additions by non-Semantic-Web-experts, supplemented by SPARUL for changes involving large numbers of classes 
+\item LIMES~\citep{limes} generates interlink candidates between the different textbooks, which can be approved or rejected by the users
+\item LodView\footnote{\url{https://lodview.it/}} lets the user browse among the classes of snik and view particular classes in detail
+\item SNIK Graph, detailed in \Cref{sec:snik-graph}, supplements the RDF browser by visualizing the relationships between classes.
+Users often discover incorrect modelling or possibilities for enhancement in SNIK graph.
+\item SNIK quality is a web application that uses SPARQL queries to find problems of varying degree, such as violations of domain, range or naming conventions, subclass cycles or missing definitions.
+\item Problems suggested by users and SNIK quality are verified, solved, and published on the SPARQL endpoint using SPARUL queries, at which point the circle begins anew. 
+\end{itemize}
+
+%After the initial extraction step, SNIK is published and users suggest problems or enhancements.%Besides issues of collaborative editing, this required a regular export and reupload, which delayed the effect of changes in SNIK to the user facing applications.
+%- git repository (link): collaborative editing but protege can cause large diffs -> people who understand rdf enough to use text editor ttl/rdfxml 
+%- use ontowiki: slow but user friendly, undo function,
+%- SPARUL queries
+The technical environment of those services is described in~\citet{sniktec}.
+Selected applications are described in the following section.
+
+\section{Applications}
 SNIK was initially intended~\citep{domaene} both as the data source for software to support hospital CIOs and to support teaching.
 For the former goal, two applications were designed and implemented as prototypes~\citep{toreonto}: (1) the requirements engineering decision support system TOREOnto and (2) the knowledge exploration and navigation visualization CIONx.
 Due to internal regulations, efforts to integrate them into the informational infrastructure of the Uniklinikum Leipzig were stopped.
 Consequently, the other approaches are in the area of teaching support:
 
-\subsection{SNIK Graph}
+\subsection{SNIK Graph}\label{sec:snik-graph}
 \todo{reference franziskas poster in both figures}
 \todo{get a higher quality version of overview graphic}
 \todo{reference \citet{visualizationoflargeontologies}}
@@ -272,7 +295,7 @@ Consequently, the other approaches are in the area of teaching support:
 \begin{figure}
 \caption{SNIK Graph Overview}
 \label{fig:snik-graph-overview}
-\includegraphics[width=\columnwidth]{img/snik-graph-overview.png}
+\includegraphics[width=\columnwidth]{img/snik-graph.png}
 \end{figure}
 
 \begin{figure}
