@@ -50,8 +50,8 @@
 
 \begin{abstract}
 Textbooks contain abstract knowledge about a domain.
-In the case of Hospital Information Management, much of this knowledge consists of systems, their parts and their relations, making it a natural fit for RDF, RDFS and OWL.
-As the domain is large and highly relevant to students of Medical Informatics, modelling the knowledge is not only possible but also very useful.
+In the case of Hospital Information Management, much of this knowledge consists of systems, their parts and their relations.%, making it a natural fit for RDF, RDFS and OWL.
+%As the domain is large and highly relevant to students of Medical Informatics, modelling the knowledge is not only possible but also very useful.
 We present a common data model for the domain and the result of applying the data model to three textbooks.
 We publish the result over several interfaces that are useful for researchers, practitioners and students, depending on their objectives and their Semantic Web skills.
 \end{abstract}
@@ -143,31 +143,31 @@ To avoid those problems, we use direct triples between the classes of SNIK as if
 
 \paragraph{}
 
-\section{Data Quality}
-- extractors not always same people who wrote book/part of book
-- mistake when extracting
-- reasoning does not work (test)
-\begin{itemize}
-\item Multiple Subtops
-\item Inconsistent Subtop with Subclass
-\item SKOS Link to Different Subtop
-\item Subclass Cycles
-\item Missing superclass
-\item Undefined Objects
-\item Domain Violation
-\item Range Violation
-\item Class URL Naming Convention Violations
-\item Property URL Naming Convention Violations
-\item Missing Definition
-\item Literals with Semicolons
-\item Classes with too many subclasses
-\item No Restriction
-\item Non-HTTP URI
-\item OWL 2 DL: Undefined Properties
-\item OWL 2 DL: Multiply Defined Properties
-\item OWL 2 DL: Class Typing Constraints
-\end{itemize}
--> use SHAPE/SHACL ?
+%\section{Data Quality}
+%- extractors not always same people who wrote book/part of book
+%- mistake when extracting
+%- reasoning does not work (test)
+%\begin{itemize}
+%\item Multiple Subtops
+%\item Inconsistent Subtop with Subclass
+%\item SKOS Link to Different Subtop
+%\item Subclass Cycles
+%\item Missing superclass
+%\item Undefined Objects
+%\item Domain Violation
+%\item Range Violation
+%\item Class URL Naming Convention Violations
+%\item Property URL Naming Convention Violations
+%\item Missing Definition
+%\item Literals with Semicolons
+%\item Classes with too many subclasses
+%\item No Restriction
+%\item Non-HTTP URI
+%\item OWL 2 DL: Undefined Properties
+%\item OWL 2 DL: Multiply Defined Properties
+%\item OWL 2 DL: Class Typing Constraints
+%\end{itemize}
+%-> use SHAPE/SHACL ?
 
 \section{Unsorted}
 
@@ -201,16 +201,16 @@ Download	&\url{https://github.com/IMISE/snik-ontology/releases/download/0.8.0/sn
 
 \includegraphics[width=\columnwidth]{img/hierarchy.pdf}
 \begin{center}
-\begin{tabular*}{0.96\columnwidth}{lll}
+\begin{tabular*}{\columnwidth}{ll}
 \toprule
-\textbf{Ontology}				&\textbf{Prefix}&\textbf{Source}\\
+\textbf{Ontology}				&\textbf{Source}\\
 \midrule
-\url{http://www.snik.eu/ontology/meta}		&meta		&All Sources\\
-\url{http://www.snik.eu/ontology/bb}		&bb		&Textbook~\cite{bb}\\
-\url{http://www.snik.eu/ontology/ob}		&ob		&Textbook~\cite{ob}\\
-\url{http://www.snik.eu/ontology/he}		&he		&Textbook~\cite{he}\\
-\url{http://www.snik.eu/ontology/ciox}		&ciox		&CIO Interview\\
-\url{http://www.snik.eu/ontology/it4it}		&it4it		&Standard~\cite{it4it}\\
+\url{http://www.snik.eu/ontology/meta}		&Meta Model\\
+\url{http://www.snik.eu/ontology/bb}		&Textbook~\cite{bb}\\
+\url{http://www.snik.eu/ontology/ob}		&Textbook~\cite{ob}\\
+\url{http://www.snik.eu/ontology/he}		&Textbook~\cite{he}\\
+\url{http://www.snik.eu/ontology/ciox}		&CIO Interview\\
+\url{http://www.snik.eu/ontology/it4it}		&Standard~\cite{it4it}\\
 \bottomrule
 \end{tabular*}
 \end{center}
@@ -221,8 +221,9 @@ Three textbooks provide different views on the domain of Hospital Information Ma
 \citep{ob} concentrates on the \emph{tactical} management of information systems in general and on healthcare in particular.
 The focus of tactical management lies on the planning and operation of projects.  
 \citet{he} explains information management beyond the scope of healthcare. 
-CIOX is based on an interview with the CIO of the Universitätsklinikum Leipzig.
-IT4IT is based on the IT4IT standard.\todo{Sebastian: Was über Standards und IT4IT schreiben}
+Other sources are interviews and standards.
+%CIOX is based on an interview with the CIO of the Universitätsklinikum Leipzig.
+%IT4IT is based on the IT4IT standard.\todo{Sebastian: Was über Standards und IT4IT schreiben}
 
 \section{Data Model}\label{sec:architecture}
 \citet{domaene} contains an initial structure of the meta model.
@@ -259,20 +260,20 @@ The SNIK ontologies are available at \url{http://www.snik.eu/ontology/} under th
 
 When we add a new textbook to SNIK, we identify all concepts that fit the meta model and their relations to other concepts.
 Some project members are not proficient in RDF serializations, so we first fill out a meta model conforming spreadsheet template.
-We then use Tarql\footnote{\url{https://github.com/cygri/tarql}} with a mapping configuration file\footnote{\url{https://github.com/IMISE/snik-csv2rdf}} to converts that spreadsheet to RDF.
+We then use Tarql\footnote{\url{https://github.com/cygri/tarql}} with a mapping configuration file\footnote{\url{https://github.com/IMISE/snik-csv2rdf}} to convert that spreadsheet to RDF.
 Next, we refine the data in Protégé and upload it to a Virtuso SPARQL endpoint.
 
 After the initial publish phase, we describe the repeating steps of the reuse phrase with the SNIK lifecycle in \Cref{fig:lifecycle}:
-\begin{itemize}
+\begin{enumerate}
 \item the Virtuoso SPARQL endpoint is used for querying and as data source for all our applications  
 \item an instance of the OntoWiki is used for punctual changes and additions by non-Semantic-Web-experts, supplemented by SPARUL for changes involving large numbers of classes 
 \item LIMES~\citep{limes} generates interlink candidates between the different textbooks, which can be approved or rejected by the users
-\item LodView\footnote{\url{https://lodview.it/}} lets the user browse among the classes of snik and view particular classes in detail
+\item LodView\footnote{\url{https://lodview.it/}} lets the user browse among the classes of SNIK and view particular classes in detail
 \item SNIK Graph, detailed in \Cref{sec:snik-graph}, supplements the RDF browser by visualizing the relationships between classes.
 Users often discover incorrect modelling or possibilities for enhancement in SNIK graph.
 \item SNIK quality is a web application that uses SPARQL queries to find problems of varying degree, such as violations of domain, range or naming conventions, subclass cycles or missing definitions.
 \item Problems suggested by users and SNIK quality are verified, solved, and published on the SPARQL endpoint using SPARUL queries, at which point the circle begins anew. 
-\end{itemize}
+\end{enumerate}
 
 %After the initial extraction step, SNIK is published and users suggest problems or enhancements.%Besides issues of collaborative editing, this required a regular export and reupload, which delayed the effect of changes in SNIK to the user facing applications.
 %- git repository (link): collaborative editing but protege can cause large diffs -> people who understand rdf enough to use text editor ttl/rdfxml 
