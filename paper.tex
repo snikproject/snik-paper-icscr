@@ -16,6 +16,7 @@
 \usepackage{listings}
 \usepackage{aurl}
 \daurl{bb}{http://www.snik.eu/ontology/bb/}
+\daurl{meta}{http://www.snik.eu/ontology/meta/}
 \lstset{language=SPARQL,breaklines=true}
 \usepackage{cleveref}
 %%%%%%%%%%% End of definitions
@@ -124,27 +125,10 @@ The generic \enquote{is associated with} relationship carries little information
 For example, a role and a function can be connected as \enquote{is involved in} \enquote{is responsible for} and \enquote{approves}.
 Relations that are neither of them can either be modeled by using the generic \enquote{is associated with} relation or by creating and using a new sub relation of \enquote{is associated with}
 
-\section{Concessions to Practicality}
-SNIK is mainly used by students and researchers having no or little semantic web knowledge.
-This led to several concessions to usability and actual usage by sacrificing full conformance to the W3C OWL recommendation in the following cases:
-
-\paragraph{OWL Restrictions}
-The meta model offers several properties between the different subtopclasses.
-The definitions of \aurl{rdfs}{domain} and \aurl{rdfs}{range} state that the subjects, respectively objects of all triples with that property are instances of that class.
-The classes of SNIK are subclasses, not instances, of the subtopclasses.
-This means that using those properties directly in SNIK is technically wrong and OWL property restrictions should be used.
-This presented the following problems:
-\begin{itemize}
-\item Tools such as LodLive don't understand those OWL constructs and only show the RDF form with blank nodes and helper constructs, which is confusing to the users
-\item Communicating OWL restrictions to extractors and non-Semantic Web expert project members is difficult.
-\item Extractors only enter the name of the property, not whether it is a "someValuesFrom" or "allValuesFrom" restriction.
-For example, it is unclear whether each CEO is involved in at least one project review, or whether each CEO is only involved in project reviews.
-It may even be the case that both of those statements are not what the author intended.
-\todo{FJ: Sollte man hier evtl. noch erklären, wie es denn tatsächlich gemeint ist? Eigentlich haben die in SNIK modellierten Aussagen jeweils eine Bedeutung wie: Laut Lehrbuch xy muss/sollte ein CEO im Krankenhaus i. d. R. an Projektreviews (innerhalb von IM-Projekten) beteiligt sein. Ob ein Krankenhaus einen oder oder mehrere CEOs hat, ist uns an der Stelle egal, ebenso wie viele Projektreviews das sind. Wir drücken hier sozusagen eher eine Regel (laut Lehrbuch) aus.  }
-\item Deleting or adding a connection between classes in the OntoWiki\todo{needs to be introduced first} is no longer an atomic operation and may result in unreferenced blank nodes or partially restored undo results.
-\end{itemize}
-
-To avoid those problems, we use direct triples between the classes of SNIK as if they were instances, not classes.
+As a concession to practicality, we express each geleral rule extracted from a textbook as a single triple using classes as subject and object, and a property of the meta model.
+For example, the rule "the CEO is involved in project reviews" is modelled as \enquote{:Ceo \aurl{meta}{isInvolvedIn} :ProjectReview.}, where \texttt{:Ceo} is a subclass of \aurl{meta}{Role} and \aurl{meta}{ProjectReview} is a subclass of \aurl{meta}{Function}.
+While an OWL restrictions using \enquote{someValuesFrom} and \enquote{allValuesFrom} would be technically correct, the knowledge is not expressed that specifically in the textbooks.
+Additionally, encoding each fact as a single triple facilitates tool support and prevents inconsistencies through non-atomic changes. 
 
 \paragraph{}
 
