@@ -31,7 +31,7 @@
 \begin{frontmatter}
 
 %\pretitle{}
-\title{Textbook Knowledge on Hospital Information Management as Linked Data}
+\title{SNIK: Textbook Knowledge on Hospital Information Management as Linked Data}
 %\runningtitle{The SNIK Ontology of Hospital Information Management}
 %\subtitle{}
 
@@ -50,12 +50,16 @@
 %Härtelstraße 16--18, D-04107 Leipzig
 
 \begin{abstract}
-Textbooks contain abstract knowledge about a domain.
-In the case of Hospital Information Management, much of this knowledge consists of information management functions, roles executing these functions  and the information used or updated by these functions.
+%Textbooks contain abstract knowledge about a domain.
+Textbooks about information management in hospitals describe the planning, monitoring and directing of a hospital's information system.
+SNIK consists of the manually transformed content of three such textbooks as Linked Open Data.
+The data model describes information management functions, roles executing these functions and the information used or updated by these functions.
+%SNIK provides applications that are used to teach students internationally.
+%and the result of applying the data model to three textbooks, an interview and a standard.
+%To compare, 
 %, making it a natural fit for RDF, RDFS and OWL.
 %As the domain is large and highly relevant to students of Medical Informatics, modelling the knowledge is not only possible but also very useful.
-We present a common data model for the domain and the result of applying the data model to three textbooks an interview and a standard.
-We publish the result over several interfaces that are useful for researchers, practitioners and students, depending on their objectives and their Semantic Web skills.
+We publish the result over several different interfaces that are useful for researchers, information system administrators or students, depending on their objectives and their capabilities.
 \end{abstract}
 
 \begin{keyword}
@@ -76,19 +80,19 @@ We publish the result over several interfaces that are useful for researchers, p
 \end{table}
 
 \section{Introduction}
-Given a care delivery organization, its health information system (HIS) can be defined as the part of the organization that processes and stores data, information, and knowledge.
-It usually consists of different application systems, computers, and network components~\citep{bb}.
-Managing an HIS comprises planning, monitoring and directing activities.
-Due to the complexity and the unique conditions in health care, HIS management is an exceptionally challenging task.
-There is an enormous amount of frameworks, textbooks and articles describing the scope of HIS management from the perspective of medical informatics.
+A health information system (HIS) is the socio-technical subsystem of a care delivery organization~\citep{bb}.
+This includes its different application systems, computers, and network components as well as their users.
+A HIS processes data, information, and knowledge and its management involves planning, monitoring and directing of those activities.
+Due to the complexity and the unique conditions in health care, HIS management is an challenging task.
+There are many different frameworks, textbooks and articles describing the scope of HIS management from the perspective of medical informatics.
 %However, the disciplines of business informatics and information systems (IS) provide an even broader view on information systems and their management.
-A structured representation of the different perspectives leads to a holistic view on HIS management and helps help researchers and students connect their existing knowledge with further knowledge from other sources during research and learning.
+%A structured representation of the different perspectives leads to a holistic view on HIS management and helps help researchers and students connect their existing knowledge with further knowledge from other sources during research and learning.
 In order to integrate different knowledge sources and to provide the knowledge in a structured, machine-readable data format, we extracted knowledge about HIS management from three textbooks~\citep{bb,ob,he} and other sources.
-The combination of this knowledge~\citep{einsemantischesnetz,domaene,approachtosupport} results in the SNIK ontology, the Semantic Network of Information Management in Hospitals (\enquote{Krankenhaus} in German).
+The combination of this knowledge~\citep{einsemantischesnetz,domaene,approachtosupport} results in SNIK, the Semantic Network of Information Management in Hospitals (\enquote{Krankenhaus} in German).
 
 In order to encourage and enable other researchers, students and health informatics professionals to use available knowledge of HIS management, We introduce different user interfaces to the SNIK ontology and discuss their suitability for different use cases of the target audiences.
 %We discuss advantages and disadvantages of the interfaces and give recommendations on which ones present the best compromise for different use cases and target audiences.
-We conclude with plans for future work on interlinking and visualization.
+%We conclude with plans for future work on interlinking and visualization.
 
 %As the domain is large and highly relevant to students of Medical Informatics, modelling the knowledge is not only possible but also very useful.
 Medical informatics students, who are trained for executive positions in information management departments of healthcare institutions, such as hospitals, need a clear terminology of their domain.
@@ -99,14 +103,9 @@ We present a common data model for the domain and the result of applying the dat
 We publish the result over several interfaces that are useful for researchers, practitioners and students, depending on their objectives and their Semantic Web skills.
 
 Publishing textbook knowledge as Linked Data enables different ways of teaching.
-The data is the result of 
-The extraction effort includes 
 The data is continously revised: users constantly report wrong or missing data in the visualization, which is then corrected, respectively revised, by the researchers of the project.
 
-This paper describes the current state of digitalized Hospital Information Management textbook knowledge.
 
-Using a data model of Information Management 
-Depending on the learning style and information need of the student, several tools are available to consume that knowledge.
 \todo{FJ: Welchen Zweck hat dieser Teil in der Einleitung? Auch würde ich die Ziele vielleicht etwas kompakter als Liste beschreiben.}
 
 \section{Data Model}
@@ -269,6 +268,9 @@ Users often discover incorrect modelling or possibilities for enhancement in SNI
 %- SPARUL queries
 The technical environment of those services is described in~\citet{sniktec}.
 Selected applications are described in the following section.
+
+\section{Data Quality}
+
 
 \section{Applications}
 SNIK was initially intended~\citep{domaene} both as  software to support hospital CIOs and to support teaching.
