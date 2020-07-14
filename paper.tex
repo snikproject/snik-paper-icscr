@@ -19,9 +19,14 @@
 \daurl{meta}{http://www.snik.eu/ontology/meta/}
 \lstset{language=SPARQL,breaklines=true}
 \usepackage{cleveref}
+\newcommand{\snikversion}{1.0}
+\newcommand{\sniktriples}{\num{71852}}
+\newcommand{\snikclasses}{\num{2655}}
+\newcommand{\snikproperties}{\num{339}}
+\newcommand{\sniklinks}{\num{581}}
 %%%%%%%%%%% End of definitions
 
-\pubyear{2019}
+\pubyear{2020}
 \volume{0}
 \firstpage{1}
 \lastpage{1}
@@ -43,7 +48,7 @@
 %\author[A]{\fnms{Anna} \snm{Lörke}\ead[label=e4]{anna.loerke@imise.uni-leipzig.de}},
 \author[A]{\fnms{Thomas} \snm{Pause}\ead[label=e5]{thomas.pause@imise.uni-leipzig.de}},
 \author[A]{\fnms{Alfred} \snm{Winter}\ead[label=e6]{alfred.winter@imise.uni-leipzig.de}}
-\runningauthor{K. Höffner et al.}
+%\runauthor{K. Höffner et al.}
 \address[A]{Institute for Medical Informatics, Statistics and Epidemiology (IMISE),
 \orgname{University of Leipzig}, \cny{Germany}\printead[presep={\\}]{e1,e2,e3,e5,e6}}
 %Medical Informatics, Management of Health Information Systemsi
@@ -88,7 +93,7 @@ There are many different frameworks, textbooks and articles describing the scope
 %However, the disciplines of business informatics and information systems (IS) provide an even broader view on information systems and their management.
 %A structured representation of the different perspectives leads to a holistic view on HIS management and helps help researchers and students connect their existing knowledge with further knowledge from other sources during research and learning.
 In order to integrate different knowledge sources and to provide the knowledge in a structured, machine-readable data format, we extracted knowledge about HIS management from three textbooks~\citep{bb,ob,he} and other sources.
-The combination of this knowledge~\citep{einsemantischesnetz,domaene,approachtosupport} results in SNIK, the Semantic Network of Information Management in Hospitals (\enquote{Krankenhaus} in German).
+The combination of this knowledge~\citep{semantischesnetz,domaene,approachtosupport} results in SNIK, the Semantic Network of Information Management in Hospitals (\enquote{Krankenhaus} in German).
 
 In order to encourage and enable other researchers, students and health informatics professionals to use available knowledge of HIS management, We introduce different user interfaces to the SNIK ontology and discuss their suitability for different use cases of the target audiences.
 %We discuss advantages and disadvantages of the interfaces and give recommendations on which ones present the best compromise for different use cases and target audiences.
@@ -103,18 +108,16 @@ We present a common data model for the domain and the result of applying the dat
 We publish the result over several interfaces that are useful for researchers, practitioners and students, depending on their objectives and their Semantic Web skills.
 
 Publishing textbook knowledge as Linked Data enables different ways of teaching.
-The data is continously revised: users constantly report wrong or missing data in the visualization, which is then corrected, respectively revised, by the researchers of the project.
+%The data is continously revised: users constantly report wrong or missing data in the visualization, which is then corrected, respectively revised, by the researchers of the project.
 
-
-\todo{FJ: Welchen Zweck hat dieser Teil in der Einleitung? Auch würde ich die Ziele vielleicht etwas kompakter als Liste beschreiben.}
 
 \section{Data Model}
 In order to specify, which information should be extracted from the books and to facilitate comparisons, we use a common data model.
 Because processed textbooks contain abstract knowledge instead of information about any specific hospital, all concepts are modelled as classes.
 We thus call our data model the \enquote{meta model}, as it is an ontology.
-
+meta model in accordance with its definition in the domain as a shared modelling language~\citep[p.~8]{ob}.
 The meta model (see \cref{fig:metamodel}) provides a common vocabulary for the domain of HIS management and thus defines, which superclasses and property can be used.
-SNIK version 0.4.1 comprises five subontologies that are built upon the meta model, see Table 1.
+SNIK version \snikversion{} comprises five subontologies that are built upon the meta model, see Table 1.
 At the head of the class hierarchy is the \enquote{Top} class, which has exactly three disjunctive subclasses.
 Following the meta model, each class has to be a subclass of exactly one of them.
 The correct superclass of a new concept can be found by answering the question: Who (\enquote{Role}) does what (\enquote{Function}) and which information (\enquote{EntityType}) is needed? If a concept is neither of them, it cannot be modeled using the meta model.
@@ -125,9 +128,9 @@ For example, a role and a function can be connected as \enquote{is involved in} 
 Relations that are neither of them can either be modeled by using the generic \enquote{is associated with} relation or by creating and using a new sub relation of \enquote{is associated with}
 
 As a concession to practicality, we express each geleral rule extracted from a textbook as a single triple using classes as subject and object, and a property of the meta model.
-For example, the rule "the CEO is involved in project reviews" is modelled as \enquote{:Ceo \aurl{meta}{isInvolvedIn} :ProjectReview.}, where \texttt{:Ceo} is a subclass of \aurl{meta}{Role} and \aurl{meta}{ProjectReview} is a subclass of \aurl{meta}{Function}.
-While an OWL restrictions using \enquote{someValuesFrom} and \enquote{allValuesFrom} would be technically correct, the knowledge is not expressed that specifically in the textbooks.
-Additionally, encoding each fact as a single triple facilitates tool support and prevents inconsistencies through non-atomic changes. 
+For example, the rule "the CEO is involved in project reviews" is modelled as \enquote{\texttt{:Ceo} \aurl{meta}{isInvolvedIn} \texttt{:ProjectReview}.}, where \texttt{:Ceo} is a subclass of \aurl{meta}{Role} and \aurl{meta}{ProjectReview} is a subclass of \aurl{meta}{Function}.
+While an OWL restrictions using \aurl{owl}{someValuesFrom} and \aurl{owl}{allValuesFrom} would be technically correct, the knowledge is not expressed that specifically in the textbooks.
+Additionally, encoding each fact as a single triple facilitates tool support and prevents inconsistencies through non-atomic changes.
 
 \paragraph{}
 
@@ -163,16 +166,16 @@ Additionally, encoding each fact as a single triple facilitates tool support and
 \begin{tabulary}{\columnwidth}{lL}
 \toprule
 URL		&\url{http://www.snik.eu/ontology}\\
-Version		&2018-10-10, 0.4.1\\
+Version		&2018-10-10, \snikversion{}\\
 License		&CC BY-NC-SA 4.0\\
 SPARQL Endpoint	&\url{http://www.snik.eu/sparql}\\
 Visualization	&\url{http://www.snik.eu/graph}\\
 RDF Browser	&\url{http://www.snik.eu/ontology}\\
-Download	&\url{https://github.com/IMISE/snik-ontology/releases/download/0.8.0/snik-0.8.zip}\\
-\# Triples	&\num{112747}\\
-\# Classes	&\num{4729}\\
-\# Properties	&\num{329}\\
-\# Interlinks	&\num{713}\\
+Download	&\url{https://github.com/IMISE/snik-ontology/releases/download/1.0.0/snik.zip}\\
+\# Triples	&\sniktriples{}\\
+\# Classes	&\snikclasses{}\\
+\# Properties	&\snikproperties{}\\
+\# Interlinks	&\sniklinks{}\\
 %Subontologies	&\url{http://www.snik.eu/ontology/bb}\\
 %		&\url{http://www.snik.eu/ontology/ciox,}\\
 %		&\url{http://www.snik.eu/ontology/ob}\\
@@ -207,14 +210,14 @@ Download	&\url{https://github.com/IMISE/snik-ontology/releases/download/0.8.0/sn
 Three textbooks provide different views on the domain of Hospital Information Management:
 \citet{bb} presents a broad view on \enquote{typical architectures of health information systems and their systematic strategic management}.
 \citep{ob} concentrates on the \emph{tactical} management of information systems in general and on healthcare in particular.
-The focus of tactical management lies on the planning and operation of projects.  
-\citet{he} explains information management beyond the scope of healthcare. 
+The focus of tactical management lies on the planning and operation of projects.
+\citet{he} explains information management beyond the scope of healthcare.
 Other sources are interviews and standards.
 %CIOX is based on an interview with the CIO of the Universitätsklinikum Leipzig.
 %IT4IT is based on the IT4IT standard.\todo{Sebastian: Was über Standards und IT4IT schreiben}
 
 \section{Data Model}\label{sec:architecture}
-\citet{domaene} contains an initial structure of the meta model.
+The initial structure of the meta model is defined in \citet{domaene}.
 The \enquote{meta model} defines three basic disjunctive classes and their possible relations: Roles (who), Function (does what) and Entity Types (and which information is therefore needed).
 A set of modular subontologies define subclasses of those three classes and their relations as described by a certain knowledge source about information management in hospitals:
 The \textbf{Semantic Network of Information Management in Hospitals} (SNIK\footnote{Hospital means \enquote{Krankenhaus} in German.}) is a modular OWL 2 DL ontology.
@@ -259,7 +262,7 @@ After the initial publish phase, we describe the repeating steps of the reuse ph
 \item SNIK Graph, detailed in \Cref{sec:snik-graph}, supplements the RDF browser by visualizing the relationships between classes.
 Users often discover incorrect modelling or possibilities for enhancement in SNIK graph.
 \item SNIK quality is a web application that uses SPARQL queries to find problems of varying degree, such as violations of domain, range or naming conventions, subclass cycles or missing definitions.
-\item Problems suggested by users and SNIK quality are verified, solved, and published on the SPARQL endpoint using SPARUL queries, at which point the circle begins anew. 
+\item Problems suggested by users and SNIK quality are verified, solved, and published on the SPARQL endpoint using SPARUL queries, at which point the circle begins anew.
 \end{enumerate}
 
 %After the initial extraction step, SNIK is published and users suggest problems or enhancements.%Besides issues of collaborative editing, this required a regular export and reupload, which delayed the effect of changes in SNIK to the user facing applications.
@@ -318,13 +321,13 @@ Path and neighourhood operations are joined in the \enquote{spider worm} (see \c
 The DBpedia-powered Clover Quiz~\citep{cloverquiz} shows that ontologies can be used to automatically generate multiple-choice questions.
 We apply this approach to SNIK and generate 1231 English questions using the templates described in \cref{tab:templates}.
 It was used by students from the Universities of Amsterdam, Heidelberg and Leipzig during the international Frank van Swieten lectures in 2019.
-To provide difficult wrong answers, the so called \emph{distractors}, we use direct neighbours of the classes that represent the correct answers. 
+To provide difficult wrong answers, the so called \emph{distractors}, we use direct neighbours of the classes that represent the correct answers.
 Due to the limited nesting capabilties of SPARQL, which does not support loops but only subqueries that cannot access variables declared outside their scope, querying for distinct sets of 4 neighbours, where exactly one was connected over a certain property to a certain object, was not possible with our Virtuoso SPARQL endpoint initially.
 We circumvented the timeout by calculating the neighbour-relation as a first step and uploading it to the endpoint.
 
 %SNIK Quiz is freely available as an open source web application.
 Because SNIK only contains the knowledge that the source textbooks describe, it does not contain the complete domain of Hospital Information Management.
-As such, negative questions are problematic, as the given relationship could hold in the real world but not be described in the textbook source of the class. 
+As such, negative questions are problematic, as the given relationship could hold in the real world but not be described in the textbook source of the class.
 The same problem concerns the distractors of positive questions.
 So this problem cannot be avoided.
 However, this is one of the reasons that we don't ask count questions like \enquote{How many functions is the CIO responsible for?}, which don't help much for learning anyways. % improve writing
@@ -366,19 +369,30 @@ Using the SPARQL1 query language, experts can also integrate applications with t
 Students and teachers, on the other hand, benefit more from SNIK Graph, which intuitively presents knowledge without the need for technical skills.
 
 Figure 4– A \enquote{Spider Worm} between the classes \enquote{Change Management} and \enquote{HIS Quality} in the SNIK Graph visualization web application.
-The content of SNIK is taken from textbooks which are protected by property rights of publishing houses or taken from an interview with a CIO holding property rights as well. Making the SNIK ontology openly available may therefore conflict with these property rights. In case of SNIK, we appreciate the approvals of the publishing houses Springer, de Gruyter and Schattauer and of the CIO. In general, missing approvals may prevent the creation of such open ontologies and thus the provision of textbook content as open knowledge.
-The approvals for SNIK were possible because for each class and relation being part of SNIK there is a clear indication of its source (see code \enquote{bb} and chapter information in Table 1). In future work we will use these indications for establishing hyperlinks into the sources such that users of SNIK may use SNIK as a smart index for retrieving more detailed knowledge and supporting illustrations from the original textbooks – if digitally available. We are convinced that this way an ontology like SNIK is not a competitor of textbooks but a smart guide for using a textbook. Thus, it might be attractive for publishing houses.
+The content of SNIK is taken from textbooks which are protected by property rights of publishing houses or taken from an interview with a CIO holding property rights as well.
+Making the SNIK ontology openly available may therefore conflict with these property rights.
+In case of SNIK, we appreciate the approvals of the publishing houses Springer, de Gruyter and Schattauer and of the CIO.
+In general, missing approvals may prevent the creation of such open ontologies and thus the provision of textbook content as open knowledge.
+The approvals for SNIK were possible because for each class and relation being part of SNIK there is a clear indication of its source (see code \enquote{bb} and chapter information in Table 1).
+In future work we will use these indications for establishing hyperlinks into the sources such that users of SNIK may use SNIK as a smart index for retrieving more detailed knowledge and supporting illustrations from the original textbooks – if digitally available.
+We are convinced that this way an ontology like SNIK is not a competitor of textbooks but a smart guide for using a textbook.
+Thus, it might be attractive for publishing houses.
 
 \todo{verweis auf existierende papers}
 \todo{benutzung durch braunschweig}
 \todo{benutzung durch amsterdam}
 
 \section{Conclusions}
-We showed that knowledge on the management of information systems in medicine and health care is made publicly available using open standards over several interfaces with different compromises between expressivity and accessibility. It can be combined with other knowledge in biomedical and health informatics and in other disciplines.
+We showed that knowledge on the management of information systems in medicine and health care is made publicly available using open standards over several interfaces with different compromises between expressivity and accessibility.
+It can be combined with other knowledge in biomedical and health informatics and in other disciplines.
 
 \section{Future Work}
 \todo{Connection with HITO}
-We plan to extend the text-based interlinks with semantic-similarity-based ontology matching [5] to find more correspondencies between the textbooks. This will enable users to switch to another textbook when a certain concept is explained there in more detail. The SNIK toolset, SNIK Graph in particular, is under permanent improvement. For instance, we are considering alternatives to the shortest path that are the most preferred by different audiences and whether those paths can be (semi-)automatically generated using suitable node or edge weight functions. We are also investigating candidates for additional subontologies and as interlink targets.
+We plan to extend the text-based interlinks with semantic-similarity-based ontology matching [5] to find more correspondencies between the textbooks.
+This will enable users to switch to another textbook when a certain concept is explained there in more detail.
+The SNIK toolset, SNIK Graph in particular, is under permanent improvement.
+For instance, we are considering alternatives to the shortest path that are the most preferred by different audiences and whether those paths can be (semi-)automatically generated using suitable node or edge weight functions.
+We are also investigating candidates for additional subontologies and as interlink targets.
 
 \section{Acknowledgments}
 This work is supported by the DFG (German Research Foundation) under the Projects SNIK, grant no. 1605/7-1 and 1387/8-1, as well as HITO, grant no. WI 1605/11-1 and I3726-N31.
