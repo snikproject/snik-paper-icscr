@@ -20,10 +20,10 @@
 \lstset{language=SPARQL,breaklines=true}
 \usepackage{cleveref}
 \newcommand{\snikversion}{1.0}
-\newcommand{\sniktriples}{\num{72046}}
-\newcommand{\snikclasses}{\num{2655}}
-\newcommand{\snikproperties}{\num{339}}
-\newcommand{\sniklinks}{\num{581}}
+\newcommand{\sniktriples}{72046}
+\newcommand{\snikclasses}{2655}
+\newcommand{\snikproperties}{339}
+\newcommand{\sniklinks}{581}
 %%%%%%%%%%% End of definitions
 
 \pubyear{2020}
@@ -164,8 +164,8 @@ Additionally, encoding each fact as a single triple facilitates tool support and
 
 
 \begin{table}
-\caption{Statistics and Details}
-\label{tab:namespaces}
+\caption{Access Options and Details}
+\label{tab:access}
 \begin{tabulary}{\columnwidth}{lL}
 \toprule
 URL		&\url{http://www.snik.eu/ontology}\\
@@ -177,12 +177,21 @@ Datahub		&\url{https://datahub.io/imise/snik/v/1}\\
 Visualization	&\url{http://www.snik.eu/graph}\\
 RDF Browser	&\url{http://www.snik.eu/ontology}\\
 Download	&\url{https://github.com/IMISE/snik-ontology/releases/download/1.0.0/snik.zip}\\
-\# Triples	&\sniktriples{}\\
-\# Classes	&\snikclasses{}\\
-\# Properties	&\snikproperties{}\\
-\# Internal Links	&\num{360}\\
-\# Links to HITO  	&\num{260}\\
-\# Links to DBpedia 	&\sniklinks{}\\
+\bottomrule
+\end{tabulary}%The source code for the services is available at \url{https://github.com/imise}
+\end{table}
+
+\begin{table}
+\caption{Statistics}
+\label{tab:statistics}
+\begin{tabulary}{\columnwidth}{lS}
+\toprule
+Nr. of Triples			&\sniktriples{}\\
+Nr. of Classes			&\snikclasses{}\\
+Nr. of Properties		&\snikproperties{}\\
+Nr. of Internal Links		&360\\
+Nr. of Links to HITO  		&260\\
+Nr. of Links to DBpedia 	&\sniklinks{}\\
 %Subontologies	&\url{http://www.snik.eu/ontology/bb}\\
 %		&\url{http://www.snik.eu/ontology/ciox,}\\
 %		&\url{http://www.snik.eu/ontology/ob}\\
