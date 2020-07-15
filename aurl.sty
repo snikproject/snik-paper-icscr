@@ -23,7 +23,7 @@
 \expandafter\def\csname urlprefixabbrv@#1\endcsname{#2}}
 
 \newcommand\aurl[2]{%
-\href{\csname urlprefixabbrv@#1\endcsname#2}{\texttt{#1:#2}}}
+\href{\csname urlprefixabbrv@#1\endcsname#2}{\texttt{#1:}\-\texttt{#2}}} % possible linebreak after "prefix:"
 
 \DeclareOption{100}
 {
