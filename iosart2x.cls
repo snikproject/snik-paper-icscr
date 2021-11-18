@@ -1,3 +1,4 @@
+\RequirePackage{hyperref}
 %% This is file `iosart2x.cls'. Forked from 'iosart2c.cls' with additions from 'ios2a.cls'.
 %%
 %% LaTeX 2e class file for articles in the journals:
@@ -4448,7 +4449,6 @@
     \egroup
   }
 
-\RequirePackage{hyperref}
 \csuse{\fmt@name @load@hypersetup}
 \csuse{\fmt@name @load@vtexhdvips}
 \setcounter{tocdepth}{3}
