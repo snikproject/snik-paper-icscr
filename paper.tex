@@ -16,7 +16,7 @@
 \usepackage{tabularx}
 \usepackage{csquotes}
 \usepackage{siunitx}
-\usepackage{todonotes}
+\usepackage[disable]{todonotes}
 %\usepackage{natbib} % does not seem to work with ios 1
 \newcommand{\citet}{\cite}% citet is not defined without natbib
 \newcommand{\citep}{\cite}% citep is not defined without natbib
@@ -245,14 +245,14 @@ Figshare				&\url{https://doi.org/10.6084/m9.figshare.17057084.v1}\\
 \centering
 \begin{tabulary}{\columnwidth}{lS}
 \toprule
-\textbf{Category}		&\textbf{Count}\\
+\textbf{Category}					&\textbf{Count}\\
 \midrule
-Triples				&\sniktriples{}\\
-Classes				&\snikclasses{}\\
-Properties			&\snikproperties{}\\
-Internal Links		&360\\
-Links to HITO  		&260\\
-Links to DBpedia 	&\sniklinks{}\\
+Triples								&\sniktriples{}\\
+Classes								&\snikclasses{}\\
+Properties							&\snikproperties{}\\
+Internal Links						&360\\
+Links to HITO  						&260\\
+Links to DBpedia~\citep{dbpedia} 	&\sniklinks{}\\
 %Subontologies	&\url{http://www.snik.eu/ontology/bb}\\
 %		&\url{http://www.snik.eu/ontology/ciox,}\\
 %		&\url{http://www.snik.eu/ontology/ob}\\
@@ -305,13 +305,13 @@ Other sources are interviews and standards.
 \end{table*}
 \fi
 
-\section{Data Transformation Process}
-\subsection{Interlinking}
+%\section{Data Transformation Process}
+%\subsection{Interlinking}
 %As shown in \cref{...}, we aligned our dataset to several others:
-We manually aligned our dataset to HITO, the Health IT Ontology~\citep{hitometh2}
-We automatically aligned our dataset to:
-- DBpedia~\citep{dbpedia}, as  
-- 
+%We manually aligned our dataset to HITO, the Health IT Ontology~\citep{hitometh2}
+%We automatically aligned our dataset to:
+%- DBpedia~\citep{dbpedia}, as  
+%- 
 \section{Lifecycle}\label{sec:application}
 
 \begin{figure}[ht]
@@ -399,7 +399,7 @@ The content and of the all containers can be saved and loaded as a session to co
 \paragraph{Compound Layout}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{img/combine.pdf}
+    \includegraphics[width=\columnwidth]{img/combine.pdf}
     \caption{Grouping of equivalent concepts from different sources in SNIK Graph (color coded).}% using the \enquote{combine matches} option.}
 	\label{fig:combine}
 \end{figure}
@@ -521,7 +521,7 @@ The \emph{circle star} also rearranges the nodes using the force-directed layout
 \Cref{fig:star} shows a mind map of strategic information management, created by an undirected star, which can be used by a teacher to prepare a lecture about the topic.
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.9\linewidth]{img/strategic-im.pdf}
+    \includegraphics[width=\columnwidth]{img/strategic-im.pdf}
     \caption{Undirected \emph{Star} of \aurl{bb}{StrategicInformationManagement}.}
 	\label{fig:star}
 \end{figure}
@@ -540,7 +540,7 @@ A \emph{spiderworm} is a path from node \emph{A} to node \emph{B} combined with 
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.5\linewidth]{img/spiderworm.pdf}
+    \includegraphics[width=\columnwidth]{img/spiderworm.pdf}
     \caption{\emph{Spiderworm} from \aurl{bb}{PatientIdentificationNumber} to \aurl{bb}{QualityOfData}~\cite{snikgraphposter}.}
 	\label{fig:spiderworm}
 \end{figure}
@@ -588,6 +588,26 @@ We also tried to automatically find the most interesting path but this was not s
 Path and neighourhood operations are joined in the \enquote{spider worm} (see \cref{fig:snik-graph-spiderworm}), which consists of the shortest path between a start node and an end node together with the end node’s neighbourhood, illustrate the context of a concept.
 \fi
 \subsection{Quiz}
+
+\begin{table}[t]
+\caption{Initial Quiz question templates.}
+\label{tab:templates}
+\centering
+\begin{tabulary}{\columnwidth}{lL}
+\toprule
+\textbf{Template}	&\textbf{Description}\\
+\midrule
+Definition		&Ask for the class that fits the given textbook definition.\\
+Example			&What is defined as \enquote{Examination of in and out patients in radiological department}?\\
+Distractors		&Labels of other classes (that have a path of length 2 or less to the correct class.)\\
+\midrule
+Subject			&Ask for the class that is related via a given relation to a given object.\\
+Example			&Who is \emph{involved in} a \emph{healthcare network}?\\
+Distractors		&Labels of other classes (of the same type) that \emph{are not} related via the same relation to the same object.\\
+\bottomrule
+\end{tabulary}
+\end{table}
+
 The DBpedia-powered Clover Quiz~\citep{cloverquiz} shows that ontologies can be used to automatically generate multiple-choice questions.
 We apply this approach to SNIK and generate 1231 English questions using the templates described in \cref{tab:templates}.
 It was used by students from the Universities of Amsterdam, Heidelberg and Leipzig during the international Frank van Swieten lectures in 2019.
@@ -606,28 +626,12 @@ For example, \aurl{bb}{ChiefInformationOfficer} is a subclass of \aurl{bb}{Infor
 It is unclear, whether the CIO is also responsible for operational information management.
 An ongoing bachelor's thesis~\citep{snikquiz} is investigating different strategies of generating complex questions, answers and distrators.
 
-\begin{table*}
-\caption{Templates}
-\label{tab:templates}
-\centering
-\begin{tabulary}{\textwidth}{lL}
-\toprule
-\textbf{Template}	&\textbf{Description}\\
-\midrule
-Definition		&Ask for the class that fits the given textbook definition.\\
-Example			&What is defined as \enquote{Examination of in and out patients in radiological department}?\\
-Distractors		&Labels of other classes (that have a path of length 2 or less to the correct class.)\\
-\midrule
-Subject			&Ask for the class that is related via a given relation to a given object.\\
-Example			&Who is \emph{involved in} a \emph{healthcare network}?\\
-Distractors		&Labels of other classes (of the same type) that \emph{are not} related via the same relation to the same object.\\
-\bottomrule
-\end{tabulary}
-\end{table*}
+
 
 
 
 %The technical environment of SNIK is characterized in previous work [11].
+\iffalse
 \section{Discussion}
 SNIK is based on the meta model from Figure \todo{reference}.
 Thus, SNIK can be considered as an archetype for ontologies describing for a given domain (here \enquote{HIS management}), what functions a certain role has to carry out and what information a person of this role needs and what information she/he provides while carrying out the functions.
@@ -635,7 +639,7 @@ This may be used for domains like the medical department of a hospital as well.\
 This would be valuable knowledge, for instance as basis for systems analysis projects [1].
 Different user groups can use the interfaces of SNIK that are most suitable to them.
 For example, the IT management of a hospital can use SNIK as a vocabulary to integrate data from different formats that result from application components from different vendors.
-Using the SPARQL1 query language, experts can also integrate applications with the SNIK ontology.
+Using the SPARQL query language, experts can also integrate applications with the SNIK ontology.
  Experts can also use the SPARQL query editor to answer specific questions, see Table 2.
 Students and teachers, on the other hand, benefit more from SNIK Graph, which intuitively presents knowledge without the need for technical skills.
 
@@ -648,7 +652,7 @@ The approvals for SNIK were possible because for each class and relation being p
 In future work we will use these indications for establishing hyperlinks into the sources such that users of SNIK may use SNIK as a smart index for retrieving more detailed knowledge and supporting illustrations from the original textbooks – if digitally available.
 We are convinced that this way an ontology like SNIK is not a competitor of textbooks but a smart guide for using a textbook.
 Thus, it might be attractive for publishing houses.
-
+\fi
 \todo{verweis auf existierende papers}
 \todo{benutzung durch braunschweig}
 \todo{benutzung durch amsterdam}
