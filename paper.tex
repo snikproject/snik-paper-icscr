@@ -119,7 +119,7 @@ linked open data, information management
 \section{Introduction}
 A health information system (HIS) is the socio-technical subsystem of a care delivery organization~\citep{bb}.
 This includes its different application systems, computers, and network components as well as their users.
-A HIS processes data, information, and knowledge and its management involves planning, monitoring and directing of those activities.
+A HIS processes data, information, and knowledge and its management involves planning, monitoring and directing those activities.
 Due to the complexity and the unique conditions in health care, HIS management is an challenging task.
 There are many different frameworks, textbooks and articles describing the scope of HIS management from the perspective of medical informatics.
 %However, the disciplines of business informatics and information systems (IS) provide an even broader view on information systems and their management.
@@ -135,7 +135,7 @@ The focus of tactical management lies on the planning and operation of projects.
 Other sources are interviews and standards.
 %CIOX is based on an interview with the CIO of the Universitätsklinikum Leipzig.
 %IT4IT is based on the IT4IT standard.\todo{Sebastian: Was über Standards und IT4IT schreiben}
-
+%
 The combination of this knowledge~\citep{semantischesnetz,domaene,approachtosupport} results in SNIK, the Semantic Network of Information Management in Hospitals (\enquote{Krankenhaus} in German).
 
 In order to encourage and enable other researchers, students and health informatics professionals to use available knowledge of HIS management, we introduce different user interfaces to the SNIK ontology and discuss their suitability for different use cases of the target audiences.
@@ -234,7 +234,8 @@ Additionally, encoding each fact as a single triple facilitates tool support and
 \toprule
 URL						&\url{http://www.snik.eu/ontology}\\
 Version					&\snikversion{}\\
-License					&CC BY-NC-SA 4.0\\
+%License					&CC BY-NC-SA 4.0\\
+License					&Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)\\
 Documentation	&\url{https://snikproject.github.io/ontology/}\\
 SPARQL Endpoint			&\url{http://www.snik.eu/sparql}\\
 LOD Cloud				&\url{https://lod-cloud.net/dataset/snik}\\
@@ -276,8 +277,8 @@ Links to DBpedia~\citep{dbpedia} 	&\sniklinks{}\\
 \caption{The SNIK meta model}
 \label{fig:metamodel}
 \centering
-\includegraphics[width=0.9\textwidth]{img/metamodel9s.pdf}
-%\includegraphics[width=\textwidth]{img/metamodel9s.pdf}
+%\includegraphics[width=0.9\textwidth]{img/metamodel9s.pdf}%7 page version
+\includegraphics[width=\textwidth]{img/metamodel9s.pdf}
 \end{figure*}
 
 
@@ -323,14 +324,17 @@ Links to DBpedia~\citep{dbpedia} 	&\sniklinks{}\\
 
 When we add a new textbook to SNIK, we identify all concepts that fit the meta model and their relations to other concepts.
 Some project members are not proficient in RDF serializations, so we first fill out a meta model conforming spreadsheet template.
-We then use Tarql\footnote{\url{https://github.com/cygri/tarql}} with a mapping configuration file\footnote{\url{https://github.com/IMISE/snik-csv2rdf}} to convert that spreadsheet to RDF.
+We then use Tarql\footnote{\url{https://github.com/cygri/tarql}} with a mapping configuration file\footnote{\url{https://github.com/snikproject/snik-csv2rdf}} to convert that spreadsheet to RDF.
 Next, we refine the data in Protégé and upload it to a Virtuso SPARQL endpoint.
 
 After the initial publish phase, we describe the repeating steps of the reuse phrase with the SNIK lifecycle in \Cref{fig:lifecycle}:
 \begin{enumerate}
 \item the Virtuoso SPARQL endpoint is used for querying and as data source for all our applications  
 \item an instance of the OntoWiki~\citep{ontowiki} is used for punctual changes and additions by non-Semantic-Web-experts, supplemented by SPARUL for changes involving large numbers of classes 
-\item LIMES~\citep{limes} generates interlink candidates between the different textbooks, which can be approved or rejected by the users
+\item LIMES~\citep{limes} generates interlink candidates between the different textbooks, which can be approved or rejected by the users.
+\aurl{skos}{closeMatch} is used instead of \aurl{owl}{equivalentClass} to emphasize that not only the names of concepts may differ between textbooks but there may be subtle differences in meaning as well.
+We do not intent to express different treatment, such as reasoning, due to the theoretical difference between \aurl{skos}{Concept} and \aurl{owl}{Class}.
+Links to HITO and DBpedia are created as well, see \cref{tab:statistics}.
 \item LodView\footnote{\url{https://lodview.it/}} lets the user browse among the classes of SNIK and view particular classes in detail
 \item SNIK Graph, detailed in \Cref{sec:snik-graph}, supplements the RDF browser by visualizing the relationships between classes.
 Users often discover incorrect modelling or possibilities for enhancement in SNIK graph.
@@ -359,7 +363,7 @@ Consequently, the other approaches are in the area of teaching support.
 %\paragraperformance
 
 Graph-based visualizations allow teachers to intuitively convey relationships between a selection of those concepts and also allow students to explore the domain on their own~\cite{ontologybased}.
-There are several existing graph-based Linked Data visualizations~\cite{linkeddatavisualization}, which visualize RDF resources (classes or instanes) as nodes and their relationships as edges, but they do not fit our requirements~\cite{visualizationoflargeontologies}.
+There are several existing graph-based Linked Data visualizations~\cite{linkeddatavisualization}, which visualize RDF resources (classes or instanes) as nodes and their relationships as edges, but they do not fit the requirements we have previously identified regarding performance, maintenance, usability, functionality and up-to-dateness~\cite{visualizationoflargeontologies}.
 SNIK Graph is a web-based client-side open source web application\footnote{Published at \url{http://www.snik.eu/graph}.} that offers Linked Data visualization for both classes and instances and according to the requirements of SNIK and its users.
 With the thousands of classes of SNIK, graph-based visualization suffers from overplotting.
 Thus, SNIK Graph offers several options to select and layout subgraphs, for example to show only a specific chapter of a book to prepare a lecture about a specific topic.
@@ -372,8 +376,8 @@ A web application is easiest to set up for the user, as it is operating system a
 
 \paragraph{Implementation and Setup}
 As none of the investigated existing approaches support all our use cases and design goals and provide adequate performance on more than 4000 nodes, we implemented SNIK Graph as a web application using JavaScript (EcmaScript 2015) based on the graph visualization library Cytoscape.js~\cite{cytoscape}.
-SNIK Graph is freely available as open source software\footnote{\url{https://github.com/imise/snik-cytoscape.js}}.
-As a client-side tool\footnotemark{}, SNIK Graph can be adapted for other knowledge bases and ontologies and published on any HTML web server by cloning the repository, installing the NPM dependencies and adapting the configuration file settings including the SPARQL endpoint URL.
+SNIK Graph is freely available as open source software\footnote{Git repository at \url{https://github.com/snikproject/snik-graph}, licensed under CC BY-NC-SA 4.0}.
+As a client-side tool\footnotemark{}, SNIK Graph can be adapted to other knowledge bases and ontologies and published on any HTML web server by cloning the repository, installing the NPM dependencies and adapting the configuration file settings including the SPARQL endpoint URL.
 \footnotetext{Aside from a SPARQL endpoint.}%
 An installation containing SNIK is published at \url{https://www.snik.eu/graph}.
 
@@ -433,7 +437,7 @@ SELECT DISTINCT ?inner ?middle ?outer ?outerx {
    OPTIONAL {?outer (skos:closeMatch|^skos:closeMatch|^rdfs:subClassOf)+ ?outerx.}
 }}}
 \end{lstlisting}
-\caption{SPARQL query to generate the \emph{role use} visualization.}
+\caption{SPARQL query to generate the \emph{class use} visualization.}
 \label{lst:roleuse}
 \end{figure}
 \vspace{-3pt}
@@ -452,6 +456,7 @@ This question is visually answered by the \enquote{role use} feature, which arra
     \includegraphics[width=\columnwidth]{img/class-use-project-manager.pdf}
     \caption{\emph{Role Use} of \aurl{bb}{ProjectManager}. Outermost layer ommitted due to space limitiations.}\label{fig:classuse}
 \end{figure}
+In SNIK Graph, this operation is called \emph{class use} and allows users to also put a function or entity type in the center.
 
 %\section{Approach}
 %Due to its large size, visualizing all of SNIK at once  overplotting.
@@ -501,7 +506,7 @@ As SPARQL endpoints, such as Virtuoso SPARQL employed by SNIK, do not perform re
 	\label{fig:hierarchy}
 \end{figure}
 \vspace{-3pt}
-We also don't explicitly store triples inferred by transitive properties such as \aurl{rdfs}{subClassOf}, which prevents paths involving such properties from being squashed, such as the path between \emph{Project Manager} and \emph{HIS Stakeholder} in \cref{fig:hierarchy}.
+We also do not explicitly store triples inferred by transitive properties such as \aurl{rdfs}{subClassOf}, which prevents paths involving such properties from being squashed, such as the path between \emph{Project Manager} and \emph{HIS Stakeholder} in \cref{fig:hierarchy}.
 
 
 %We ignore the direction of edges because, that is, which resource is the subject and the object 
@@ -515,7 +520,7 @@ Future work includes adopting this approach to SNIK Graph and evaluating it with
 Another approach is to show all short paths under a given length and let the user remove unwanted ones manually, as employed by \emph{Relfinder}~\cite{relfinder}.
 
 \paragraph{Neighbourhood Operations}
-Exploration using neighbours, that is the successive uncovering of nodes adjacent to a starting node given by a user, is a common feature of tools such as \cite{lodlive} and \cite{vizlod}.%
+Exploration using neighbours, that is the successive uncovering of nodes adjacent to a starting node given by a user, is a common feature of tools such as LodLive~\cite{lodlive} and VizLOD~\cite{vizlod}.%
 \paragraph{Star}
 The directed and undirected star operations show nodes connected to selected nodes via all paths that contain at most one property other than \aurl{skos}{closeMatch}.
 The \emph{circle star} also rearranges the nodes using the force-directed layout locally on the currently visible subgraph.
@@ -609,7 +614,7 @@ Distractors		&Labels of other classes (of the same type) that \emph{are not} rel
 \end{tabulary}
 \end{table}
 
-The DBpedia-powered Clover Quiz~\citep{cloverquiz} shows that ontologies can be used to automatically generate multiple-choice questions.
+Clover Quiz~\citep{cloverquiz} shows that ontologies can be used to automatically generate multiple-choice questions over DBpedia~\citep{dbpedia}.
 We apply this approach to SNIK and generate 1231 English questions using the templates described in \cref{tab:templates}.
 It was used by students from the Universities of Amsterdam, Heidelberg and Leipzig during the international Frank van Swieten lectures in 2019.
 To provide difficult wrong answers, the so called \emph{distractors}, we use direct neighbours of the classes that represent the correct answers.
@@ -621,7 +626,7 @@ Because SNIK only contains the knowledge that the source textbooks describe, it 
 As such, negative questions are problematic, as the given relationship could hold in the real world but not be described in the textbook source of the class.
 The same problem concerns the distractors of positive questions.
 So this problem cannot be avoided.
-However, this is one of the reasons that we don't ask count questions like \enquote{How many functions is the CIO responsible for?}, which don't help much for learning anyways. % improve writing
+However, this is one of the reasons that we do not ask count questions like \enquote{How many functions is the CIO responsible for?}, which do not help much for learning anyways. % improve writing
 Relationships could also hold implicitly through the subclass hierarchy.
 For example, \aurl{bb}{ChiefInformationOfficer} is a subclass of \aurl{bb}{InformationManagementStaff}, which is responsible for \aurl{bb}{OperationalInformationManagement}.
 It is unclear, whether the CIO is also responsible for operational information management.
