@@ -29,10 +29,14 @@
 \lstset{language=SPARQL,breaklines=true}
 \usepackage[noabbrev,capitalize]{cleveref}
 \newcommand{\snikversion}{1.3.0}
-\newcommand{\sniktriples}{72046}
-\newcommand{\snikclasses}{2655}
-\newcommand{\snikproperties}{339}
-\newcommand{\sniklinks}{581}
+\newcommand{\snikversionlink}{\href{https://github.com/snikproject/ontology/releases/tag/\snikversion}{\snikversion}}
+\newcommand{\sniktriples}{81499}
+% SELECT (COUNT(DISTINCT *) AS ?count) {?s a owl:Class. FILTER(STRSTARTS(STR(?s),"http://www.snik.eu/ontology/"))}
+\newcommand{\snikclasses}{4107}
+% SELECT (COUNT(DISTINCT ?s) AS ?count) {{?s a rdf:Property.} UNION {?s a owl:ObjectProperty.} UNION {?s a owl:DataTypeProperty.} FILTER(STRSTARTS(STR(?s),"http://www.snik.eu/ontology/"))}
+\newcommand{\snikproperties}{65}
+%SELECT (COUNT(DISTINCT *) AS ?links) {?s ?p ?o. FILTER(STRSTARTS(STR(?o),"http://dbpedia")) }
+\newcommand{\sniklinks}{579}
 %%%%%%%%%%% End of definitions
 
 %\pubyear{2020}
@@ -153,9 +157,10 @@ We publish the result over several interfaces that are useful for researchers, p
 Publishing textbook knowledge as Linked Data enables different ways of teaching.
 %The data is continously revised: users constantly report wrong or missing data in the visualization, which is then corrected, respectively revised, by the researchers of the project.
 
-\begin{table}[t!]
-\caption{The different subontologies of SNIK and their sources.
-The URL of each subontology is equal to its graph name, the namespace has an additional slash \enquote{/} suffix.
+\begin{table}[tbh]
+\caption{The different ontologies and graphs of SNIK and their sources.
+The namespace of each ontology is is equal to its URL with a slash suffix.
+The graph group URL has no associated ontology and is the entry point of the RDF browser.
 %All graphs are combined in the graph group \lowercase{\url{http://www.snik.eu/ontology}}.
 }
 \label{tab:source}
@@ -163,26 +168,34 @@ The URL of each subontology is equal to its graph name, the namespace has an add
 %\begin{tabular}{\columnwidth}{lll}
 \begin{tabular}{lll}
 \toprule
-\textbf{Ontology}				&\textbf{Source}					&\textbf{Prefix}\\
+\textbf{Prefix}	&\textbf{Ontology and Graph URL}			&\textbf{Source}\\		
 \midrule
-\url{http://www.snik.eu/ontology/meta}		&Meta Model				&meta\\
-\url{http://www.snik.eu/ontology/bb}		&Textbook~\cite{bb}		&bb\\
-\url{http://www.snik.eu/ontology/ob}		&Textbook~\cite{ob}		&ob\\
-\url{http://www.snik.eu/ontology/he}		&Textbook~\cite{he}		&he\\
-\url{http://www.snik.eu/ontology/ciox}		&CIO Interview			&ciox\\
-\url{http://www.snik.eu/ontology/it4it}		&Standard~\cite{it4it}	&it4it\\
-\url{http://www.snik.eu/ontology}			&Combined Graph Group	&sniko\\
+meta			&\url{http://www.snik.eu/ontology/meta}		&Meta Model\\
+bb				&\url{http://www.snik.eu/ontology/bb}		&Textbook~\cite{bb}\\
+ob				&\url{http://www.snik.eu/ontology/ob}		&Textbook~\cite{ob}\\
+he				&\url{http://www.snik.eu/ontology/he}		&Textbook~\cite{he}\\
+ciox			&\url{http://www.snik.eu/ontology/ciox}		&CIO Interview\\
+it4it			&\url{http://www.snik.eu/ontology/it4it}	&Standard~\cite{it4it}\\
+\midrule
+sniko			&\url{http://www.snik.eu/ontology}			&Combined Graph Group\\
 \bottomrule
 \end{tabular}
 \end{center}
 \end{table}
 
 \section{Data Model}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{img/hierarchy.pdf}
+    \caption{Excerpt of the SNIK class hierarchy. Source: \cite{snikposter}.}
+	\label{fig:hierarchy}
+\end{figure}
+\vspace{-3pt}
 In order to specify, which information should be extracted from the books and to facilitate comparisons, we use a common data model.
 Because processed textbooks contain abstract knowledge instead of information about any specific hospital, all concepts are modelled as classes.
 We thus call our data model the \enquote{meta model} in accordance with the term's definition as a shared modelling language~\citep[p.~8]{ob}.
 The meta model (see \cref{fig:metamodel}) provides a common vocabulary for the domain of HIS management and thus defines, which superclasses and property can be used.
-SNIK version \snikversion{} comprises five subontologies that are built upon the meta model, see Table 1.
+SNIK version \snikversionlink{} comprises five subontologies that are built upon the meta model, see Table 1.
 At the head of the class hierarchy (see \cref{fig:hierarchy}) is the \enquote{Top} class, which has exactly three disjunctive subclasses.
 %
 Following the meta model, each class has to be a subclass of exactly one of them.
@@ -233,9 +246,9 @@ Additionally, encoding each fact as a single triple facilitates tool support and
 \begin{tabulary}{\columnwidth}{lL}
 \toprule
 URL						&\url{http://www.snik.eu/ontology}\\
-Version					&\snikversion{}\\
+Version					&\snikversionlink{}\\
 %License					&CC BY-NC-SA 4.0\\
-License					&Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)\\
+License					&Attribution-NonCommercial-ShareAlike 4.0 International (\href{https://creativecommons.org/licenses/by-nc-sa/4.0/}{CC BY-NC-SA 4.0})\\
 Documentation	&\url{https://snikproject.github.io/ontology/}\\
 SPARQL Endpoint			&\url{http://www.snik.eu/sparql}\\
 LOD Cloud				&\url{https://lod-cloud.net/dataset/snik}\\
@@ -499,13 +512,6 @@ Roles can be nested using \aurl{meta}{roleComponent} (\emph{has part}), which co
 Another reason is that a set of resources that forms a graph connected by some symmetric property implies a complete subgraph, which negatively effects speed, memory and visibility of SNIK Graph.
 For this reason, \aurl{skos}{closeMatch} and other symmetrical properties are often only sparsely modelled, and the other triples are implied.
 As SPARQL endpoints, such as Virtuoso SPARQL employed by SNIK, do not perform reasoning to infer such implied triples such as those generated by symmetric properties, this would prevent the shortest path from including resources where only the opposite direction is explicitly modelled.%
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\columnwidth]{img/hierarchy.pdf}
-    \caption{Excerpt of the SNIK class hierarchy. Source: \cite{snikposter}.}
-	\label{fig:hierarchy}
-\end{figure}
-\vspace{-3pt}
 We also do not explicitly store triples inferred by transitive properties such as \aurl{rdfs}{subClassOf}, which prevents paths involving such properties from being squashed, such as the path between \emph{Project Manager} and \emph{HIS Stakeholder} in \cref{fig:hierarchy}.
 
 
