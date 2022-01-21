@@ -1,16 +1,17 @@
-% add. options: [seceqn,secthm,crcready,onecolumn]
-%\documentclass[sw]{iosart2x}
-\documentclass[conference]{IEEEtran}
-\IEEEoverridecommandlockouts
-\usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
+\documentclass{IOS-Book-Article}     %[seceqn,secfloat,secthm]
+\usepackage{mathptmx}
+\usepackage{soul}\setuldepth{article}
+
+%\normalfont
+%\usepackage[T1]{fontenc}
+%\usepackage{times}
+%\usepackage[mtplusscr,mtbold]{mathtime}
+\def\hb{\hbox to 11.5 cm{}}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
 \usepackage{graphicx}
 \usepackage{textcomp}
-\usepackage{xcolor}
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-%\usepackage{dcolumn}
-%\usepackage{endnotes}
+%\usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{tabulary}
 \usepackage{tabularx}
@@ -37,38 +38,37 @@
 \newcommand{\snikproperties}{65}
 %SELECT (COUNT(DISTINCT *) AS ?links) {?s ?p ?o. FILTER(STRSTARTS(STR(?o),"http://dbpedia")) }
 \newcommand{\sniklinks}{579}
-%%%%%%%%%%% End of definitions
-
-%\pubyear{2020}
-%\volume{0}
-%\firstpage{1}
-%\lastpage{1}
 
 \begin{document}
 
-%\begin{frontmatter}
+\pagestyle{headings}
+\def\thepage{}
 
-%\pretitle{}
+\begin{frontmatter}              % The preamble begins here.
+
+
+%\pretitle{Pretitle}
 \title{SNIK: Textbook Knowledge on Hospital Information Management as Linked Data}
 %\thanks{This work is supported by the DFG (German Research Foundation) under the Project SNIK, Grant no. 1605/7-1 and 1387/8-1.}%bug: will create an empty first page
-%\runningtitle{The SNIK Ontology of Hospital Information Management}
+
+\markboth{}{May 2022\hb}
 %\subtitle{}
-\iffalse
-% Two or more authors:
-\author[A]{\inits {K.}\fnms{Konrad} \snm{Höffner}\ead[label=e1]{konrad.hoeffner@imise.uni-leipzig.de}%
-\thanks{Corresponding author. \printead{e1}.}},
-\author[A]{\fnms{Franziska} \snm{Jahn}\ead[label=e2]{franziska.jahn@imise.uni-leipzig.de}},
-\author[A]{\fnms{Birgit} \snm{Schneider}\ead[label=e3]{birgit.schneider@imise.uni-leipzig.de}},
-%\author[A]{\fnms{Anna} \snm{Lörke}\ead[label=e4]{anna.loerke@imise.uni-leipzig.de}},
-\author[A]{\fnms{Thomas} \snm{Pause}\ead[label=e5]{thomas.pause@imise.uni-leipzig.de}},
-\author[A]{\fnms{Alfred} \snm{Winter}\ead[label=e6]{alfred.winter@imise.uni-leipzig.de}}
-%\runauthor{K. Höffner et al.}
-\address[A]{Institute for Medical Informatics, Statistics and Epidemiology (IMISE),
-\orgname{University of Leipzig}, \cny{Germany}\printead[presep={\\}]{e1,e2,e3,e5,e6}}
+
+\author[A]{\fnms{Konrad} \snm{Höffner}%
+%\thanks{Corresponding author: Konrad Höffner, Institute for Medical Informatics, Statistics and Epidemiology, Leipzig University,
+\thanks{Corresponding author: Konrad Höffner, IMISE, Leipzig University,
+Härtelstraße 16--18, 04107 Leipzig, Germany; E-mail: konrad.hoeffner@imise.uni-leipzig.de.}},
+\author[A]{\fnms{Franziska} \snm{Jahn}},
+\author[A]{\fnms{Birgit} \snm{Schneider}},
+\author[A]{\fnms{Thomas} \snm{Pause}},
+\author[A]{\fnms{Alfred} \snm{Winter}}
+\runningauthor{K. Höffner et al.}
+%\address[A]{Institute for Medical Informatics, Statistics and Epidemiology (IMISE), Leipzig University, Germany}
+\address[A]{IMISE, Leipzig University, Germany}
 %Medical Informatics, Management of Health Information Systemsi
 %Härtelstraße 16--18, D-04107 Leipzig
-\fi
 
+\iffalse
 \author{\IEEEauthorblockN{Konrad Höffner}
 \IEEEauthorblockA{\textit{Institute for Medical Informatics, Statistics and Epidemiology} \\
 \textit{Leipzig University}\\
@@ -95,7 +95,7 @@ Leipzig, Germany \\
 Leipzig, Germany \\
 \url{https://orcid.org/0000-0001-5832-4890}}
 }
-\maketitle
+\fi
 \begin{abstract}
 %Textbooks contain abstract knowledge about a domain.
 Textbooks about information management in hospitals describe the planning, monitoring and directing of a hospital's information system.
@@ -113,12 +113,16 @@ We publish the result over several interfaces that are useful for researchers, a
 %\begin{keyword}
 %\kwd{information management, information systems, hospital information management}
 %\end{keyword}
-
 % ICSCR style
-\begin{IEEEkeywords}
-linked open data, information management
-\end{IEEEkeywords}
-%\end{frontmatter}
+%\begin{IEEEkeywords}
+%linked open data, information management
+%\end{IEEEkeywords}
+
+% MIE style
+\begin{keyword}
+linked open data \sep information management
+\end{keyword}
+\end{frontmatter}
 
 \section{Introduction}
 A health information system (HIS) is the socio-technical subsystem of a care delivery organization~\citep{bb}.
@@ -183,20 +187,23 @@ sniko			&\url{http://www.snik.eu/ontology}			&Combined Graph Group\\
 \end{center}
 \end{table}
 
-\section{Data Model}
+\section{Methods}
+\iffalse
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\columnwidth]{img/hierarchy.pdf}
+    \includegraphics[width=0.5\columnwidth]{img/hierarchy.pdf}
     \caption{Excerpt of the SNIK class hierarchy. Source: \cite{snikposter}.}
 	\label{fig:hierarchy}
 \end{figure}
+\fi
 \vspace{-3pt}
 In order to specify, which information should be extracted from the books and to facilitate comparisons, we use a common data model.
 Because processed textbooks contain abstract knowledge instead of information about any specific hospital, all concepts are modelled as classes.
 We thus call our data model the \enquote{meta model} in accordance with the term's definition as a shared modelling language~\citep[p.~8]{ob}.
 The meta model (see \cref{fig:metamodel}) provides a common vocabulary for the domain of HIS management and thus defines, which superclasses and property can be used.
 SNIK version \snikversionlink{} comprises five subontologies that are built upon the meta model, see Table 1.
-At the head of the class hierarchy (see \cref{fig:hierarchy}) is the \enquote{Top} class, which has exactly three disjunctive subclasses.
+%At the head of the class hierarchy (see \cref{fig:hierarchy}) is the \enquote{Top} class, which has exactly three disjunctive subclasses.
+At the head of the class hierarchy is the \enquote{Top} class, which has exactly three disjunctive subclasses.
 %
 Following the meta model, each class has to be a subclass of exactly one of them.
 The correct superclass of a new concept can be found by answering the question: Who (\enquote{Role}) does what (\enquote{Function}) and which information (\enquote{EntityType}) is needed? If a concept is neither of them, it cannot be modeled using the meta model.
@@ -263,6 +270,7 @@ Figshare				&\url{https://doi.org/10.6084/m9.figshare.17057084.v1}\\
 \end{tabulary}%The source code for the services is available at \url{https://github.com/imise}
 \end{table}
 
+\iffalse
 \begin{table}
 \caption{Statistics}
 \label{tab:statistics}
@@ -285,13 +293,14 @@ Links to DBpedia~\citep{dbpedia} 	&\sniklinks{}\\
 \bottomrule
 \end{tabulary}%The source code for the services is available at \url{https://github.com/imise}
 \end{table}
+\fi
 
 \begin{figure*}
 \caption{The SNIK meta model}
 \label{fig:metamodel}
 \centering
 %\includegraphics[width=0.9\textwidth]{img/metamodel9s.pdf}%7 page version
-\includegraphics[width=\textwidth]{img/metamodel9s.pdf}
+\includegraphics[width=0.7\textwidth]{img/metamodel9s.pdf}
 \end{figure*}
 
 
@@ -327,27 +336,27 @@ Links to DBpedia~\citep{dbpedia} 	&\sniklinks{}\\
 %We automatically aligned our dataset to:
 %- DBpedia~\citep{dbpedia}, as  
 %- 
-\section{Lifecycle}\label{sec:application}
-
+%\section{Lifecycle}\label{sec:application}
+\section{Results}\label{sec:application}
+\iffalse
 \begin{figure}[ht]
 \caption{The SNIK lifecycle}
 \label{fig:lifecycle}
-\includegraphics[width=\columnwidth]{cycle.pdf}
+\includegraphics[width=0.5\columnwidth]{cycle.pdf}
 \end{figure}
-
+\fi
 When we add a new textbook to SNIK, we identify all concepts that fit the meta model and their relations to other concepts.
 Some project members are not proficient in RDF serializations, so we first fill out a meta model conforming spreadsheet template.
 We then use Tarql\footnote{\url{https://github.com/cygri/tarql}} with a mapping configuration file\footnote{\url{https://github.com/snikproject/snik-csv2rdf}} to convert that spreadsheet to RDF.
 Next, we refine the data in Protégé and upload it to a Virtuso SPARQL endpoint.
-
-After the initial publish phase, we describe the repeating steps of the reuse phrase with the SNIK lifecycle in \Cref{fig:lifecycle}:
+%After the initial publish phase, we describe the repeating steps of the reuse phrase with the SNIK lifecycle in \Cref{fig:lifecycle}:
 \begin{enumerate}
 \item the Virtuoso SPARQL endpoint is used for querying and as data source for all our applications  
 \item an instance of the OntoWiki~\citep{ontowiki} is used for punctual changes and additions by non-Semantic-Web-experts, supplemented by SPARUL for changes involving large numbers of classes 
 \item LIMES~\citep{limes} generates interlink candidates between the different textbooks, which can be approved or rejected by the users.
 \aurl{skos}{closeMatch} is used instead of \aurl{owl}{equivalentClass} to emphasize that not only the names of concepts may differ between textbooks but there may be subtle differences in meaning as well.
 We do not intent to express different treatment, such as reasoning, due to the theoretical difference between \aurl{skos}{Concept} and \aurl{owl}{Class}.
-Links to HITO and DBpedia are created as well, see \cref{tab:statistics}.
+Links to HITO and DBpedia are created as well.%, see \cref{tab:statistics}.
 \item LodView\footnote{\url{https://lodview.it/}} lets the user browse among the classes of SNIK and view particular classes in detail
 \item SNIK Graph, detailed in \Cref{sec:snik-graph}, supplements the RDF browser by visualizing the relationships between classes.
 Users often discover incorrect modelling or possibilities for enhancement in SNIK graph.
@@ -360,9 +369,9 @@ Users often discover incorrect modelling or possibilities for enhancement in SNI
 %- use ontowiki: slow but user friendly, undo function,
 %- SPARUL queries
 The technical environment of those services is described in~\citet{sniktec}.
-Selected applications are described in the following section.
+Selected applications are described in the following.
 
-\section{Applications}
+%\section{Applications}
 SNIK was initially intended~\citep{domaene} both as  software to support hospital CIOs and to support teaching.
 For the former goal, two applications were designed and implemented as prototypes~\citep{toreonto}: (1) the requirements engineering decision support system TOREOnto and (2) the knowledge exploration and navigation visualization CIONx.
 Due to internal regulations, efforts to integrate them into the informational infrastructure of the Uniklinikum Leipzig were stopped.
@@ -373,7 +382,7 @@ Consequently, the other approaches are in the area of teaching support.
 %Virtuoso Opensource 7 serves as the SPARQL endpoint.
 
 \subsection{SNIK Graph}\label{sec:snik-graph}
-TODO: Search auto complete and suggestions
+%TODO: Search auto complete and suggestions
 %\paragraperformance
 
 Graph-based visualizations allow teachers to intuitively convey relationships between a selection of those concepts and also allow students to explore the domain on their own~\cite{ontologybased}.
@@ -397,35 +406,37 @@ An installation containing SNIK is published at \url{https://www.snik.eu/graph}.
 
 %\paragraph{Features}
 \paragraph{Tabs and Containers}
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{img/tabs.png}
-    \caption{A session containing the default view and freely partitioned subgraphs containers.}
-	\label{fig:tabs}
-\end{figure}
-\vspace{-3pt}
+%\begin{figure}[h]
+%    \centering
+%    \includegraphics[width=0.5\columnwidth]{img/tabs.png}
+%    \caption{A session containing the default view and freely partitioned subgraphs containers.}
+%	\label{fig:tabs}
+%\end{figure}
+%\vspace{-3pt}
+
 %For this subgraphs of the ontology have to be extracted and organized.
 %A feature of SNIK Graph, tabs, allows multi-instance usage.
 %One major issue in working with SNIK Graph was the missing ability of organizing teaching scenarios.
 To organize teaching scenarios, independent SNIK Graph instances are loaded into containers\footnotemark{} that can be organized around the browser window.
 \footnotetext{Implemented using the JavaScript GoldenLayout framework (\url{https://golden-layout.com/}).} 
-These containers can either be accessed as tabs or freely partitioned see \cref{fig:tabs}.
+These containers can either be accessed as tabs or freely partitioned.% see \cref{fig:tabs}.
 The content and of the all containers can be saved and loaded as a session to continue developing a teaching scenario at a later point.
 
 %This feature allows better workflows in preparation and presentation of teaching scenarios.
 %We use JSON formatted files for export and import.
 
 \paragraph{Compound Layout}
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\columnwidth]{img/combine.pdf}
-    \caption{Grouping of equivalent concepts from different sources in SNIK Graph (color coded).}% using the \enquote{combine matches} option.}
-	\label{fig:combine}
-\end{figure}
-\vspace{-3pt}
+%\begin{figure}[h]
+%    \centering
+%    \includegraphics[width=0.5\columnwidth]{img/combine.pdf}
+%    \caption{Grouping of equivalent concepts from different sources in SNIK Graph (color coded).}% using the \enquote{combine matches} option.}
+%	\label{fig:combine}
+%\end{figure}
+%\vspace{-3pt}
+
 %\noindent For citations of references, we prefer the use of square brackets and consecutive numbers, e.g. as shown by Author et al. [2], [3, pp. 5–10], as mentioned earlier [1], [3], [9]. The following bibliography provides the basic formats as a reference list with entries for journal articles [1], book chapter [2], as well as a URL [5]. For further guidance please refer to the \href{https://ieeeauthorcenter.ieee.org/wp-content/uploads/IEEE-Reference-Guide.pdf}{IEEE-Reference-Guide}.
 
-Users can group interlinked nodes together and either display them side by side or on top of each other, see \cref{fig:combine}.
+Users can group interlinked nodes together and either display them side by side or on top of each other.%, see \cref{fig:combine}.
 As SNIK consists of more than 4000 classes, viewing large parts of it at once does not convey much information.%, see \cref{fig:much}.
 To alleviate this, SNIK offers multiple exploration methods described in the following.
 %\begin{figure}[h!]
@@ -435,29 +446,29 @@ To alleviate this, SNIK offers multiple exploration methods described in the fol
 %\end{figure}
 
 \paragraph{Role Use}
-\iffalse
-\todo{konrad an alle: was mache ich mit der sparql query? rausschmeissen, drin lassen oder umbauen? TP: drinlassen, aber direkt ans Bild hängen.. Sowas wie aus der Query folgt dieses Bild. Ich finde sowas sollte schon rein ins Paper}
-\begin{figure}[h]
-\begin{lstlisting}
-SELECT DISTINCT ?inner ?middle ?outer ?outerx {
- <role> (rdfs:subClassOf|skos:closeMatch|^skos:closeMatch)* ?inner.
- ?inner meta:subTopClass meta:Role.
- OPTIONAL {
-  ?inner ?p ?middle.
-  ?middle meta:subTopClass meta:Function.
-  OPTIONAL {
-   ?middle ?q ?outer.
-   ?outer meta:subTopClass meta:EntityType.
-   OPTIONAL {?outer (skos:closeMatch|^skos:closeMatch|^rdfs:subClassOf)+ ?outerx.}
-}}}
-\end{lstlisting}
-\caption{SPARQL query to generate the \emph{class use} visualization.}
-\label{lst:roleuse}
-\end{figure}
-\vspace{-3pt}
-\fi
+
+%\todo{konrad an alle: was mache ich mit der sparql query? rausschmeissen, drin lassen oder umbauen? TP: drinlassen, aber direkt ans Bild hängen.. Sowas wie aus der Query folgt dieses Bild. Ich finde sowas sollte schon rein ins Paper}
+%\begin{figure}[h]
+%\begin{lstlisting}
+%SELECT DISTINCT ?inner ?middle ?outer ?outerx {
+% <role> (rdfs:subClassOf|skos:closeMatch|^skos:closeMatch)* ?inner.
+% ?inner meta:subTopClass meta:Role.
+% OPTIONAL {
+%  ?inner ?p ?middle.
+%  ?middle meta:subTopClass meta:Function.
+%  OPTIONAL {
+%   ?middle ?q ?outer.
+%   ?outer meta:subTopClass meta:EntityType.
+%   OPTIONAL {?outer (skos:closeMatch|^skos:closeMatch|^rdfs:subClassOf)+ ?outerx.}
+%}}}
+%\end{lstlisting}
+%\caption{SPARQL query to generate the \emph{class use} visualization.}
+%\label{lst:roleuse}
+%\end{figure}
+%\vspace{-3pt}
+
 A frequent question is, what a given role does and which information is needed for those functions represented by the entity types connected to those functions.
-This question is visually answered by the \enquote{role use} feature, which arranges roles, functions and entity types in concentric circles, see \Cref{fig:classuse}:
+This question is visually answered by the \enquote{role use} feature, which arranges roles, functions and entity types in concentric circles.%, see \Cref{fig:classuse}:
 
 \begin{enumerate}%[align=left, labelwidth=1ex]
 \item The first ring consists of the given role and all roles that are connected by a path of \aurl{rdfs}{subClassOf} and \aurl{skos}{closeMatch} edges.
@@ -465,11 +476,15 @@ This question is visually answered by the \enquote{role use} feature, which arra
 \item The third ring consists of all entity types adjacent to functions in the middle ring.
 \item The final ring consists of all entity types that are connected to entity types from the third ring by a path of \aurl{skos}{closeMatch} and reverse \aurl{rdfs}{subClassOf} edges.
 \end{enumerate}
+
+\iffalse
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\columnwidth]{img/class-use-project-manager.pdf}
+    \includegraphics[width=0.5\columnwidth]{img/class-use-project-manager.pdf}
     \caption{\emph{Role Use} of \aurl{bb}{ProjectManager}. Outermost layer ommitted due to space limitiations.}\label{fig:classuse}
 \end{figure}
+\fi
+
 In SNIK Graph, this operation is called \emph{class use} and allows users to also put a function or entity type in the center.
 
 %\section{Approach}
@@ -477,12 +492,13 @@ In SNIK Graph, this operation is called \emph{class use} and allows users to als
 %At the core of SNIK Graph is incremental exploration, which starts at one or more nodes and gradually expands them to related ones.
 
 \paragraph{Search}
+\iffalse
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\columnwidth]{img/search.pdf}
+    \includegraphics[width=0.5\columnwidth]{img/search.pdf}
     \caption{Visual search results for \enquote{Chief Information Officer} in a part of SNIK.}\label{fig:search}
 \end{figure}
-
+\fi
 Due to the large amount of resources, exploration often begins with a search.
 The search index is populated from the target SPARQL endpoint and is implemented using the Fuse.js library that is based on the Baeza-Yates--Gonnet algorithm~\cite{textsearching}.
 Fuse.js\footnotemark{} is a light-weight, purely client side JavaScript library and presents an alternative to backend-driven indexes like Lucene.%
@@ -497,7 +513,8 @@ Textbook definitions are included with a weight of 0.3.
 Labels of resources connected via \aurl{skos}{closeMatch} interlinks in either direction are included as well, because those resources are defined as semantically close, so we assume their labels are synonyms.
 Fuzzy matching is enabled with a threshold of \num{0.25}.
 The resource \aurl{bb}{ChiefInformationOfficer} can thus be found by entering either \enquote{CIO} (alternative label), \enquote{vice president} (part of the definition) or \enquote{Leiter des Rechenzentrums} (German alternative label of \aurl{ob}{ChiefInformationOfficer}).
-Search results are then selected in the graph, see~\cref{fig:search}, which allows further exploration by chaining the path and neighbourhood operations described in following.
+%Search results are then selected in the graph, see~\cref{fig:search}, which allows further exploration by chaining the path and neighbourhood operations described in following.
+Search results are then selected in the graph, which allows further exploration by chaining the path and neighbourhood operations described in following.
 
 \paragraph{Shortest Paths}
 \begin{figure}[h!]
@@ -531,7 +548,8 @@ Exploration using neighbours, that is the successive uncovering of nodes adjacen
 \paragraph{Star}
 The directed and undirected star operations show nodes connected to selected nodes via all paths that contain at most one property other than \aurl{skos}{closeMatch}.
 The \emph{circle star} also rearranges the nodes using the force-directed layout locally on the currently visible subgraph.
-\Cref{fig:star} shows a mind map of strategic information management, created by an undirected star, which can be used by a teacher to prepare a lecture about the topic.
+%\Cref{fig:star} shows a mind map of strategic information management, created by an undirected star, which can be used by a teacher to prepare a lecture about the topic.
+\iffalse
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\columnwidth]{img/strategic-im.pdf}
@@ -539,6 +557,7 @@ The \emph{circle star} also rearranges the nodes using the force-directed layout
 	\label{fig:star}
 \end{figure}
 \vspace{-3pt}
+\fi
 
 %\todo{Konrad: Nimm den Star um "ob/ProjectManagement".} % ist inkludiert in \cref{fig:tabs}, refer?
 The concept \emph{project management} both exists in a textbook~\cite{ob} and in the knowledge about information management in a German university hospital.
@@ -549,8 +568,9 @@ As all neighbourhood and path operations automatically select all resulting node
 %\subsection{Mixed Operations}
 \paragraph{Spiderworm}
 A \emph{spiderworm} is a path from node \emph{A} to node \emph{B} combined with a \emph{star} of \emph{B}.
-\Cref{fig:spiderworm} shows how we use a spiderworm to teach a student how the new concept \enquote{quality of data} is connected the the already introduced concept \enquote{patient identification number.}
+%\Cref{fig:spiderworm} shows how we use a spiderworm to teach a student how the new concept \enquote{quality of data} is connected the the already introduced concept \enquote{patient identification number.}
 
+\iffalse
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\columnwidth]{img/spiderworm.pdf}
@@ -558,7 +578,7 @@ A \emph{spiderworm} is a path from node \emph{A} to node \emph{B} combined with 
 	\label{fig:spiderworm}
 \end{figure}
 \vspace{-3pt}
-
+\fi
 
 \iffalse
 Due to the limitations of JavaScript, such as a single thread, and the used library library Cytoscape.js which is the base of the graph visualization, there are performance problems on large graphs.
@@ -670,17 +690,17 @@ Thus, it might be attractive for publishing houses.
 \todo{benutzung durch braunschweig}
 \todo{benutzung durch amsterdam}
 
-\section{Conclusions}
+\section{Discussion}
 We showed that knowledge on the management of information systems in medicine and health care is made publicly available using open standards over several interfaces with different compromises between expressivity and accessibility.
 It can be combined with other knowledge in biomedical and health informatics and in other disciplines.
 
-\section{Future Work}
-We plan to extend the text-based interlinks with semantic-similarity-based ontology matching [5] to find more correspondencies between the textbooks.
+%\section{Future Work}
+\section{Conclusions}
+In the future, we plan to extend the text-based interlinks with semantic-similarity-based ontology matching [5] to find more correspondencies between the textbooks.
 This will enable users to switch to another textbook when a certain concept is explained there in more detail.
 The SNIK toolset, SNIK Graph in particular, is under permanent improvement.
 For instance, we are considering alternatives to the shortest path that are the most preferred by different audiences and whether those paths can be (semi-)automatically generated using suitable node or edge weight functions.
 We are also investigating candidates for additional subontologies and as interlink targets.
-
 Past efforts of automatic textbook extractions were unsuccessfull but recent advances in natural language processing, such as GPT-3~\citep{gpt3}, motivate further investigation.
 
 %\section{Acknowledgments}
@@ -689,12 +709,9 @@ Past efforts of automatic textbook extractions were unsuccessfull but recent adv
 %\nocite{*} 
 \todo{FJ: Hmmm, ziemlich selbstreferenziell. Brauchen wir da wirklich so viele Publikationen von uns? Welche anderen könnte man noch einbringen? Ich schaue auch mal, was mir so über den Weg läuft.}
 %\bibliographystyle{ios1}
-\bstctlcite{IEEE:BSTcontrol}
-\bibliographystyle{IEEEtran}
+\bibliographystyle{vancouver}
 \bibliography{paper,snik,relatedwork}
 %\section{Notes to Reviewers}
 %This paper includes and extends text and figures from:
 %\citet{snikgraph}
-%\todo{KH: Extending a poster should be allowed for a journal but maybe not for a conference. replace text and figures from the poster. should only be the snik graph chapter. use snik graph paper instead.}
-%Update: All the text from the paper should now be commented out or properly referenced.
 \end{document}
