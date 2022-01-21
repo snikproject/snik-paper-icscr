@@ -1,0 +1,430 @@
+\documentclass{IOS-Book-Article}     %[seceqn,secfloat,secthm]
+\usepackage{mathptmx}
+\usepackage{soul}\setuldepth{article}
+
+%\normalfont
+%\usepackage[T1]{fontenc}
+%\usepackage{times}
+%\usepackage[mtplusscr,mtbold]{mathtime}
+\def\hb{\hbox to 11.5 cm{}}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{textcomp}
+%\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{tabulary}
+\usepackage{tabularx}
+\usepackage{csquotes}
+\usepackage{siunitx}
+\usepackage[disable]{todonotes}
+%\usepackage{natbib} % does not seem to work with ios 1
+\newcommand{\citet}{\cite}% citet is not defined without natbib
+\newcommand{\citep}{\cite}% citep is not defined without natbib
+\setlength{\marginparwidth}{2.1cm}% enough space for todonotes
+\usepackage{listings}
+\usepackage{aurl}
+\daurl{ob}{http://www.snik.eu/ontology/bb/}
+\daurl{bb}{http://www.snik.eu/ontology/bb/}
+\daurl{meta}{http://www.snik.eu/ontology/meta/}
+\lstset{language=SPARQL,breaklines=true}
+\usepackage[noabbrev,capitalize]{cleveref}
+\newcommand{\snikversion}{1.3.0}
+\newcommand{\snikversionlink}{\href{https://github.com/snikproject/ontology/releases/tag/\snikversion}{\snikversion}}
+\newcommand{\sniktriples}{81499}
+% SELECT (COUNT(DISTINCT *) AS ?count) {?s a owl:Class. FILTER(STRSTARTS(STR(?s),"http://www.snik.eu/ontology/"))}
+\newcommand{\snikclasses}{4107}
+% SELECT (COUNT(DISTINCT ?s) AS ?count) {{?s a rdf:Property.} UNION {?s a owl:ObjectProperty.} UNION {?s a owl:DataTypeProperty.} FILTER(STRSTARTS(STR(?s),"http://www.snik.eu/ontology/"))}
+\newcommand{\snikproperties}{65}
+%SELECT (COUNT(DISTINCT *) AS ?links) {?s ?p ?o. FILTER(STRSTARTS(STR(?o),"http://dbpedia")) }
+\newcommand{\sniklinks}{579}
+
+\begin{document}
+
+\pagestyle{headings}
+\def\thepage{}
+
+\begin{frontmatter}              % The preamble begins here.
+
+
+%\pretitle{Pretitle}
+\title{SNIK Quiz: Automatic Generation of Multiple Choice Questionnaires about Information Management in Hospitals}
+%\thanks{This work is supported by the DFG (German Research Foundation) under the Project SNIK, Grant no. 1605/7-1 and 1387/8-1.}%bug: will create an empty first page
+
+\markboth{}{May 2022\hb}
+%\subtitle{}
+
+\author[A]{\fnms{Konrad} \snm{Höffner}%
+%\thanks{Corresponding author: Konrad Höffner, Institute for Medical Informatics, Statistics and Epidemiology, Leipzig University,
+\thanks{Corresponding author: Konrad Höffner, IMISE, Leipzig University,
+Härtelstraße 16--18, 04107 Leipzig, Germany; E-mail: konrad.hoeffner@imise.uni-leipzig.de.}},
+\author[A]{\fnms{Arne} \snm{Roszeitis}},
+\author[A]{\fnms{Max Niclas} \snm{Wächtler}},
+\author[A]{\fnms{Franziska} \snm{Jahn}},
+\author[A]{\fnms{Alfred} \snm{Winter}}
+\runningauthor{K. Höffner et al.}
+%\address[A]{Institute for Medical Informatics, Statistics and Epidemiology (IMISE), Leipzig University, Germany}
+%\address[A]{Institute for Medical Informatics, Statistics and Epidemiology, Leipzig University, Germany}
+\address[A]{IMISE, Leipzig University, Germany}
+%Medical Informatics, Management of Health Information Systemsi
+%Härtelstraße 16--18, D-04107 Leipzig
+
+\iffalse
+\author{\IEEEauthorblockN{Konrad Höffner}
+\IEEEauthorblockA{\textit{Institute for Medical Informatics, Statistics and Epidemiology} \\
+\textit{Leipzig University}\\
+Leipzig, Germany \\
+\url{https://orcid.org/0000-0001-7358-3217}}
+\and
+\IEEEauthorblockN{Franziska Jahn}
+\IEEEauthorblockA{\textit{Institute for Medical Informatics, Statistics and Epidemiology} \\
+\textit{Leipzig University}\\
+Leipzig, Germany \\
+\url{https://orcid.org/0000-0002-7687-8544}}
+\and
+\and
+\IEEEauthorblockN{Alfred Winter}
+\IEEEauthorblockA{\textit{Institute for Medical Informatics, Statistics and Epidemiology} \\
+\textit{Leipzig University}\\
+Leipzig, Germany \\
+%alfred.winter@imise.uni-leipzig.de}
+\url{https://orcid.org/0000-0003-0179-954X}}
+\and
+\IEEEauthorblockN{Thomas Pause}
+\IEEEauthorblockA{\textit{Institute for Medical Informatics, Statistics and Epidemiology} \\
+\textit{Leipzig University}\\
+Leipzig, Germany \\
+\url{https://orcid.org/0000-0001-5832-4890}}
+}
+\fi
+\begin{abstract}
+%Textbooks contain abstract knowledge about a domain.
+%Textbooks about information management in hospitals describe the planning, monitoring and directing of a hospital's information system.
+
+SNIK consists of the manually transformed content of three textbooks as Linked Open Data.
+SNIK Quiz...
+%The data model describes information management functions, roles executing these functions and the information used or updated by these functions.
+
+%SNIK provides applications that are used to teach students internationally.
+%and the result of applying the data model to three textbooks, an interview and a standard.
+%To compare, 
+%, making it a natural fit for RDF, RDFS and OWL.
+%As the domain is large and highly relevant to students of Medical Informatics, modelling the knowledge is not only possible but also very useful.
+%We publish the result over several interfaces that are useful for researchers, administrators or students, depending on their objectives and capabilities.
+\end{abstract}
+
+% SWJ style
+%\begin{keyword}
+%\kwd{information management, information systems, hospital information management}
+%\end{keyword}
+% ICSCR style
+%\begin{IEEEkeywords}
+%linked open data, information management
+%\end{IEEEkeywords}
+
+% MIE style
+\begin{keyword}
+linked open data \sep information management
+\end{keyword}
+\end{frontmatter}
+
+\section{Introduction}
+%A health information system (HIS) is the socio-technical subsystem of a care delivery organization~\citep{bb}.
+%This includes its different application systems, computers, and network components as well as their users.
+Medical informatics students, who are trained for executive positions in information management departments of healthcare institutions, such as hospitals, need a clear terminology of their domain.
+This terminology is offered by SNIK~\citep{semantischesnetz,sniktec}, the Semantic Network of Information Management in Hospitals (\enquote{Krankenhaus} in German), which integrates knowledge extracted from three textbooks~\citep{bb,ob,he} in the form of Linked Open Data.
+
+%A HIS processes data, information, and knowledge and its management involves planning, monitoring and directing those activities.
+%Due to the complexity and the unique conditions in health care, HIS management is an challenging task.
+%There are many different frameworks, textbooks and articles describing the scope of HIS management from the perspective of medical informatics.
+%However, the disciplines of business informatics and information systems (IS) provide an even broader view on information systems and their management.
+%A structured representation of the different perspectives leads to a holistic view on HIS management and helps help researchers and students connect their existing knowledge with further knowledge from other sources during research and learning.
+%three textbooks~\citep{bb,ob,he} and other sources, see \cref{tab:source}.
+%\section{Sources}\label{sec:sources}
+%Three textbooks provide different views on the domain of Hospital Information Management:
+%\citet{bb} presents a broad view on \enquote{typical architectures of health information systems and their systematic strategic management}.
+%\citep{ob} concentrates on the \emph{tactical} management of information systems in general and on healthcare in particular.
+%The focus of tactical management lies on the planning and operation of projects.
+%\citet{he} explains information management beyond the scope of healthcare.
+%Other sources are interviews and standards.
+%CIOX is based on an interview with the CIO of the Universitätsklinikum Leipzig.
+%IT4IT is based on the IT4IT standard.\todo{Sebastian: Was über Standards und IT4IT schreiben}
+%
+%We discuss advantages and disadvantages of the interfaces and give recommendations on which ones present the best compromise for different use cases and target audiences.
+%We conclude with plans for future work on interlinking and visualization.
+%As the domain is large and highly relevant to students of Medical Informatics, modelling the knowledge is not only possible but also very useful.
+%Due to different frameworks and textbooks dealing with information management in healthcare, modelling the knowledge unravels the links between the different views on information management.
+%These are only implicitly known or not known at all by experts in the field.
+%
+%
+%Publishing textbook knowledge as Linked Data enables different ways of teaching.
+%The data is continously revised: users constantly report wrong or missing data in the visualization, which is then corrected, respectively revised, by the researchers of the project.
+
+\iffalse
+\begin{table}[tbh]
+\caption{The different ontologies and graphs of SNIK and their sources.
+The namespace of each ontology is is equal to its URL with a slash suffix.
+The graph group URL has no associated ontology and is the entry point of the RDF browser.
+%All graphs are combined in the graph group \lowercase{\url{http://www.snik.eu/ontology}}.
+}
+\label{tab:source}
+\begin{center}
+%\begin{tabular}{\columnwidth}{lll}
+\begin{tabular}{lll}
+\toprule
+\textbf{Prefix}	&\textbf{Ontology and Graph URL}			&\textbf{Source}\\		
+\midrule
+meta			&\url{http://www.snik.eu/ontology/meta}		&Meta Model\\
+bb				&\url{http://www.snik.eu/ontology/bb}		&Textbook~\cite{bb}\\
+ob				&\url{http://www.snik.eu/ontology/ob}		&Textbook~\cite{ob}\\
+he				&\url{http://www.snik.eu/ontology/he}		&Textbook~\cite{he}\\
+ciox			&\url{http://www.snik.eu/ontology/ciox}		&CIO Interview\\
+it4it			&\url{http://www.snik.eu/ontology/it4it}	&Standard~\cite{it4it}\\
+\midrule
+sniko			&\url{http://www.snik.eu/ontology}			&Combined Graph Group\\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+\fi
+
+\section{Methods}
+
+\begin{figure*}
+\caption{The SNIK meta model}
+\label{fig:metamodel}
+\centering
+\includegraphics[width=0.7\textwidth]{img/metamodel9s.pdf}
+\end{figure*}
+
+\iffalse
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\columnwidth]{img/hierarchy.pdf}
+    \caption{Excerpt of the SNIK class hierarchy. Source: \cite{snikposter}.}
+	\label{fig:hierarchy}
+\end{figure}
+\vspace{-3pt}
+\fi
+
+SNIK describes information management functions, roles executing these functions and entity types, the information used or updated by these functions.
+Because the textbooks describe those concepts in the abstract sense, and not those of any concrete hospital, those entities are modelled as classes and individuals at the same time, using OWL 2 DL \emph{punning}.
+Thus, \emph{function}, \emph{role} and \emph{entity type} are metaclasses and the ontology of SNIK is called the \emph{meta model}, see \cref{fig:metamodel}.
+%In order to specify, which information should be extracted from the books and to facilitate comparisons, we use a common data model.
+%Because processed textbooks contain abstract knowledge instead of information about any specific hospital, all concepts are modelled as classes.
+%We thus call our data model the \enquote{meta model} in accordance with the term's definition as a shared modelling language~\citep[p.~8]{ob}.
+%The meta model (see \cref{fig:metamodel}) provides a common vocabulary for the domain of HIS management and thus defines, which superclasses and properties can be used.
+%SNIK version \snikversionlink{} comprises five subontologies that are built upon the meta model, see Table 1.
+%At the head of the class hierarchy (see \cref{fig:hierarchy}) is the \enquote{Top} class, which has exactly three disjunctive subclasses.
+%At the head of the class hierarchy is the \enquote{Top} class, which has exactly three disjunctive subclasses.
+%
+%Following the meta model, each class has to be a subclass of exactly one of them.
+%The correct superclass of a new concept can be found by answering the question: Who (\enquote{Role}) does what (\enquote{Function}) and which information (\enquote{EntityType}) is needed? If a concept is neither of them, it cannot be modeled using the meta model.
+%As the subclass relation is transitive, a new class can be placed further down the hierarchy and it can still be inferred, whether it is a Function, Role or EntityType (see Figure 3).
+%Besides the subclass relationship, two classes can be connected with relations provided by the meta model.
+%The generic \enquote{is associated with} relationship carries little information.
+%For example, a role and a function can be connected as \enquote{is involved in} \enquote{is responsible for} and \enquote{approves}.
+%Relations that are neither of them can either be modeled by using the generic \enquote{is associated with} relation or by creating and using a new sub relation of \enquote{is associated with}
+%
+%As a concession to practicality, we express each geleral rule extracted from a textbook as a single triple using classes as subject and object, and a property of the meta model.
+%For example, the rule "the CEO is involved in project reviews" is modelled as \enquote{\texttt{:Ceo} \aurl{meta}{isInvolvedIn} \texttt{:ProjectReview}.}, where \texttt{:Ceo} is a subclass of \aurl{meta}{Role} and \aurl{meta}{ProjectReview} is a subclass of \aurl{meta}{Function}.
+%While an OWL restrictions using \aurl{owl}{someValuesFrom} and \aurl{owl}{allValuesFrom} would be technically correct, the knowledge is not expressed that specifically in the textbooks.
+%Additionally, encoding each fact as a single triple facilitates tool support and prevents inconsistencies through non-atomic changes.
+
+%\section{Data Quality}
+%- extractors not always same people who wrote book/part of book
+%- mistake when extracting
+%- reasoning does not work (test)
+%\begin{itemize}
+%\item Multiple Subtops
+%\item Inconsistent Subtop with Subclass
+%\item SKOS Link to Different Subtop
+%\item Subclass Cycles
+%\item Missing superclass
+%\item Undefined Objects
+%\item Domain Violation
+%\item Range Violation
+%\item Class URL Naming Convention Violations
+%\item Property URL Naming Convention Violations
+%\item Missing Definition
+%\item Literals with Semicolons
+%\item Classes with too many subclasses
+%\item No Restriction
+%\item Non-HTTP URI
+%\item OWL 2 DL: Undefined Properties
+%\item OWL 2 DL: Multiply Defined Properties
+%\item OWL 2 DL: Class Typing Constraints
+%\end{itemize}
+%-> use SHAPE/SHACL ?
+
+
+
+
+
+%\section{Data Model}\label{sec:architecture}
+%The initial structure of the meta model is defined in \citet{domaene}.
+%The \enquote{meta model} defines three basic disjunctive classes and their possible relations: Roles (who), Function (does what) and Entity Types (and which information is therefore needed).
+%A set of modular subontologies define subclasses of those three classes and their relations as described by a certain knowledge source about information management in hospitals:
+%The \textbf{Semantic Network of Information Management in Hospitals} (SNIK\footnote{Hospital means \enquote{Krankenhaus} in German.}) is a modular OWL 2 DL ontology.
+%from different sources:% three textbooks, an interview and a standard.
+
+
+\iffalse
+\section{Data Set Description}\label{sec:dsd}
+\begin{table*}
+\caption{use of established vocabularies}
+\label{tab:templates}
+\begin{tabulary}{\textwidth}{lL}
+\toprule
+\textbf{Vocabulary}	&\textbf{Description}\\
+\midrule
+&\\
+&\\
+&\\
+\bottomrule
+\end{tabulary}
+\end{table*}
+\fi
+
+%\section{Data Transformation Process}
+%\subsection{Interlinking}
+%As shown in \cref{...}, we aligned our dataset to several others:
+%We manually aligned our dataset to HITO, the Health IT Ontology~\citep{hitometh2}
+%We automatically aligned our dataset to:
+%- DBpedia~\citep{dbpedia}, as  
+%- 
+%\section{Lifecycle}\label{sec:application}
+%Virtuoso SPARQL endpoint is used for querying and as data source for all our applications  
+
+%After the initial extraction step, SNIK is published and users suggest problems or enhancements.%Besides issues of collaborative editing, this required a regular export and reupload, which delayed the effect of changes in SNIK to the user facing applications.
+%- git repository (link): collaborative editing but protege can cause large diffs -> people who understand rdf enough to use text editor ttl/rdfxml 
+%- use ontowiki: slow but user friendly, undo function,
+%- SPARUL queries
+%The technical environment of those services is described in~\citet{sniktec}.
+
+%\section{Applications}
+
+\begin{table}[t]
+\caption{Initial Quiz question templates.}
+\label{tab:templates}
+\centering
+\begin{tabulary}{\columnwidth}{lL}
+\toprule
+\textbf{Template}	&\textbf{Description}\\
+\midrule
+Definition		&Ask for the class that fits the given textbook definition.\\
+Example			&What is defined as \enquote{Examination of in and out patients in radiological department}?\\
+Distractors		&Labels of other classes (that have a path of length 2 or less to the correct class.)\\
+\midrule
+Subject			&Ask for the class that is related via a given relation to a given object.\\
+Example			&Who is \emph{involved in} a \emph{healthcare network}?\\
+Distractors		&Labels of other classes (of the same type) that \emph{are not} related via the same relation to the same object.\\
+\bottomrule
+\end{tabulary}
+\end{table}
+
+Clover Quiz~\citep{cloverquiz} shows that ontologies can be used to automatically generate multiple-choice questions over DBpedia~\citep{dbpedia}.
+To provide difficult wrong answers, the so called \emph{distractors}, we use direct neighbours of the classes that represent the correct answers.
+Due to the limited nesting capabilties of SPARQL, which does not support loops but only subqueries that cannot access variables declared outside their scope, querying for distinct sets of 4 neighbours, where exactly one was connected over a certain property to a certain object, was not possible with our Virtuoso SPARQL endpoint initially.
+We circumvented the timeout by calculating the neighbour-relation as a first step and uploading it to the endpoint.
+%
+%SNIK Quiz is freely available as an open source web application.
+Because SNIK only contains the knowledge that the source textbooks describe, it does not contain the complete domain of Hospital Information Management.
+As such, negative questions are problematic, as the given relationship could hold in the real world but not be described in the textbook source of the class.
+The same problem concerns the distractors of positive questions.
+So this problem cannot be avoided.
+However, this is one of the reasons that we do not ask count questions like \enquote{How many functions is the CIO responsible for?}, which do not help much for learning anyways. % improve writing
+Relationships could also hold implicitly through the subclass hierarchy.
+For example, \aurl{bb}{ChiefInformationOfficer} is a subclass of \aurl{bb}{InformationManagementStaff}, which is responsible for \aurl{bb}{OperationalInformationManagement}.
+It is unclear, whether the CIO is also responsible for operational information management.
+%An ongoing bachelor's thesis~\citep{snikquiz} is investigating different strategies of generating complex questions, answers and distrators.
+
+\subsection{Question Types}
+%\paragraph{}
+
+\paragraph{intertwined}
+
+\begin{figure}
+\includegraphics[width=0.7\textwidth]{img/intertwined_cml.png} 
+\caption{Left to right: correct answer, difficult and easy distractor for the \emph{intertwined} question type.}
+\label{fig:intertwined}
+\end{figure}
+
+Intertwined focuses on the connectivity of the knowledge graph.
+In each answer, three related concepts are given.
+The correct answer is the one where all concepts are directly connected with each other, that is, they form a triangle in the graph, see \cref{fig:intertwined}.
+The distractors should then not form this triangle.
+In the difficult variation of the distractor, one of the three concept pairs is directly connected, one has a shortest path of length 2 and the third one has neither.
+In this easier variation, two concepts pairs are connected with a shortest path of length 2 instead.
+
+\paragraph{closeMatch}
+\begin{table}
+\begin{tabular}{p{0.8\textwidth}  p{0.1\textwidth}}
+\toprule
+question	& correct\\
+\midrule
+In the Tactical Information Management, the Project Execution uses the Resource, while in the Strategic Information Management, the Project Execution uses the Resource.											&True \\
+In the Strategic Information Management, the Project Management Board is responsible for  the Project Monitoring, while in the Tactical Information Management, the Project Steering Committee uses the Project.	&False \\
+\bottomrule
+\end{tabular}
+\caption{Examples of generated \emph{closeMatch}-questions}
+\label{tab:closematch}
+\end{table}
+
+This question type tests the connection between the textbooks \cite{ob} (tactical information management) and \cite{bb} (strategic information management) based on the existing \aurl{skos}{closeMatch} interlinks.
+The aim is to help students transfer knowledge in one textbook to the other.
+The questions have the form: In [Tactical / Strategic IM], the [subject] [predicate] the [object], while in [Strategic / Tactical IM], the [subject] [predicate] the [object] with 2 possible answers: true and false.
+Examplarly questions are given in \cref{tab:closematch}.
+
+%Dies beinhaltet dann Begriffe, welche in beiden Büchern auftreten. Ausgehend davon sollen dann ebenfalls in beiden Büchern auftretende Begriffe gesucht werden, welche verschiedene Grundklassen aufweisen: im einen Buch als Aufgabe und im anderen als Subjekt. Damit sollen dann Sätze gebildet werden, welche eine Gegenüberstellung in den Büchern erlauben, um so Brücken zu bauen und das Wissen des einen Buches effektiv auf das andere transferieren zu können. Ein Fragesatz könnte dann lauten: \enquote{In \textit{[Tactical / Strategic IM]}, the \textit{[Subjekt] [Prädikat]} the \textit{[Objekt]}, while in \textit{[Strategic / Tactical IM]}, the \textit{[Subjekt] [Prädikat]} the \textit{[Objekt]}} mit 2 Antwortmöglichkeiten, wahr und falsch.
+
+
+\paragraph{Occurence}
+Hier handelt es sich um eine Spezialisierung von close-by, bei der ent-
+schieden werden soll, ob ein Begriff in keinem Buch, in Ammenwerth
+u. a., 2014, in Winter u. a., 2011 oder in beiden Büchern auftritt. Eine
+mögliche Frage ist hier: \enquote{In which books does the term \emph{Chief Information Officer} occur?}. Auf diese Frage kann dann noch die Definition des Begriffes folgen, um noch mehr Kontext zu liefern.
+
+\begin{table}
+\begin{tabular}{p{0.5\textwidth}  p{0.3\textwidth}}
+\toprule
+Frage  & korrekt \\
+\midrule
+In which contexts does the term \enquote{Automated Observation} occur? & Tactical Information Management \\
+In which contexts does the term \enquote{Health Insurance Company} occur? & Strategic Information Management \\
+In which contexts does the term \enquote{System Analysis} occur? & Both Contexts \\
+In which contexts does the term \enquote{System Administrator} occur? & Neither\\
+\bottomrule
+\end{tabular}
+\caption[occurence-Ergebnisbeispiele]{Beispiele für generierte Fragen der \textit{occurence}-Strategie}
+\label{tabelle:bsp_occurence}
+\end{table}
+
+\section{Results}\label{sec:application}
+We apply this approach to SNIK and generate 1231 English questions using the templates described in \cref{tab:templates}.
+It was used by students from the Universities of Amsterdam, Heidelberg and Leipzig during the international Frank van Swieten lectures in 2019.
+
+%The technical environment of SNIK is characterized in previous work [11].
+
+\section{Discussion}
+
+
+
+We showed that knowledge on the management of information systems in medicine and health care is made publicly available using open standards over several interfaces with different compromises between expressivity and accessibility.
+It can be combined with other knowledge in biomedical and health informatics and in other disciplines.
+
+%\section{Future Work}
+\section{Conclusions}
+
+%\section{Acknowledgments}
+%This work is supported by the DFG (German Research Foundation) under the Projects SNIK, grant no. 1605/7-1 and 1387/8-1, as well as HITO, grant no. WI 1605/11-1 and I3726-N31.
+%We thank the publishers ... and ... for granting us permission to publish the subontologies based on the textbooks \citet{bb,ob,he} under an open license.
+%\nocite{*} 
+\todo{FJ: Hmmm, ziemlich selbstreferenziell. Brauchen wir da wirklich so viele Publikationen von uns? Welche anderen könnte man noch einbringen? Ich schaue auch mal, was mir so über den Weg läuft.}
+%\bibliographystyle{ios1}
+\bibliographystyle{vancouver}
+\bibliography{paper,snik,relatedwork}
+%\section{Notes to Reviewers}
+%This paper includes and extends text and figures from:
+%\citet{snikgraph}
+\end{document}
