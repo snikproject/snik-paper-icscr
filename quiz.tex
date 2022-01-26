@@ -329,24 +329,35 @@ Thus, SNIK Quiz is designed as an multiple choice quiz with at most four possibl
 \textbf{Template}	&\textbf{Description}\\
 \midrule
 \textbf{Definition}		&Ask for the class that fits the given textbook definition.\\
-Example					&What is defined as \enquote{Examination of in and out patients in radiological department}?\\
-Distractors				&Labels of other classes (that have a path of length 2 or less to the correct class.)\\
+						&Stem: \emph{What is defined as \enquote{Examination of in and out patients in radiological department}?}\\
+Example:				&Key: label of the class with that definition, e.g. \emph{CT Scanner}\\
+						&Distractors: Labels of other classes, that have a path of length 2 or less to the correct class., e.g. \emph{Execution of Diagnostic and Therapeutic Procedures}, \emph{Imaging Modality}\\
 \midrule
 \textbf{Subject}		&Ask for the class that is related via a given relation to a given object.\\
-						&Key: Who is \emph{involved in} a \emph{healthcare network}?\\
-Example					&Stem: \\
-Distractors				&Labels of other classes (of the same type) that \emph{are not} related via the same relation to the same object, for example .\\
+						&Stem: Who is \emph{involved in} a \emph{healthcare network}?\\
+Example					&Key: \\
+						&Distractors: Labels of other classes (of the same type) that \emph{are not} related via the same relation to the same object, for example .\\
 \midrule
 \textbf{Intertwined}	&\\
-						&Stem: \\
-Example:				&Key: \\
-						&Distractors: \\
-\midrule
-\textbf{CloseMatch}		&\\
 						&Stem: In the context of Strategic Information Management, which one of the following triples belongs together the most?\\
 Example:				&Key: Chief Information Officer – Department of Information management – IM Staff \\
 						&Distractors: Labels of three resources connected in one of the distractor shapes in \cref{fig:intertwined}, such as
 						Chief Information Officer – Strategic Gap – Corporate Strategy\\
+\midrule
+\textbf{CloseMatch}		&\\
+						&Stem: \\
+Example:				&Key: \\
+						&Distractors: \\
+\midrule
+\textbf{Contains}		&\\
+						&Stem: \\
+Example:				&Key: \\
+						&Distractors: \\
+\midrule
+\textbf{Label-Definition}	&Present different definitions and ask, which of them fits the given entity.\\
+						&Stem: \emph{How is \enquote{X} defined?}, e.g. \emph{Chief Executive Officer}\\
+Example:				&Key: definition of the entity, e.g. \emph{Responsible for setting and carrying out the strategic plans and policies of an enterprise.}\\
+						&Distractors: labels of entities within a path length of at most 2, e.g. \emph{Anyone who has direct or indirect influence on or interest in a component of an information system.}\\
 \midrule
 \textbf{}				&\\
 						&Stem: \\
@@ -385,8 +396,8 @@ This gives the user a definition and asks for  the correct term. The terms to be
 The definition approach focuses on the question of which definition is fitting for a given term. 
 To increase the difficulty of the strategy, the distractors are chosen to be at most two vertices away from the edge which represents the correct term, much like in the label-definition-type.
 
-\paragraph{contains}
-describe contains...
+\paragraph{subject}
+describe subject (contains)...
 
 \paragraph{intertwined}
 
@@ -396,6 +407,7 @@ describe contains...
 \label{fig:intertwined}
 \end{figure}
 
+\iffalse
 \begin{table}
 \begin{tabulary}{\textwidth}{LLLL}
 \toprule
@@ -413,6 +425,7 @@ In the context of CIOX, which one of the following triples belongs together the 
 \caption{Examples of generated \emph{intertwined}-questions and answers.}
 \label{tab:intertwined}
 \end{table}
+\fi
 
 Intertwined focuses on the connectivity of the knowledge graph.
 In each answer, three related concepts are given.
@@ -420,7 +433,7 @@ The correct answer is the one where all concepts are directly connected with eac
 The distractors should then not form this triangle.
 In the difficult variation of the distractor, one of the three concept pairs is directly connected, one has a shortest path of length 2 and the third one has neither.
 In this easier variation, two concepts pairs are connected with a shortest path of length 2 instead.
-Examplse are given in \cref{tab:intertwined}.
+%Examplse are given in \cref{tab:intertwined}.
 
 \paragraph{closeMatch}
 \begin{table}[h]
