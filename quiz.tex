@@ -141,12 +141,15 @@ linked open data \sep information management \sep multiple choice quiz
 \section{Introduction}
 %A health information system (HIS) is the socio-technical subsystem of a care delivery organization~\citep{bb}.
 %This includes its different application systems, computers, and network components as well as their users.
-Medical informatics students, who are trained for executive positions in information management departments of healthcare institutions, such as hospitals, need a clear terminology of their domain.
+Medical informatics students, who are trained for executive positions in information management (IM) departments of healthcare institutions, such as hospitals, need a clear terminology of their domain.
 This terminology is offered by SNIK~\citep{semantischesnetz,sniktec}, the Semantic Network of Information Management in Hospitals (\enquote{Krankenhaus} in German), which integrates knowledge extracted from three textbooks~\citep{bb,ob,he} and other sources such as interviews in the form of Linked Open Data.
-SNIK describes information management functions, roles executing these functions and entity types, the information used or updated by these functions.
-Because the textbooks describe those concepts in the abstract sense, and not those of any concrete hospital, those entities are modelled as classes and individuals at the same time, using OWL 2 DL punning.
-Thus, \emph{function}, \emph{role} and \emph{entity type} are metaclasses and the ontology of SNIK is a meta model as depicted in \cref{fig:metamodel}.
+SNIK describes health information management (HIM) functions, roles executing these functions, and entity types, the information used or updated by these functions, see \cref{fig:metamodel}.
+%Because the textbooks describe those concepts in the abstract sense, and not those of any concrete hospital, those entities are modelled as classes and individuals at the same time, using OWL 2 DL punning.
+%Thus, \emph{function}, \emph{role} and \emph{entity type} are metaclasses and the ontology of SNIK is a meta model as depicted in \cref{fig:metamodel}.
 SNIK version \snikversionlink{} contains \sniktriples{} triples describing \snikproperties{} properties and \snikclasses{} classes, of which there are \snikroles{} roles, \snikfunctions{} functions and \snikentitytypes{} entity types.
+%Applications include a graph visualization for exploratiory learning, 
+This paper presents SNIK Quiz, a browser game in which a student answers multiple-choice questions about HIM including an evaluation by domain experts and a student.
+
 %A HIS processes data, information, and knowledge and its management involves planning, monitoring and directing those activities.
 %Due to the complexity and the unique conditions in health care, HIS management is an challenging task.
 %There are many different frameworks, textbooks and articles describing the scope of HIS management from the perspective of medical informatics.
@@ -202,13 +205,16 @@ sniko			&\url{http://www.snik.eu/ontology}			&Combined Graph Group\\
 \fi
 
 \section{Methods}
-
 \begin{figure*}
 \caption{The SNIK meta model}
 \label{fig:metamodel}
 \centering
 \includegraphics[width=\textwidth,trim={0 0 0 135mm},clip]{img/metamodel9s.pdf}
 \end{figure*}
+SNIK Quiz is designed as single-player game for English speaking students of Medical Informatics.
+This group is diverse and includes students of Medicine, who may not have a background in Computer Science and Semantic Web technologies.
+Target devices are PCs, tablets and smartphones, so multiple operating systems and input methods need to be supported.
+Thus, SNIK Quiz is designed as an multiple choice quiz with at most four possible answers and published as an open source\footnote{\url{https://github.com/snikproject/snik-quiz}} web application.
 
 \iffalse
 \begin{figure}[h]
@@ -315,25 +321,41 @@ sniko			&\url{http://www.snik.eu/ontology}			&Combined Graph Group\\
 %\section{Applications}
 
 \begin{table}[t]
-\caption{Initial Quiz question templates.}
+\caption{Quiz question templates.}
 \label{tab:templates}
 \centering
 \begin{tabulary}{\columnwidth}{lL}
 \toprule
 \textbf{Template}	&\textbf{Description}\\
 \midrule
-Definition		&Ask for the class that fits the given textbook definition.\\
-Example			&What is defined as \enquote{Examination of in and out patients in radiological department}?\\
-Distractors		&Labels of other classes (that have a path of length 2 or less to the correct class.)\\
+\textbf{Definition}		&Ask for the class that fits the given textbook definition.\\
+Example					&What is defined as \enquote{Examination of in and out patients in radiological department}?\\
+Distractors				&Labels of other classes (that have a path of length 2 or less to the correct class.)\\
 \midrule
-Subject			&Ask for the class that is related via a given relation to a given object.\\
-Example			&Who is \emph{involved in} a \emph{healthcare network}?\\
-Distractors		&Labels of other classes (of the same type) that \emph{are not} related via the same relation to the same object.\\
+\textbf{Subject}		&Ask for the class that is related via a given relation to a given object.\\
+						&Key: Who is \emph{involved in} a \emph{healthcare network}?\\
+Example					&Stem: \\
+Distractors				&Labels of other classes (of the same type) that \emph{are not} related via the same relation to the same object, for example .\\
+\midrule
+\textbf{Intertwined}	&\\
+						&Stem: \\
+Example:				&Key: \\
+						&Distractors: \\
+\midrule
+\textbf{CloseMatch}		&\\
+						&Stem: In the context of Strategic Information Management, which one of the following triples belongs together the most?\\
+Example:				&Key: Chief Information Officer – Department of Information management – IM Staff \\
+						&Distractors: Labels of three resources connected in one of the distractor shapes in \cref{fig:intertwined}, such as
+						Chief Information Officer – Strategic Gap – Corporate Strategy\\
+\midrule
+\textbf{}				&\\
+						&Stem: \\
+Example:				&Key: \\
+						&Distractors: \\
 \bottomrule
 \end{tabulary}
 \end{table}
 
-Clover Quiz~\citep{cloverquiz} shows that ontologies can be used to automatically generate multiple-choice questions over DBpedia~\citep{dbpedia}.
 To provide difficult wrong answers, the so called \emph{distractors}, we use direct neighbours of the classes that represent the correct answers.
 Due to the limited nesting capabilties of SPARQL, which does not support loops but only subqueries that cannot access variables declared outside their scope, querying for distinct sets of 4 neighbours, where exactly one was connected over a certain property to a certain object, was not possible with our Virtuoso SPARQL endpoint initially.
 We circumvented the timeout by calculating the neighbour-relation as a first step and uploading it to the endpoint.
@@ -377,15 +399,15 @@ describe contains...
 \begin{table}
 \begin{tabulary}{\textwidth}{LLLL}
 \toprule
-Question			&correct answer	&distractor 1	&distractor 2\\ 
+Question			&Correct answer	&Distractor 1	&Distractor 2\\ 
 \midrule
-In the context of Strategic Information Management, which one of the following triples belongs together the most? &Chief Information Officer -- Department of Information management -- Information Management Staff & Chief Information Officer -- Strategic Gap -- Corporate Strategy & Chief Information Officer -- Ticket Evaluation -- Project Monitoring \\
+In the context of Strategic IM, which one of the following triples belongs together the most? &Chief Information Officer -- Department of Information management -- IM Staff & Chief Information Officer -- Strategic Gap -- Corporate Strategy & Chief Information Officer -- Ticket Evaluation -- Project Monitoring \\
 \midrule
-In the context of Strategic Information Management, which one of the following triples belongs together the most? & Information Management -- IT Service Management -- Operational Information Management & Information Management -- Tactical Management of Information Systems -- Information System & Information Management -- methodology of Information Management -- Operational Management of Information Systems\\
+In the context of Strategic IM, which one of the following triples belongs together the most? & IM -- IT Service Management -- Operational IM & IM -- Tactical Management of Information Systems -- Information System & IM -- methodology of IM -- Operational Management of Information Systems\\
 \midrule
 In the context of CIOX, which one of the following triples belongs together the most & Chief Information Officer -- Jour Fixe Execution -- Project Monitoring & Chief Information Officer -- Project Risk -- Strategic HIS Planning & Chief Information Officer -- IT General Ledger Account Planning -- Project Portfolio \\
 \midrule
-In the context of CIOX, which one of the following triples belongs together the most & Chief Information Officer -- Project Presentation -- Project Waitlist & Chief Information Officer -- Strategic Information Management Planning -- Project Manager & Chief Information Officer -- Project Priorisation -- Project Web Site \\
+In the context of CIOX, which one of the following triples belongs together the most & Chief Information Officer -- Project Presentation -- Project Waitlist & Chief Information Officer -- Strategic IM Planning -- Project Manager & Chief Information Officer -- Project Priorisation -- Project Web Site \\
 \bottomrule
 \end{tabulary}
 \caption{Examples of generated \emph{intertwined}-questions and answers.}
@@ -484,6 +506,7 @@ interview 3	&3					&3			&6			&8				&8			&7\\
 \end{table}
 
 \section{Discussion}
+Clover Quiz~\citep{cloverquiz} shows that Linked Data knowledge bases can be used to semi-automatically generate cross-domain multiple-choice questions using DBpedia~\citep{dbpedia}.
 systematic review of multiple choice question generation from ontologies
 complex questions, 
 \cite{ontologybasedmultiplechoice}
