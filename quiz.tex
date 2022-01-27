@@ -10,6 +10,7 @@
 %\usepackage[utf8]{inputenc}
 %\usepackage[english]{babel}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{textcomp}
 %\usepackage{xcolor}
 \usepackage{booktabs}
@@ -141,7 +142,10 @@ linked open data \sep information management \sep multiple choice quiz
 %This includes its different application systems, computers, and network components as well as their users.
 Medical informatics students, who are trained for executive positions in information management (IM) departments of healthcare institutions, such as hospitals, need a clear terminology of their domain.
 This terminology is offered by SNIK~\citep{semantischesnetz,sniktec}, the Semantic Network of Information Management in Hospitals (\enquote{Krankenhaus} in German), which integrates knowledge extracted from three textbooks~\citep{bb,ob,he} and other sources such as interviews in the form of Linked Open Data.
-SNIK describes health information management (HIM) functions, roles executing these functions, and entity types, the information used or updated by these functions, see \cref{fig:metamodel}.
+In order to specify, which information should be extracted from the books and to facilitate comparisons, we use a common data model.
+Because processed textbooks contain abstract knowledge instead of information about any specific hospital, all concepts are modelled as classes and instances simultaneusly, using OWL punning.
+We thus call our data model the \enquote{meta model} in accordance with the term's definition as a shared modelling language~\citep[p.~8]{ob}.
+The central entities of the meta model are enterprise functions, roles executing these functions, and entity types, the information used or updated by these functions, see \cref{fig:metamodel}.
 %Because the textbooks describe those concepts in the abstract sense, and not those of any concrete hospital, those entities are modelled as classes and individuals at the same time, using OWL 2 DL punning.
 %Thus, \emph{function}, \emph{role} and \emph{entity type} are metaclasses and the ontology of SNIK is a meta model as depicted in \cref{fig:metamodel}.
 SNIK version \snikversionlink{} contains \sniktriples{} triples describing \snikproperties{} properties and \snikclasses{} classes, of which there are \snikroles{} roles, \snikfunctions{} functions and \snikentitytypes{} entity types.
@@ -220,6 +224,10 @@ SNIK Quiz is designed as single-player game for English speaking students of Med
 This group is diverse and includes students of Medicine, who may not have a background in Computer Science and Semantic Web technologies.
 Target devices are PCs, tablets and smartphones, so multiple operating systems and input methods need to be supported.
 Thus, SNIK Quiz is designed as an multiple choice quiz with at most four possible answers and published as an open source web application.
+We employ an approach similar to Clover Quiz~\citep{cloverquiz}, which shows that Linked Data knowledge bases can be used to semi-automatically generate cross-domain multiple-choice questions on DBpedia~\citep{dbpedia}.
+For each question (\emph{stem}), we generate a correct answer (\emph{key}) and one or more incorrect answers (\emph{distractors}).
+The data is semi-automatically generated using SPARQL queries, such as \cref{lst:sparql}, on the public SPARQL endpoint of SNIK\footnote{\url{https://www.snik.eu/sparql}} followed by minimal postprocessing to achieve more natural looking questions.
+The graph structure of SNIK allows the generation of difficult to guess distractors by using entities that are semantically close to the key, using path lengths of at most 2 in the graph.
 
 \iffalse
 \begin{figure}[h]
@@ -252,80 +260,10 @@ Thus, SNIK Quiz is designed as an multiple choice quiz with at most four possibl
 %While an OWL restrictions using \aurl{owl}{someValuesFrom} and \aurl{owl}{allValuesFrom} would be technically correct, the knowledge is not expressed that specifically in the textbooks.
 %Additionally, encoding each fact as a single triple facilitates tool support and prevents inconsistencies through non-atomic changes.
 
-%\section{Data Quality}
-%- extractors not always same people who wrote book/part of book
-%- mistake when extracting
-%- reasoning does not work (test)
-%\begin{itemize}
-%\item Multiple Subtops
-%\item Inconsistent Subtop with Subclass
-%\item SKOS Link to Different Subtop
-%\item Subclass Cycles
-%\item Missing superclass
-%\item Undefined Objects
-%\item Domain Violation
-%\item Range Violation
-%\item Class URL Naming Convention Violations
-%\item Property URL Naming Convention Violations
-%\item Missing Definition
-%\item Literals with Semicolons
-%\item Classes with too many subclasses
-%\item No Restriction
-%\item Non-HTTP URI
-%\item OWL 2 DL: Undefined Properties
-%\item OWL 2 DL: Multiply Defined Properties
-%\item OWL 2 DL: Class Typing Constraints
-%\end{itemize}
-%-> use SHAPE/SHACL ?
+\section{Results}\label{sec:application}
+The resulting question data is generated by several templates, as shown in \cref{tab:templates}, which are designed to either train basic facts, more complex patterns in one of the textbooks or connections between the different textbooks modelled in SNIK.
 
-
-
-
-
-%\section{Data Model}\label{sec:architecture}
-%The initial structure of the meta model is defined in \citet{domaene}.
-%The \enquote{meta model} defines three basic disjunctive classes and their possible relations: Roles (who), Function (does what) and Entity Types (and which information is therefore needed).
-%A set of modular subontologies define subclasses of those three classes and their relations as described by a certain knowledge source about information management in hospitals:
-%The \textbf{Semantic Network of Information Management in Hospitals} (SNIK\footnote{Hospital means \enquote{Krankenhaus} in German.}) is a modular OWL 2 DL ontology.
-%from different sources:% three textbooks, an interview and a standard.
-
-
-\iffalse
-\section{Data Set Description}\label{sec:dsd}
-\begin{table*}
-\caption{use of established vocabularies}
-\label{tab:templates}
-\begin{tabulary}{\textwidth}{lL}
-\toprule
-\textbf{Vocabulary}	&\textbf{Description}\\
-\midrule
-&\\
-&\\
-&\\
-\bottomrule
-\end{tabulary}
-\end{table*}
-\fi
-
-%\section{Data Transformation Process}
-%\subsection{Interlinking}
-%As shown in \cref{...}, we aligned our dataset to several others:
-%We manually aligned our dataset to HITO, the Health IT Ontology~\citep{hitometh2}
-%We automatically aligned our dataset to:
-%- DBpedia~\citep{dbpedia}, as  
-%- 
-%\section{Lifecycle}\label{sec:application}
-%Virtuoso SPARQL endpoint is used for querying and as data source for all our applications  
-
-%After the initial extraction step, SNIK is published and users suggest problems or enhancements.%Besides issues of collaborative editing, this required a regular export and reupload, which delayed the effect of changes in SNIK to the user facing applications.
-%- git repository (link): collaborative editing but protege can cause large diffs -> people who understand rdf enough to use text editor ttl/rdfxml 
-%- use ontowiki: slow but user friendly, undo function,
-%- SPARUL queries
-%The technical environment of those services is described in~\citet{sniktec}.
-
-%\section{Applications}
-
-\begin{table}[t]
+\begin{table}[h]
 \caption{Quiz question templates with examples. When not otherwise noted, distractor entites are wrong answers that are neighbors of degree at most 2 of the correct answer.}%, with all being of the same type, see \cref{fig:metamodel}.}
 \label{tab:templates}
 \centering
@@ -362,12 +300,12 @@ Key						&\emph{Chief Information Officer -- Department of Information managemen
 Distractor 1			&\emph{Chief Information Officer -- Strategic Gap -- Corporate Strategy}\\
 Distractor 2			&\emph{Chief Information Officer -- Ticket Evaluation -- Project Monitoring}\\
 \midrule
-\textbf{Occurence}		&Ask whether a given term is defined in one of the textbooks \cite{bb,ob}, both or neither.\\
+\textbf{Occurence}		&Ask whether a given term is defined in one of the textbooks \cite{bb,ob}, both or neither~\citep{snikquizba}.\\
 Stem					&\emph{In which contexts does the term \enquote{Health Insurance Company} occur?}\\
 Key						&\emph{Strategic Information Management}\\
 Distractors				&\emph{Tactical Information Management, Both Contexts, Neither}\\
 \midrule
-\textbf{CloseMatch}		&Transfer knowledge about one textbook~\citep{bb} to the other~\citep{ob} by confirming or denying statements about entity pairs that are marked as near equivalent.\\
+\textbf{CloseMatch}		&Transfer knowledge about one textbook~\citep{bb} to the other~\citep{ob} by confirming or denying statements about entity pairs that are marked as near equivalent~\citep{snikquizba}.\\
 Stem					&\emph{In the Strategic Information Management, the Consultant is associated with the Long-Term HIS Planning, while in the Tactical Information Management, the Consultant is responsible for the Functional Specification Document.} (Key: True, Distractor: False)\\
 %Key						&True\\
 %Distractor				&False\\
@@ -375,7 +313,7 @@ Stem					&\emph{In the Strategic Information Management, the Consultant is assoc
 \end{tabulary}
 \end{table}
 %
-\begin{lstlisting}[captionpos=b, caption=SPARQL query generating the key and distractors for the \emph{definition} questions., label=lst:sparql,basicstyle=\ttfamily\footnotesize,frame=single]
+\begin{lstlisting}[float, caption=SPARQL query generating the key and distractors for the \emph{definition} questions., label=lst:sparql,basicstyle=\ttfamily\footnotesize,frame=single]
 SELECT SAMPLE(replace(str(?def),str(?cl),"X","i") as ?def) SAMPLE(str(?cl) as ?cl) SAMPLE(str(?a1l) as ?a1l) SAMPLE(str(?a2l) as ?a2l) SAMPLE(str(?a3l) as ?a3l) {
   ?class a owl:Class.
   ?class rdfs:label ?cl.
@@ -394,36 +332,13 @@ SELECT SAMPLE(replace(str(?def),str(?cl),"X","i") as ?def) SAMPLE(str(?cl) as ?c
 } GROUP BY ?class limit 1000
 \end{lstlisting}
 %
-The questions are semi-automatically generated using several question templates as shown in \cref{tab:templates} to train basic facts, more complex patterns, as well as connections between textbooks encoded in SNIK.
-
-To provide difficult wrong answers, the so called \emph{distractors}, we use direct neighbours of the classes that represent the correct answers.
 %Due to the limited nesting capabilties of SPARQL, which does not support loops but only subqueries that cannot access variables declared outside their scope, querying for distinct sets of 4 neighbours, where exactly one was connected over a certain property to a certain object, was not possible with our Virtuoso SPARQL endpoint initially.
-We circumvented the timeout by calculating the neighbour-relation as a first step and uploading it to the endpoint.
+%We circumvented the timeout by calculating the neighbour-relation as a first step and uploading it to the endpoint.
 %
 %SNIK Quiz is freely available as an open source web application.
-Because SNIK only contains the knowledge that the source textbooks describe, it does not contain the complete domain of Hospital Information Management.
-As such, negative questions are problematic, as the given relationship could hold in the real world but not be described in the textbook source of the class.
-The same problem concerns the distractors of positive questions.
-So this problem cannot be avoided.
-However, this is one of the reasons that we do not ask count questions like \enquote{How many functions is the CIO responsible for?}, which do not help much for learning anyways. % improve writing
-Relationships could also hold implicitly through the subclass hierarchy.
-For example, \aurl{bb}{ChiefInformationOfficer} is a subclass of \aurl{bb}{InformationManagementStaff}, which is responsible for \aurl{bb}{OperationalInformationManagement}.
-It is unclear, whether the CIO is also responsible for operational information management.
 
-
-
-\subsection{Question Types}
-\iffalse
-TODO: Add the old question types, but only the b-versions (so no suffix is required in this paper)
-
-\paragraph{label-definition}
-This gives the user a definition and asks for  the correct term. The terms to be considered are chosen from terms, which are positioned within a distance of two vertices in the graph. So, relative semantic similarity can be assumed. This makes the label-definition-approach especially worthwhile when basic knowledge of terms of information management is required.
- 
-% set this as second strat to gain constistency to table 5 
-\paragraph{definition}
-The definition approach focuses on the question of which definition is fitting for a given term. 
-To increase the difficulty of the strategy, the distractors are chosen to be at most two vertices away from the edge which represents the correct term, much like in the label-definition-type.
-\fi
+%The definition approach focuses on the question of which definition is fitting for a given term. 
+%To increase the difficulty of the strategy, the distractors are chosen to be at most two vertices away from the edge which represents the correct term, much like in the label-definition-type.
 
 \begin{figure}
 \includegraphics[width=0.7\textwidth]{img/intertwined_cml.png} 
@@ -431,56 +346,14 @@ To increase the difficulty of the strategy, the distractors are chosen to be at 
 \label{fig:intertwined}
 \end{figure}
 
-\iffalse
-\begin{table}
-\begin{tabulary}{\textwidth}{LLLL}
-\toprule
-Question			&Correct answer	&Distractor 1	&Distractor 2\\ 
-\midrule
-In the context of Strategic IM, which one of the following triples belongs together the most? &Chief Information Officer -- Department of Information management -- IM Staff & Chief Information Officer -- Strategic Gap -- Corporate Strategy & Chief Information Officer -- Ticket Evaluation -- Project Monitoring \\
-\midrule
-In the context of Strategic IM, which one of the following triples belongs together the most? & IM -- IT Service Management -- Operational IM & IM -- Tactical Management of Information Systems -- Information System & IM -- methodology of IM -- Operational Management of Information Systems\\
-\midrule
-In the context of CIOX, which one of the following triples belongs together the most & Chief Information Officer -- Jour Fixe Execution -- Project Monitoring & Chief Information Officer -- Project Risk -- Strategic HIS Planning & Chief Information Officer -- IT General Ledger Account Planning -- Project Portfolio \\
-\midrule
-In the context of CIOX, which one of the following triples belongs together the most & Chief Information Officer -- Project Presentation -- Project Waitlist & Chief Information Officer -- Strategic IM Planning -- Project Manager & Chief Information Officer -- Project Priorisation -- Project Web Site \\
-\bottomrule
-\end{tabulary}
-\caption{Examples of generated \emph{intertwined}-questions and answers.}
-\label{tab:intertwined}
-\end{table}
-\fi
-
-\iffalse
-Intertwined focuses on the connectivity of the knowledge graph.
-In each answer, three related concepts are given.
-The correct answer is the one where all concepts are directly connected with each other, that is, they form a triangle in the graph, see \cref{fig:intertwined}.
-The distractors should then not form this triangle but a different shape based on the difficulty.
-In the difficult variation of the distractor, one of the three concept pairs is directly connected, one has a shortest path of length 2 and the third one has neither.
-In this easier variation, two concepts pairs are connected with a shortest path of length 2 instead.
-
-
-\paragraph{closeMatch}
-\begin{table}[h]
-\begin{tabulary}{\textwidth}{Ll}
-\toprule
-question	& correct\\
-\midrule
-In the Tactical Information Management, the Project Execution uses the Resource, while in the Strategic Information Management, the Project Execution uses the Resource.											&True \\
-In the Strategic Information Management, the Project Management Board is responsible for  the Project Monitoring, while in the Tactical Information Management, the Project Steering Committee uses the Project.	&False \\
-\bottomrule
-\end{tabulary}
-\caption{Examples of generated \emph{closeMatch}-questions.}
-\label{tab:closematch}
-\end{table}
-
-This question type tests the connection between a textbook about tactical information management~\cite{ob} and one about strategic information management~\cite{bb} based on the existing \aurl{skos}{closeMatch} interlinks.
-The aim is to help students transfer knowledge about one textbook to the other.
-The questions have the form: \emph{\enquote{In [Tactical / Strategic IM], the [subject] [predicate] the [object], while in [Strategic / Tactical IM], the [subject] [predicate] the [object].}} with two possible answers: true and false.
-Examplarly questions are given in \cref{tab:closematch}.
+%This question type tests the connection between a textbook about tactical information management~\cite{ob} and one about strategic information management~\cite{bb} based on the existing \aurl{skos}{closeMatch} interlinks.
+%The aim is to help students transfer knowledge about one textbook to the other.
+%The questions have the form: \emph{\enquote{In [Tactical / Strategic IM], the [subject] [predicate] the [object], while in [Strategic / Tactical IM], the [subject] [predicate] the [object].}} with two possible answers: true and false.
+%Examplarly questions are given in \cref{tab:closematch}.
 
 %Dies beinhaltet dann Begriffe, welche in beiden Büchern auftreten. Ausgehend davon sollen dann ebenfalls in beiden Büchern auftretende Begriffe gesucht werden, welche verschiedene Grundklassen aufweisen: im einen Buch als Aufgabe und im anderen als Subjekt. Damit sollen dann Sätze gebildet werden, welche eine Gegenüberstellung in den Büchern erlauben, um so Brücken zu bauen und das Wissen des einen Buches effektiv auf das andere transferieren zu können. Ein Fragesatz könnte dann lauten: \enquote{In \textit{[Tactical / Strategic IM]}, the \textit{[Subjekt] [Prädikat]} the \textit{[Objekt]}, while in \textit{[Strategic / Tactical IM]}, the \textit{[Subjekt] [Prädikat]} the \textit{[Objekt]}} mit 2 Antwortmöglichkeiten, wahr und falsch.
 
+\iffalse
 \paragraph{occurence}
 \begin{table}[h]
 \begin{tabulary}{\textwidth}{LL}
@@ -505,13 +378,11 @@ The context of the questions can be augmented with the definitions of the concep
 
 
 
-\section{Results}\label{sec:application}
-The question types definition-a and contains-a were used to generate 1231 English questions, see \cref{tab:templates}.
-It was used by students from the Universities of Amsterdam, Heidelberg and Leipzig during the international Frank van Swieten lectures in 2019.
-
+%The question types definition and subject were used to generate 1231 English questions, see \cref{tab:templates}.
+The question types definition and subject were presented in a first prototype of SNIK Quiz to students of Medical Informatics from the Universities of Amsterdam, Heidelberg and Leipzig during the international Frank van Swieten lectures in 2019 and were positively received.
+An extended version of SNIK Quiz including the query types definition, definitions, subject, intertwined, closeMatch and occurrence was rated by two experts of hospital information management and one student of Medical Informatics, see \cref{tab:eval}.
 %The technical environment of SNIK is characterized in previous work [11].
 
-\subsection{Evaluation}
 \iffalse
 \begin{table}[h]
 \begin{tabularx}{\textwidth}{Xccc}
@@ -536,41 +407,53 @@ occurence			&7				&5				&7\\
 \begin{table}[h]
 \begin{tabularx}{\textwidth}{Xcccccc}
 \toprule
-			&definitions		&definition	&subject	&intertwined	&closeMatch	&occurence\\
+			&definition		&definitions	&subject	&intertwined	&closeMatch	&occurence\\
 \midrule
-interview 1	&3					&4			&5--6		&7				&8			&7\\
-interview 2	&4					&6			&7			&7--8			&7--8		&5\\
+interview 1	&4					&3			&5--6		&7				&8			&7\\
+interview 2	&6					&4			&7			&7--8			&7--8		&5\\
 interview 3	&3					&3			&6			&8				&8			&7\\
 \bottomrule
 \end{tabularx}
-\caption{Rating given by interviewees based on the complexity of the questions on a scale between 1 and 10 with 10 representing maximum complexity~\citep{snikquizba}.}
-\label{tabelle:eval_komplex}
+\caption{Rating given by interviewees based on the subjective complexity of the questions on a scale between 1 and 10 with 10 representing maximum complexity~\citep{snikquizba}.}
+\label{tab:eval}
 \end{table}
 
 \section{Discussion}
-Clover Quiz~\citep{cloverquiz} shows that Linked Data knowledge bases can be used to semi-automatically generate cross-domain multiple-choice questions using DBpedia~\citep{dbpedia}.
-systematic review of multiple choice question generation from ontologies
-complex questions, 
-\cite{ontologybasedmultiplechoice}
+While the basic question types were received positively during the Frank van Swieten lectures and the evaluation ratings on subjective complexity show promising results, qualitative feedback on the more complex question types was mixed.
+One of the experts questioned the didactic value of the \emph{intertwined} questions, as the users cannot know the exact graph structure of SNIK and thus may difficulties deciding, which triplets of concepts are most strongly connected.
+While the closeMatch were rated as most complex, the complexity was seen mostly seen as grammatical and not enough on the didactically relevant relationships between the entities.
+Contrary to the initial assumption that well explained questions would be beneficial, shorter questions were preferred as they could be read more quickly.
 
-performance 
-static html and javascript
-client side
+%However, only certain question types are feasible with SNIK.
+%Because SNIK only contains the knowledge that the source textbooks describe, it does not contain the complete domain of Hospital Information Management.
+%As such, negative questions are problematic, as the given relationship could hold in the real world but not be described in the textbook source of the class (open world assumption).
+%The same problem concerns the distractors of positive questions.
+%So this problem cannot be avoided.
+%This is one of the reasons that we do not ask count questions like \enquote{How many functions is the CIO responsible for?}.
+%Relationships could also hold implicitly through the subclass hierarchy.
+%For example, \aurl{bb}{ChiefInformationOfficer} is a subclass of \aurl{bb}{InformationManagementStaff}, which is responsible for \aurl{bb}{OperationalInformationManagement}.
+%It is unclear, whether the CIO is also responsible for operational information management.
+%systematic review of multiple choice question generation from ontologies
+%complex questions, 
+%\cite{ontologybasedmultiplechoice}
 
-\label{tab:templates} subclasses and superclasses
-because of OWL punning entities are individuals but also classes and can have superclasses and subclasses
-subclasses of the correct answer are semantically correct because subclasses are subsets
-superclasses on the other hand are only partially correct because the relation only holds for the subclass
-example who is responsible for medical admission: Health Care Professional - Physician - Senior Physician
-however SPARQL endpoint doesnt do inferencing so it will not mark that as correct
-we could add the transitive hull for such triples but we think it is good like this, it increases the difficulty and you need to choose the most general correct answer
+%\cref{tab:templates} subclasses and superclasses
+%because of OWL punning entities are individuals but also classes and can have superclasses and subclasses
+%subclasses of the correct answer are semantically correct because subclasses are subsets
+%superclasses on the other hand are only partially correct because the relation only holds for the subclass
+%example who is responsible for medical admission: Health Care Professional - Physician - Senior Physician
+%however SPARQL endpoint doesnt do inferencing so it will not mark that as correct
+%we could add the transitive hull for such triples but we think it is good like this, it increases the difficulty and you need to choose the most general correct answer
 
 
-%We showed that knowledge on the management of information systems in medicine and health care is made publicly available using open standards over several interfaces with different compromises between expressivity and accessibility.
 %It can be combined with other knowledge in biomedical and health informatics and in other disciplines.
 
 %\section{Future Work}
 \section{Conclusions}
+SNIK Quiz shows that knowledge on the management of information systems in medicine and health care can be used to semi-automatically generate multiple-choice questions.
+While preliminary evaluations show promising results, the complex question types need to be investigated further.
+Future work should also include a quantitative evaluation of learning efficiency when supplementing courses with SNIK Quiz.
+%Use of neural networks and language models in combination with linked data to generate more natural questions and answers is another avenue for further exploration.
 
 %\section{Acknowledgments}
 %This work is supported by the DFG (German Research Foundation) under the Projects SNIK, grant no. 1605/7-1 and 1387/8-1, as well as HITO, grant no. WI 1605/11-1 and I3726-N31.
