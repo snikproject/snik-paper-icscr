@@ -1,3 +1,4 @@
+% arara: pdflatex if changed(tex): { options: [-halt-on-error] }
 \documentclass{IOS-Book-Article}     %[seceqn,secfloat,secthm]
 \usepackage{mathptmx}
 \usepackage{soul}\setuldepth{article}
@@ -59,7 +60,7 @@
 %\thanks{This work is supported by the DFG (German Research Foundation) under the Project SNIK, Grant no. 1605/7-1 and 1387/8-1.}%bug: will create an empty first page
 
 \markboth{}{May 2022\hb}
-%\subtitle{}
+\subtitle{The SNIK Quiz paper has moved to \url{https://github.com/snikproject/paper-snik-quiz}.}
 
 \author[A]{\fnms{Konrad} \snm{Höffner}%
 %\thanks{Corresponding author: Konrad Höffner, Institute for Medical Informatics, Statistics and Epidemiology, Leipzig University,
@@ -135,7 +136,6 @@ The questions are semi-automatically generated using several question templates 
 linked open data \sep information management \sep multiple choice quiz
 \end{keyword}
 \end{frontmatter}
-
 \section{Introduction}
 %A health information system (HIS) is the socio-technical subsystem of a care delivery organization~\citep{bb}.
 %This includes its different application systems, computers, and network components as well as their users.
@@ -183,7 +183,6 @@ This paper presents SNIK Quiz, an open source\footnotemark{} browser game, see \
 %
 %Publishing textbook knowledge as Linked Data enables different ways of teaching.
 %The data is continously revised: users constantly report wrong or missing data in the visualization, which is then corrected, respectively revised, by the researchers of the project.
-
 \iffalse
 \begin{table}[tbh]
 \caption{The different ontologies and graphs of SNIK and their sources.
